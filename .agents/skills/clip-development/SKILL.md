@@ -13,11 +13,28 @@ Use this skill when writing a new clip type (a custom visual block for episodes)
 
 A clip component is `React.FC<{ clip: TimelineClip<T> }>` where `T` is the clip's def type. It renders inside a `<Sequence>` sized by the clip's `rect`, so `useCurrentFrame()` is clip-local and the component should fill 100%x100% of its pane. The clip arrives **fully resolved**: absolute `startFrame`/`endFrame`, inherited fields applied. Components never see narration lines, stores, or other clips.
 
+A complete minimal clip:
+
 ```tsx
-export const MyClip: ClipComponent<MyClipDef> = ({ clip }) => {
+import { mix, readableColor } from "polished";
+import { useThemeColors } from "../../calculate-metadata/theme";
+import type { ClipComponent, TitleClipDef } from "../types";
+import { useClipFrame } from "../useClipFrame";
+
+export const TitleClip: ClipComponent<TitleClipDef> = ({ clip }) => {
+  // Content choreography starts after the renderer-owned pane transition
   const frame = useClipFrame(clip.transitionIn);
   const themeColors = useThemeColors();
-  // render based on frame + clip's own config only
+
+  return (
+    <div style={{
+      width: "100%", height: "100%",
+      display: "flex", alignItems: "center", justifyContent: "center",
+      color: themeColors.editor.foreground,
+    }}>
+      {clip.title}
+    </div>
+  );
 };
 ```
 

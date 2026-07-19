@@ -19,27 +19,32 @@ export const diff: AnnotationHandler = {
       ? interpolate(
           frame,
           [MARK_DELAY, MARK_DELAY + MARK_DURATION],
-          [0, 0.8],
+          [0, 1],
           { extrapolateLeft: "clamp", extrapolateRight: "clamp" },
         )
       : 0;
     const removed = annotation?.query.trim().startsWith("-");
+    const color = removed ? "#f85149" : "#3fb950";
 
     return (
-      <>
+      // Flex row: InnerLine is block-level in this Code Hike version, so a
+      // bare fragment would stack the gutter above the code and double every
+      // line's height. The gutter stays in flow (always reserved, so
+      // switching between diff and non-diff steps never shifts the code).
+      <div style={{ display: "flex" }}>
         <span
           style={{
-            // Absolutely positioned so the sign never shifts the code layout
-            position: "absolute",
-            marginLeft: "-2ch",
-            opacity,
+            width: "2ch",
+            flexShrink: 0,
             userSelect: "none",
+            opacity,
+            color,
           }}
         >
-          {annotation ? (removed ? "-" : "+") : null}
+          {annotation ? (removed ? "-" : "+") : ""}
         </span>
         <InnerLine merge={props} />
-      </>
+      </div>
     );
   },
 };

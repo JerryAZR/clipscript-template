@@ -109,8 +109,7 @@ export const terminalLinesAt = (
   return lines;
 };
 
-// Mac traffic lights: a universal convention, not themeable
-const trafficLights = ["#ff5f56", "#ffbd2e", "#27c93f"];
+// Mac traffic lights live in CardHeader (shared window chrome)
 
 export const TerminalClip: ClipComponent<TerminalClipDef> = ({ clip }) => {
   const frame = useClipFrame(clip.transitionIn);
@@ -146,34 +145,7 @@ export const TerminalClip: ClipComponent<TerminalClipDef> = ({ clip }) => {
         lineHeight: codeLineHeight,
       }}
     >
-      <CardHeader>
-        <span style={{ display: "flex", gap: 8 }}>
-          {trafficLights.map((color) => (
-            <span
-              key={color}
-              style={{
-                width: 14,
-                height: 14,
-                borderRadius: 7,
-                backgroundColor: color,
-              }}
-            />
-          ))}
-        </span>
-        <span
-          style={{
-            flex: 1,
-            textAlign: "center",
-            fontWeight: 600,
-            color: textColor,
-            opacity: 0.7,
-          }}
-        >
-          {title}
-        </span>
-        {/* balance the traffic lights so the title is truly centered */}
-        <span style={{ width: 3 * 14 + 2 * 8 }} />
-      </CardHeader>
+      <CardHeader title={title} icon="terminal" />
       <div style={{ flex: 1, overflow: "hidden", padding: `0 ${cardPadding}px` }}>
         {lines.map((line, i) => (
           <div

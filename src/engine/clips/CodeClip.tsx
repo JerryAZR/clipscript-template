@@ -43,6 +43,11 @@ export const CodeClip: ClipComponent<CodeClipDef> = ({ clip }) => {
       `clip '${clip.id}': step '${!code ? currentSrc : prevSrc}' was not pre-highlighted`,
     );
   }
+  if (!clip.filename) {
+    throw new Error(
+      `clip '${clip.id}': code clip has no filename after state resolution`,
+    );
+  }
 
   const scrollFrom = clip.scrollFrom ?? 0;
   const scrollTarget = clip.scrollTo ?? scrollFrom;
@@ -98,11 +103,7 @@ export const CodeClip: ClipComponent<CodeClipDef> = ({ clip }) => {
         position: "relative",
       }}
     >
-      <CardHeader>
-        <div style={{ flex: 1, textAlign: "center", fontWeight: 600 }}>
-          {clip.filename}
-        </div>
-      </CardHeader>
+      <CardHeader title={clip.filename} icon="file" />
       <div style={{ flex: 1, overflow: "hidden", position: "relative" }}>
         <div
           style={{

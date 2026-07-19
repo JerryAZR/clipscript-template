@@ -174,7 +174,7 @@ Less commonly needed features - load the rule file only when the task calls for 
 - Video metadata (dimensions, duration): [rules/get-video-dimensions.md](rules/get-video-dimensions.md), [rules/get-video-duration.md](rules/get-video-duration.md)
 - FFmpeg operations, silence detection: [rules/ffmpeg.md](rules/ffmpeg.md), [rules/silence-detection.md](rules/silence-detection.md)
 - Sound effects: [rules/sfx.md](rules/sfx.md)
-- Voiceover (ElevenLabs TTS): [rules/voiceover.md](rules/voiceover.md)
+- Voiceover: this template generates narration audio locally with edge-tts (`scripts/tts.mts`) - prefer it for drafts. See [rules/voiceover.md](rules/voiceover.md) for the ElevenLabs pattern when high-quality TTS is needed
 - Audio visualization: [rules/audio-visualization.md](rules/audio-visualization.md)
 - Advanced images (sizing, dynamic paths, dimensions): [rules/images.md](rules/images.md)
 - GIFs: [rules/gifs.md](rules/gifs.md)

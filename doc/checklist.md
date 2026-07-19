@@ -51,6 +51,6 @@ per purpose; similar-purpose leftovers stay Niche in the inventory.
 
 ## Framework work (not clips, sequential)
 
-- [ ] TTS pipeline (narration.toml → voiceover mp3s, hash-cached) + measured durations.
+- [x] TTS pipeline (narration.toml → voiceover mp3s, hash-cached) + measured durations.
 - [ ] Validation/lint pass (coverage, transition sanity, scroll continuity).
 - [ ] Skill updates for the new authoring workflow.

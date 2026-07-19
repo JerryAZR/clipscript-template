@@ -8,6 +8,7 @@ import { mix, readableColor } from "polished";
 import { PNG } from "pngjs";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { resolveCodeState } from "../../src/engine/clips/code-state";
+import { measureAudioDuration } from "../../src/engine/audio";
 import { estimateDurationFrames, parseNarration } from "../../src/engine/narration";
 import { calculateTimeline } from "../../src/engine/timeline";
 import type { CodeClipDef, TimelineClip } from "../../src/engine/types";
@@ -89,10 +90,19 @@ describe("smoke: Episode demo render", () => {
     const narration = parseNarration(
       fs.readFileSync(path.resolve("public/demo/narration.toml"), "utf8"),
     );
-    const lines = narration.map((line) => ({
-      ...line,
-      durationFrames: estimateDurationFrames(line.text, 30),
-    }));
+    // Mirror the engine: measured durations from voiceover mp3s when present
+    const lines = await Promise.all(
+      narration.map(async (line) => {
+        const mp3 = path.resolve(`public/demo/voiceover/${line.fullId}.mp3`);
+        if (fs.existsSync(mp3)) {
+          const seconds = await measureAudioDuration(
+            new Blob([fs.readFileSync(mp3)]),
+          );
+          return { ...line, durationFrames: Math.max(1, Math.round(seconds * 30)) };
+        }
+        return { ...line, durationFrames: estimateDurationFrames(line.text, 30) };
+      }),
+    );
     const rawTimeline = calculateTimeline(lines, storyboard.clips);
     const clips = resolveCodeState(rawTimeline.clips);
     const code1 = clips.find((c) => c.id === "code-1")! as unknown as TimelineClip<CodeClipDef>;

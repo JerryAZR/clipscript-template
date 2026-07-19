@@ -1,7 +1,10 @@
 import type { NarrationLine } from "./narration";
 import type { StoryboardClip, Timeline, TimelineLine } from "./types";
 
-type LineWithDuration = NarrationLine & { durationFrames: number };
+type LineWithDuration = NarrationLine & {
+  durationFrames: number;
+  audio?: string | null;
+};
 
 type ClipState = {
   startFrame: number | null;
@@ -97,7 +100,7 @@ export const calculateTimeline = (
       text: line.text,
       startFrame: lineStart,
       endFrame: nextStart,
-      audio: null,
+      audio: line.audio ?? null,
     });
 
     // Resolve clip starts, ordinary end conditions and sync fences

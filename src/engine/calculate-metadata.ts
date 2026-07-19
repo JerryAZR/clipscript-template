@@ -4,9 +4,10 @@ import type { CalculateMetadataFunction } from "remotion";
 import { z } from "zod";
 import { themeSchema, ThemeColors } from "../calculate-metadata/theme";
 import { getEpisode } from "../episodes/registry";
+import { resolveLineAudio } from "./audio";
 import { resolveCodeState } from "./clips/code-state";
 import { highlightCodeSteps } from "./highlight";
-import { estimateDurationFrames, loadNarration } from "./narration";
+import { loadNarration } from "./narration";
 import { calculateTimeline } from "./timeline";
 import type { CodeClipDef, Timeline } from "./types";
 
@@ -35,11 +36,7 @@ export const episodeCalculateMetadata: CalculateMetadataFunction<
 > = async ({ props }) => {
   const { storyboard } = getEpisode(props.episode);
   const narration = await loadNarration(props.episode);
-
-  const lines = narration.map((line) => ({
-    ...line,
-    durationFrames: estimateDurationFrames(line.text, EPISODE_FPS),
-  }));
+  const lines = await resolveLineAudio(props.episode, narration, EPISODE_FPS);
 
   const rawTimeline = calculateTimeline(lines, storyboard.clips);
   const timeline: Timeline = {

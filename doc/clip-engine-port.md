@@ -159,8 +159,14 @@ type-acquisition for npm imports in snippets would still touch the network.
    split-pane presence, video playback (frames differ over time), overlay
    presence. Also caught and fixed an inverted-logic bug in the smoke
    `regionRatio` helper that made region assertions measure the inverse.
-4. **TTS pre-build** — `scripts/tts.mts`; real voiceover in demo episode.
-   (Network in some environments may block the TTS endpoint — degrade gracefully.)
+4. ~~**TTS pre-build**~~ **DONE** — `scripts/tts.mts` (edge-tts via
+   `msedge-tts`, content-hash cached, `--episode/--voice/--rate` args).
+   Engine measures real mp3 durations with Mediabunny (`src/engine/audio.ts`)
+   and falls back to text-length estimates for missing audio, so silent
+   episodes still render. Verified end to end: rendered demo has an AAC
+   voiceover track (mean -23.6 dB). Smoke test derives durations the same
+   way (measured when mp3s exist). OpenAI-compatible pipeline is a possible
+   later addition; the engine only cares about the mp3 files.
 5. **Validation + docs** — coverage/lint in `calculateMetadata`; update
    `codehike-video` skill to the new authoring workflow.
 

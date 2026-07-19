@@ -57,7 +57,15 @@ const synthesize = async (text: string, file: string) => {
   });
 };
 
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+// edge-tts is occasionally unstable - retry with backoff per line, and
+// persist the cache after every line so a failed run still resumes cheaply
+const MAX_ATTEMPTS = 3;
+const writeCache = () => fs.writeFileSync(cachePath, JSON.stringify(cache, null, 2));
+
 const wanted = new Set<string>();
+const failed: string[] = [];
 let synthesized = 0;
 for (const line of lines) {
   const filename = `${line.fullId}.mp3`;
@@ -70,15 +78,29 @@ for (const line of lines) {
     continue;
   }
 
-  try {
-    await synthesize(line.text, file);
-  } catch {
-    console.log(`retry  ${line.fullId}`);
-    await synthesize(line.text, file);
+  let attempt = 0;
+  for (;;) {
+    try {
+      attempt++;
+      await synthesize(line.text, file);
+      break;
+    } catch (err) {
+      if (attempt >= MAX_ATTEMPTS) {
+        console.log(`FAIL   ${line.fullId} (${MAX_ATTEMPTS} attempts)`);
+        failed.push(line.fullId);
+        break;
+      }
+      console.log(`retry  ${line.fullId} (attempt ${attempt} failed, backing off)`);
+      await sleep(1000 * 2 ** (attempt - 1));
+    }
   }
-  cache[line.fullId] = hash;
-  synthesized++;
-  console.log(`done   ${line.fullId}`);
+
+  if (!failed.includes(line.fullId)) {
+    cache[line.fullId] = hash;
+    writeCache();
+    synthesized++;
+    console.log(`done   ${line.fullId}`);
+  }
 }
 
 // Garbage-collect audio for removed lines
@@ -89,7 +111,11 @@ for (const file of fs.readdirSync(outDir)) {
   }
 }
 
-fs.writeFileSync(cachePath, JSON.stringify(cache, null, 2));
+writeCache();
 console.log(
-  `\n${lines.length} lines, ${synthesized} synthesized, ${lines.length - synthesized} cached`,
+  `\n${lines.length} lines, ${synthesized} synthesized, ${lines.length - synthesized - failed.length} cached, ${failed.length} failed`,
 );
+if (failed.length > 0) {
+  console.log(`failed lines: ${failed.join(", ")} - re-run to retry (cache is resumable)`);
+  process.exitCode = 1;
+}

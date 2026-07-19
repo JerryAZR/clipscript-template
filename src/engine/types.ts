@@ -58,12 +58,6 @@ export type ClipCommon = {
   paneTitle?: string;
 };
 
-export type TitleClipDef = ClipCommon & {
-  type: "title";
-  title: string;
-  subtitle?: string;
-};
-
 export type CodeClipDef = ClipCommon & {
   type: "code";
   /** Persistence chain id - clips with the same key share code/scroll state */
@@ -149,7 +143,6 @@ export type ProgressClipDef = ClipCommon & {
 };
 
 export type StoryboardClip =
-  | TitleClipDef
   | CodeClipDef
   | TerminalClipDef
   | VideoClipDef

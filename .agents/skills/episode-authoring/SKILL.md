@@ -41,7 +41,7 @@ export const storyboard: Storyboard = {
   clips: [
     {
       id: "intro-title",
-      type: "title",
+      type: "cinematic-title",
       title: "Episode Title",
       subtitle: "optional",
       rect: { x: 0, y: 0, w: "100%", h: "100%" },
@@ -80,11 +80,11 @@ export const storyboard: Storyboard = {
 - `{ line: "a.b", end: true }` - when the line finishes (spans the whole line)
 - `{ line: "a.b", offsetFrames: 150, sync: "a.b" }` - fence: the timeline waits for this frame
 
-Rect numbers are px, `"NN%"` is percent of 1920x1080. Split screen = two clips with `w: "50%"`. Overlay on top = small rect + `zIndex: 10`. `paneTitle` labels a pane from the outside (comparison-style split screens); for one shared title above cooperating panes, place a `title` clip in a top rect instead.
+Rect numbers are px, `"NN%"` is percent of 1920x1080. Split screen = two clips with `w: "50%"`. Overlay on top = small rect + `zIndex: 10`. `paneTitle` labels a pane from the outside (comparison-style split screens); for one shared title above cooperating panes, place a `cinematic-title` clip in a top rect instead.
 
 ## Clip types (common config)
 
-- **title** - `title`, `subtitle?`. Centered title card.
+- **cinematic-title** - `title`, `subtitle?`. The default title page: spring title, growing underline, subtitle fade. Full-screen rect, its own line.
 - **code** - `steps` (code files, morphs between them), `key?` (chain continuity), `filename?`, `stepInterval?` (60), `transitionDuration?` (30), `transition?` ("token"/"line"), `scrollTo?`, `scrollDuration?`. Code annotations live in the code files as comments - see [rules/annotations.md](rules/annotations.md).
 - **terminal** - `steps` (`{cwd?, command, output?[]}[]`), `typeSpeed?` (1), `pauseAfterCommand?` (15), `outputLineDelay?` (10), `showCursor?` (true).
 - **video** - `src` (file in `video/`), `startFrom?`, `playbackRate?`, `muted?` (true), `loop?` (false).
@@ -92,7 +92,7 @@ Rect numbers are px, `"NN%"` is percent of 1920x1080. Split screen = two clips w
 
 Defaults in parentheses. Key chains: clips sharing `key` continue exactly where the previous ended (code step, scroll, rect, filename) - they must not overlap and must keep the same top-left corner.
 
-Also available: **cinematic-title** (spring title + growing underline, for openers), **animated-list** (staggered bullet reveal), **progress** (done/current/todo checklist) - config in [rules/more-clips.md](rules/more-clips.md).
+Also available: **animated-list** (staggered bullet reveal), **progress** (done/current/todo checklist) - config in [rules/more-clips.md](rules/more-clips.md).
 
 ## When the 80% path isn't enough
 
@@ -100,4 +100,4 @@ Also available: **cinematic-title** (spring title + growing underline, for opene
 - Voiceover details (voices, cache, replacing the pipeline) - [rules/narration-and-voiceover.md](rules/narration-and-voiceover.md)
 - Code annotations (mark, diff, focus, callout, twoslash) - [rules/annotations.md](rules/annotations.md)
 - Debugging renders - [rules/verification.md](rules/verification.md)
-- Per-clip deep dives - [rules/code-clip.md](rules/code-clip.md), [terminal-clip.md](rules/terminal-clip.md), [video-clip.md](rules/video-clip.md), [overlay-clip.md](rules/overlay-clip.md), [title-clip.md](rules/title-clip.md)
+- Per-clip deep dives - [rules/code-clip.md](rules/code-clip.md), [terminal-clip.md](rules/terminal-clip.md), [video-clip.md](rules/video-clip.md), [overlay-clip.md](rules/overlay-clip.md), [cinematic-title-clip.md](rules/cinematic-title-clip.md)

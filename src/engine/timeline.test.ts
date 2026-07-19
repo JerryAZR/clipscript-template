@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { calculateTimeline } from "./timeline";
-import type { TitleClipDef } from "./types";
+import type { OverlayClipDef } from "./types";
 
 const line = (fullId: string, durationFrames: number) => ({
   fullId,
@@ -8,11 +8,11 @@ const line = (fullId: string, durationFrames: number) => ({
   durationFrames,
 });
 
-const titleClip = (
-  overrides: Partial<TitleClipDef> & { id: string },
-): TitleClipDef => ({
-  type: "title",
-  title: "t",
+const testClip = (
+  overrides: Partial<OverlayClipDef> & { id: string },
+): OverlayClipDef => ({
+  type: "overlay",
+  text: "t",
   rect: { x: 0, y: 0, w: "100%", h: "100%" },
   startAt: { line: "l1" },
   endAt: [{ line: "l1", end: true }],
@@ -31,7 +31,7 @@ describe("calculateTimeline", () => {
     const [clip] = calculateTimeline(
       [line("l1", 60), line("l2", 60)],
       [
-        titleClip({
+        testClip({
           id: "c",
           startAt: { line: "l1", offsetFrames: 10 },
           endAt: [{ line: "l2", offsetFrames: 15 }],
@@ -45,7 +45,7 @@ describe("calculateTimeline", () => {
     const [clip] = calculateTimeline(
       [line("l1", 60), line("l2", 60)],
       [
-        titleClip({
+        testClip({
           id: "c",
           endAt: [
             { line: "l1", offsetFrames: 40 },
@@ -61,12 +61,12 @@ describe("calculateTimeline", () => {
     const timeline = calculateTimeline(
       [line("l1", 60), line("l2", 60)],
       [
-        titleClip({
+        testClip({
           id: "fence",
           startAt: { line: "l1" },
           endAt: [{ line: "l1", offsetFrames: 100, sync: "l1" }],
         }),
-        titleClip({
+        testClip({
           id: "absorber",
           startAt: { line: "l1" },
           endAt: [{ line: "l1", end: true }],
@@ -83,7 +83,7 @@ describe("calculateTimeline", () => {
   it("extends totalFrames past the last line for an unfenced clip end", () => {
     const timeline = calculateTimeline(
       [line("l1", 60)],
-      [titleClip({ id: "c", endAt: [{ line: "l1", offsetFrames: 120 }] })],
+      [testClip({ id: "c", endAt: [{ line: "l1", offsetFrames: 120 }] })],
     );
     expect(timeline.totalFrames).toBe(120);
   });
@@ -92,7 +92,7 @@ describe("calculateTimeline", () => {
     expect(() =>
       calculateTimeline(
         [line("l1", 60)],
-        [titleClip({ id: "c", startAt: { line: "nope" } })],
+        [testClip({ id: "c", startAt: { line: "nope" } })],
       ),
     ).toThrow(/clip 'c' startAt references unknown line 'nope'/);
   });
@@ -101,19 +101,19 @@ describe("calculateTimeline", () => {
     expect(() =>
       calculateTimeline(
         [line("l1", 60)],
-        [titleClip({ id: "c", endAt: [{ line: "nope" }] })],
+        [testClip({ id: "c", endAt: [{ line: "nope" }] })],
       ),
     ).toThrow(/clip 'c' endAt references unknown line 'nope'/);
   });
 
   it("throws on empty endAt", () => {
     expect(() =>
-      calculateTimeline([line("l1", 60)], [titleClip({ id: "c", endAt: [] })]),
+      calculateTimeline([line("l1", 60)], [testClip({ id: "c", endAt: [] })]),
     ).toThrow(/clip 'c' has no endAt conditions/);
   });
 
   it("throws when end=true is combined with offsetFrames", () => {
-    const clip = titleClip({
+    const clip = testClip({
       id: "c",
       endAt: [{ line: "l1", end: true, offsetFrames: 5 } as never],
     });
@@ -127,7 +127,7 @@ describe("calculateTimeline", () => {
       calculateTimeline(
         [line("l1", 60), line("l2", 60)],
         [
-          titleClip({
+          testClip({
             id: "c",
             endAt: [{ line: "l2", offsetFrames: 5, sync: "l1" }],
           }),
@@ -140,7 +140,7 @@ describe("calculateTimeline", () => {
     expect(() =>
       calculateTimeline(
         [line("l1", 60)],
-        [titleClip({ id: "c", endAt: [{ line: "l1" }] })],
+        [testClip({ id: "c", endAt: [{ line: "l1" }] })],
       ),
     ).toThrow(/clip 'c' has zero or negative duration/);
   });
@@ -149,7 +149,7 @@ describe("calculateTimeline", () => {
     expect(() =>
       calculateTimeline(
         [line("l1", 60), line("l2", 60)],
-        [titleClip({ id: "c", startAt: { line: "l2" }, endAt: [{ line: "l1" }] })],
+        [testClip({ id: "c", startAt: { line: "l2" }, endAt: [{ line: "l1" }] })],
       ),
     ).toThrow(/clip 'c' end was never resolved|end resolved before start/);
   });
@@ -158,7 +158,7 @@ describe("calculateTimeline", () => {
     const timeline = calculateTimeline(
       [line("l1", 60), line("l2", 60)],
       [
-        titleClip({
+        testClip({
           id: "c",
           endAt: [{ line: "l1", offsetFrames: 30, sync: "l1" }],
         }),

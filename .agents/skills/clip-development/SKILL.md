@@ -16,23 +16,23 @@ A clip component is `React.FC<{ clip: TimelineClip<T> }>` where `T` is the clip'
 A complete minimal clip:
 
 ```tsx
-import { mix, readableColor } from "polished";
 import { useThemeColors } from "../../calculate-metadata/theme";
-import type { ClipComponent, TitleClipDef } from "../types";
+import { centeredPaneStyle, textStyles } from "../clip-style";
+import type { ClipComponent, OverlayClipDef } from "../types";
 import { useClipFrame } from "../useClipFrame";
 
-export const TitleClip: ClipComponent<TitleClipDef> = ({ clip }) => {
+export const OverlayClip: ClipComponent<OverlayClipDef> = ({ clip }) => {
   // Content choreography starts after the renderer-owned pane transition
   const frame = useClipFrame(clip.transitionIn);
   const themeColors = useThemeColors();
 
   return (
     <div style={{
-      width: "100%", height: "100%",
-      display: "flex", alignItems: "center", justifyContent: "center",
+      ...centeredPaneStyle,
+      ...textStyles.body,
       color: themeColors.editor.foreground,
     }}>
-      {clip.title}
+      {clip.text}
     </div>
   );
 };
@@ -59,4 +59,4 @@ export const TitleClip: ClipComponent<TitleClipDef> = ({ clip }) => {
 
 - Writing Code Hike annotation handlers (for code-like clips) - [rules/annotation-handlers.md](rules/annotation-handlers.md)
 - Porting RVE template recipes into clips - [rules/rve-recipes.md](rules/rve-recipes.md)
-- Existing clips to imitate: `src/engine/clips/TitleClip.tsx` (simplest), `TerminalClip.tsx` (pure-math pattern), `CodeClip.tsx` (complex)
+- Existing clips to imitate: `src/engine/clips/OverlayClip.tsx` (simplest), `TerminalClip.tsx` (pure-math pattern), `CodeClip.tsx` (complex)

@@ -3,26 +3,6 @@
 Occasionally-useful clips beyond the core five. Same common fields (`rect`,
 `startAt`, `endAt`, `transitionIn?`, `transitionOut?`, `zIndex?`) as every clip.
 
-## cinematic-title
-
-Full-pane episode/chapter opener: title springs up, an accent underline grows,
-subtitle fades in. All choreography is fixed; there is nothing to tune.
-
-```ts
-{
-  id: "opener",
-  type: "cinematic-title",
-  title: "Building the Engine",
-  subtitle: "part 2",              // optional
-  rect: { x: 0, y: 0, w: "100%", h: "100%" },
-  startAt: { line: "intro.first" },
-  endAt: [{ line: "intro.first", end: true }],
-}
-```
-
-Give it a line of its own and a full-screen rect - overlapping it with other
-clips defeats the purpose.
-
 ## animated-list
 
 Bullet list whose items spring in one at a time.

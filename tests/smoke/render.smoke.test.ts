@@ -122,7 +122,7 @@ describe("smoke: Episode demo render", () => {
     const progressLine = rawTimeline.lines.find((l) => l.fullId === "more.progress")!;
 
     const samplePoints: Record<string, number> = {
-      introTitle: introLine.startFrame + 15,
+      introTitle: introLine.startFrame + 30,
       conceptsMid: spanLine.startFrame + Math.floor((spanLine.endFrame - spanLine.startFrame) / 2),
       bannerFrame: banner.startFrame + 30,
       settledV1: code1.startFrame + 40,

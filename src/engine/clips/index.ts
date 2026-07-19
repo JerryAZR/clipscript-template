@@ -5,7 +5,6 @@ import { CodeClip } from "./CodeClip";
 import { OverlayClip } from "./OverlayClip";
 import { ProgressClip } from "./ProgressClip";
 import { TerminalClip } from "./TerminalClip";
-import { TitleClip } from "./TitleClip";
 import { VideoClip } from "./VideoClip";
 
 // Optional per key: clip types land incrementally, and episode registries
@@ -17,12 +16,11 @@ type SharedClipComponents = {
 };
 
 export const sharedClipComponents: SharedClipComponents = {
-  title: TitleClip,
+  "cinematic-title": CinematicTitleClip,
   code: CodeClip,
   terminal: TerminalClip,
   video: VideoClip,
   overlay: OverlayClip,
-  "cinematic-title": CinematicTitleClip,
   "animated-list": AnimatedListClip,
   progress: ProgressClip,
 };

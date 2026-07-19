@@ -1,10 +1,10 @@
 import type { Storyboard } from "../../engine/types";
 
-// Introduction: one full-screen title spanning two narration lines
+// Introduction: one full-screen cinematic title spanning two narration lines
 const introClips: Storyboard["clips"] = [
   {
     id: "intro-title",
-    type: "title",
+    type: "cinematic-title",
     title: "Clip Engine",
     subtitle: "Narration-driven videos",
     rect: { x: 0, y: 0, w: "100%", h: "100%" },
@@ -17,20 +17,20 @@ const introClips: Storyboard["clips"] = [
 const conceptClips: Storyboard["clips"] = [
   {
     id: "concepts-left",
-    type: "title",
+    type: "overlay",
     title: "Clips",
-    subtitle: "modular visual blocks",
-    rect: { x: 0, y: 0, w: "50%", h: "100%" },
+    text: "modular visual blocks",
+    rect: { x: "10%", y: "35%", w: "35%", h: "30%" },
     transitionIn: 15,
     startAt: { line: "concepts.clips" },
     endAt: [{ line: "concepts.span", end: true }],
   },
   {
     id: "concepts-right",
-    type: "title",
+    type: "overlay",
     title: "Timeline",
-    subtitle: "computed from narration",
-    rect: { x: "50%", y: 0, w: "50%", h: "100%" },
+    text: "computed from narration",
+    rect: { x: "55%", y: "35%", w: "35%", h: "30%" },
     transitionIn: 15,
     startAt: { line: "concepts.clips", offsetFrames: 20 },
     endAt: [{ line: "concepts.span", end: true }],
@@ -39,8 +39,8 @@ const conceptClips: Storyboard["clips"] = [
     // Bottom banner appearing on "concepts.timing"; its sync fence holds the
     // timeline for 150 frames before the next line may start
     id: "concepts-banner",
-    type: "title",
-    title: "Anchored to lines",
+    type: "overlay",
+    text: "Anchored to lines",
     rect: { x: "25%", y: "75%", w: "50%", h: "15%" },
     zIndex: 10,
     startAt: { line: "concepts.timing" },

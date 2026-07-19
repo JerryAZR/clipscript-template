@@ -8,7 +8,7 @@ Clips are plain typed objects - TypeScript validates them as you write.
 ```ts
 {
   id: string;                  // unique in the storyboard; used in errors
-  type: "title" | "code" | "terminal" | "video" | "overlay";
+  type: "cinematic-title" | "code" | "terminal" | "video" | "overlay" | "animated-list" | "progress";
   rect?: Rect;                 // { x, y, w, h } - numbers are px, "NN%" of the composition
   zIndex?: number;             // stacking order for overlapping panes
   startAt: { line: string; offsetFrames?: number };

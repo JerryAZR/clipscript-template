@@ -20,18 +20,10 @@ export const ESTIMATED_CHARS_PER_SECOND = 15;
 export const estimateDurationFrames = (text: string, fps: number): number =>
   Math.max(fps, Math.round((text.length / ESTIMATED_CHARS_PER_SECOND) * fps));
 
-export const loadNarration = async (
-  episode: string,
-): Promise<NarrationLine[]> => {
-  const response = await fetch(staticFile(`${episode}/narration.toml`));
-  if (!response.ok) {
-    throw new Error(
-      `narration.toml not found for episode '${episode}' (HTTP ${response.status})`,
-    );
-  }
-  const parsed = narrationSchema.parse(parse(await response.text()));
+export const parseNarration = (toml: string): NarrationLine[] => {
+  const parsed = narrationSchema.parse(parse(toml));
   if (parsed.lines.length === 0) {
-    throw new Error(`narration.toml for episode '${episode}' has no lines`);
+    throw new Error("narration.toml has no lines");
   }
 
   const seen = new Set<string>();
@@ -44,4 +36,16 @@ export const loadNarration = async (
     // is an authoring convention, not engine semantics
     return { fullId: id, text };
   });
+};
+
+export const loadNarration = async (
+  episode: string,
+): Promise<NarrationLine[]> => {
+  const response = await fetch(staticFile(`${episode}/narration.toml`));
+  if (!response.ok) {
+    throw new Error(
+      `narration.toml not found for episode '${episode}' (HTTP ${response.status})`,
+    );
+  }
+  return parseNarration(await response.text());
 };

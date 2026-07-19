@@ -83,6 +83,38 @@ scripts/tts.mts      narration.toml → voiceover/*.mp3 (hash-cached)
 
 ## Milestones (build & verify incrementally)
 
+**Testing infrastructure (post-M2)**: vitest unit tests for the pure core
+(`timeline.ts`, `code-state.ts`, `narration.ts`, `registry.ts`) plus a render
+smoke test (`tests/smoke/render.smoke.test.ts`) that derives sample frames
+from the actual timeline and asserts cross-frame invariants with pngjs:
+absolute theme/card colors, non-blank frames, static holds ≈ 0 diff, chain
+continuity ≈ 0 diff (full-frame AND tab-strip crop), morphs differing from
+both endpoints, scroll-target verification via crop matching, title/split/
+banner presence. CI: `.github/workflows/ci.yml` (lint → unit → smoke, with
+cached Remotion browser).
+
+Known conscious test gaps: OCR/content correctness (out of scope), twoslash
+output correctness, the `transitionOut` exit fade (no demo clip uses it),
+the `transition: "line"` granularity path (no demo coverage), and
+React-component error paths (unknown clip type) - no React test setup.
+
+**Bug found by the smoke test (fixed)**: Sequences premount offscreen
+(`top: -999999px`), so the mount-time transition snapshot measured garbage
+positions and every token phantom-flew-in for ~15 frames at each clip start.
+Fix: `CodeTransition` detects content-identical self-morphs (step 0) and skips
+the transition machinery entirely.
+
+**Engine rule codified by that bug**: never measure DOM at mount - Remotion
+may premount offscreen. Measure per-frame or after visibility.
+
+**Twoslash is fully local** (no CDN dependency): `twoslash-cdn` accepts a
+custom `fetcher`; `scripts/prepare-twoslash-libs.mjs` (wired to `postinstall`)
+copies the TS compiler + lib types from `node_modules/typescript` into
+`public/vendor/ts-lib/` (gitignored, ~12MB), and the fetcher in
+`process-snippet.ts` rewrites `/cdn/*/typescript/lib/*` URLs to `staticFile`.
+Verified: `^?` callout renders with zero `playgroundcdn` requests. Only ATA
+type-acquisition for npm imports in snippets would still touch the network.
+
 1. ~~**Engine core**~~ **DONE** — types, narration parser (`smol-toml`), fence
    timeline, `calculateMetadata`, `ClipRenderer`, `useClipFrame`; silent demo
    episode (`public/demo/` + `src/episodes/demo/`), title clips; verified with

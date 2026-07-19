@@ -54,18 +54,27 @@ export function CodeTransition({
   const { delayRender, continueRender } = useDelayRender();
   const [handle] = React.useState(() => delayRender());
 
+  // Step 0 morphs "from itself" (static display). Skipping the transition
+  // machinery also avoids a bogus snapshot: Sequences premount offscreen
+  // (top: -999999px), so a mount-time snapshot measures garbage positions.
+  const isStatic = oldCode !== null && oldCode.code === newCode.code;
+
   const prevCode: HighlightedCode = useMemo(() => {
     return oldCode || { ...newCode, tokens: [], annotations: [] };
   }, [newCode, oldCode]);
 
   const code = useMemo(() => {
-    return oldSnapshot ? newCode : prevCode;
-  }, [newCode, prevCode, oldSnapshot]);
+    return isStatic || oldSnapshot ? newCode : prevCode;
+  }, [isStatic, newCode, prevCode, oldSnapshot]);
 
   const selector = transition === "line" ? ".ch-line" : undefined;
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useLayoutEffect(() => {
+    if (isStatic) {
+      continueRender(handle);
+      return;
+    }
     if (!oldSnapshot) {
       setOldSnapshot(getStartingSnapshot(ref.current!, { selector }));
       return;

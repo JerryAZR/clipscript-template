@@ -58,6 +58,7 @@ const codeClips: Storyboard["clips"] = [
     steps: ["v1.ts", "v2.ts"],
     filename: "users.ts",
     rect: { x: "10%", y: "10%", w: "80%", h: "80%" },
+    scrollTo: 8,
     startAt: { line: "code.intro" },
     endAt: [{ line: "code.intro", end: true }],
   },

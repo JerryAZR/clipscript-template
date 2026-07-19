@@ -95,12 +95,41 @@ export type OverlayClipDef = ClipCommon & {
   text: string;
 };
 
+export type CinematicTitleClipDef = ClipCommon & {
+  type: "cinematic-title";
+  title: string;
+  subtitle?: string;
+};
+
+export type AnimatedListClipDef = ClipCommon & {
+  type: "animated-list";
+  items: string[];
+  /** Frames between consecutive items appearing (default 15) */
+  stagger?: number;
+};
+
+export type ProgressItem = {
+  text: string;
+  status: "done" | "current" | "todo";
+  children?: { text: string; status: "done" | "current" | "todo" }[];
+};
+
+export type ProgressClipDef = ClipCommon & {
+  type: "progress";
+  /** Heading above the checklist (optional) */
+  title?: string;
+  items: ProgressItem[];
+};
+
 export type StoryboardClip =
   | TitleClipDef
   | CodeClipDef
   | TerminalClipDef
   | VideoClipDef
-  | OverlayClipDef;
+  | OverlayClipDef
+  | CinematicTitleClipDef
+  | AnimatedListClipDef
+  | ProgressClipDef;
 
 export type Storyboard = {
   clips: StoryboardClip[];

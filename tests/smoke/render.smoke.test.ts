@@ -116,6 +116,9 @@ describe("smoke: Episode demo render", () => {
     const terminalLine = rawTimeline.lines.find((l) => l.fullId === "showcase.terminal")!;
     const videoLine = rawTimeline.lines.find((l) => l.fullId === "showcase.video")!;
     const overlayLine = rawTimeline.lines.find((l) => l.fullId === "showcase.overlay")!;
+    const cinematicLine = rawTimeline.lines.find((l) => l.fullId === "more.cinematic")!;
+    const listLine = rawTimeline.lines.find((l) => l.fullId === "more.list")!;
+    const progressLine = rawTimeline.lines.find((l) => l.fullId === "more.progress")!;
 
     const samplePoints: Record<string, number> = {
       introTitle: introLine.startFrame + 15,
@@ -132,6 +135,11 @@ describe("smoke: Episode demo render", () => {
       videoEarly: videoLine.startFrame + 30,
       videoLate: overlayLine.startFrame + 30,
       overlayFrame: overlayLine.startFrame + 30,
+      cinematicMid: cinematicLine.startFrame + 60,
+      // After the pane fade + first item's reveal, but before the last item starts
+      listEarly: listLine.startFrame + 35,
+      listLate: listLine.endFrame - 5,
+      progressMid: progressLine.startFrame + 45,
     };
 
     // Absolute expected colors, computed the same way the components do
@@ -275,5 +283,45 @@ describe("smoke: Episode demo render", () => {
 
   it("morphs to the next step after the scroll", () => {
     expect(fullDiff(readPng(frames.afterScroll), readPng(frames.midMorph2))).toBeGreaterThan(0.02);
+  });
+
+  it("renders the cinematic title with its accent underline", () => {
+    const png = readPng(frames.cinematicMid);
+    const bg = hexToRgb(expectedBackground);
+    // Title + underline around the screen center
+    expect(
+      regionRatio(png, bg, { x: 560, y: 380, w: 800, h: 320 }, true),
+    ).toBeGreaterThan(0.005);
+  });
+
+  it("reveals list items one by one", () => {
+    const bg = hexToRgb(expectedBackground);
+    const late = readPng(frames.listLate);
+    // List pane settled: items present in the lower rows too
+    expect(
+      regionRatio(late, bg, { x: 400, y: 450, w: 1100, h: 400 }, true),
+    ).toBeGreaterThan(0.005);
+    // Early frame is missing the later items
+    expect(
+      cropDiff(
+        readPng(frames.listEarly),
+        late,
+        400,
+        450,
+        400,
+        450,
+        1100,
+        400,
+      ),
+    ).toBeGreaterThan(0.005);
+  });
+
+  it("renders the progress checklist", () => {
+    const png = readPng(frames.progressMid);
+    const bg = hexToRgb(expectedBackground);
+    // Heading + items inside the progress pane (x 20%-80%, y 10%-90%)
+    expect(
+      regionRatio(png, bg, { x: 500, y: 200, w: 900, h: 700 }, true),
+    ).toBeGreaterThan(0.005);
   });
 });

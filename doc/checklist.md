@@ -14,12 +14,12 @@ per purpose; similar-purpose leftovers stay Niche in the inventory.
 
 ## Batch 2 — structure
 
-- [ ] **cinematic-title-intro** (RVE) — spring title with growing underline.
+- [x] **cinematic-title-intro** (RVE) — spring title with growing underline.
   Use case: episode opener. Replaces the plain title page for anything that
   needs to feel like an intro.
-- [ ] **animated-list** (RVE) — staggered bullet reveals.
+- [x] **animated-list** (RVE) — staggered bullet reveals.
   Use case: "what we'll cover", summaries, checklists narrated one by one.
-- [ ] **progress** (bevy) — outline with done/current/todo states.
+- [x] **progress** (bevy) — outline with done/current/todo states.
   Use case: episode roadmap, multi-part progress. Needs de-sinicizing.
 
 ## Batch 3 — flair

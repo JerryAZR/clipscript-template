@@ -124,6 +124,60 @@ const showcaseClips: Storyboard["clips"] = [
   },
 ];
 
+// Batch-2 clips: cinematic chapter title, staggered list, progress checklist
+const moreClips: Storyboard["clips"] = [
+  {
+    id: "cinematic-1",
+    type: "cinematic-title",
+    title: "More Clips",
+    subtitle: "titles, lists and checklists",
+    rect: { x: 0, y: 0, w: "100%", h: "100%" },
+    startAt: { line: "more.cinematic" },
+    endAt: [{ line: "more.cinematic", end: true }],
+  },
+  {
+    id: "list-1",
+    type: "animated-list",
+    items: [
+      "Narration is the master clock",
+      "Clips anchor to lines, never frames",
+      "State chains carry code across clips",
+    ],
+    rect: { x: "15%", y: "15%", w: "70%", h: "70%" },
+    transitionIn: 15,
+    startAt: { line: "more.list" },
+    endAt: [{ line: "more.list", end: true }],
+  },
+  {
+    id: "progress-1",
+    type: "progress",
+    title: "In this demo",
+    items: [
+      { text: "Titles and layouts", status: "done" },
+      { text: "Code clips and state chains", status: "done" },
+      {
+        text: "Showcase clips",
+        status: "current",
+        children: [
+          { text: "Terminal and video", status: "done" },
+          { text: "Lists and progress", status: "current" },
+        ],
+      },
+      { text: "The framework demo video", status: "todo" },
+    ],
+    rect: { x: "20%", y: "10%", w: "60%", h: "80%" },
+    transitionIn: 15,
+    startAt: { line: "more.progress" },
+    endAt: [{ line: "more.progress", end: true }],
+  },
+];
+
 export const storyboard: Storyboard = {
-  clips: [...introClips, ...conceptClips, ...codeClips, ...showcaseClips],
+  clips: [
+    ...introClips,
+    ...conceptClips,
+    ...codeClips,
+    ...showcaseClips,
+    ...moreClips,
+  ],
 };

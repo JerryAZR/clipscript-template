@@ -29,7 +29,7 @@ export const processSnippet = async (step: PublicFolderFile, theme: Theme) => {
   const highlighted = await highlight(
     {
       lang: extension,
-      meta: "",
+      meta: step.filename,
       value: twoslashResult ? twoslashResult.code : step.value,
     },
     theme,

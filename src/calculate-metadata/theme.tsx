@@ -31,6 +31,8 @@ export const themeSchema = z.enum([
 
 export type Theme = z.infer<typeof themeSchema>;
 
+export const defaultTheme: Theme = "github-dark";
+
 export const ThemeColorsContext = React.createContext<ThemeColors | null>(null);
 
 export const useThemeColors = () => {

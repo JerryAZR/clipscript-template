@@ -8,8 +8,7 @@ import { useRemotionEnvironment } from "remotion";
 
 const getCurrentHash = () => {
   const files = getStaticFiles();
-  const codeFiles = files.filter((file) => file.name.startsWith("code"));
-  const contents = codeFiles.map((file) => file.src + file.lastModified);
+  const contents = files.map((file) => file.src + file.lastModified);
   return contents.join("");
 };
 

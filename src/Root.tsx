@@ -3,6 +3,7 @@ import { Main } from "./Main";
 
 import { calculateMetadata } from "./calculate-metadata/calculate-metadata";
 import { schema } from "./calculate-metadata/schema";
+import { defaultTheme } from "./calculate-metadata/theme";
 
 export const RemotionRoot = () => {
   return (
@@ -12,7 +13,8 @@ export const RemotionRoot = () => {
       defaultProps={{
         steps: null,
         themeColors: null,
-        theme: "github-dark" as const,
+        episode: "codehike-demo",
+        theme: defaultTheme,
         codeWidth: null,
         width: {
           type: "auto",

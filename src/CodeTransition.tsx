@@ -1,5 +1,5 @@
 import { AnnotationHandler, HighlightedCode, Pre } from "codehike/code";
-import React, { useEffect, useLayoutEffect, useMemo, useState } from "react";
+import React, { useLayoutEffect, useMemo, useState } from "react";
 import { Easing, interpolate, useCurrentFrame, useDelayRender } from "remotion";
 
 import {
@@ -8,10 +8,14 @@ import {
   TokenTransitionsSnapshot,
 } from "codehike/utils/token-transitions";
 import { callout } from "./annotations/Callout";
+import { diff } from "./annotations/Diff";
+import { focus } from "./annotations/Focus";
+import { mark } from "./annotations/Mark";
 import { applyStyle } from "./utils";
 
 import { errorInline, errorMessage } from "./annotations/Error";
 import { tokenTransitions } from "./annotations/InlineToken";
+import { wordWrap } from "./annotations/WordWrap";
 import { fontFamily, fontSize, tabSize } from "./font";
 
 export function CodeTransition({
@@ -38,12 +42,6 @@ export function CodeTransition({
   const code = useMemo(() => {
     return oldSnapshot ? newCode : prevCode;
   }, [newCode, prevCode, oldSnapshot]);
-
-  useEffect(() => {
-    if (!oldSnapshot) {
-      setOldSnapshot(getStartingSnapshot(ref.current!));
-    }
-  }, [oldSnapshot]);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useLayoutEffect(() => {
@@ -79,7 +77,7 @@ export function CodeTransition({
   });
 
   const handlers: AnnotationHandler[] = useMemo(() => {
-    return [tokenTransitions, callout, errorInline, errorMessage];
+    return [tokenTransitions, mark, diff, focus, callout, errorInline, errorMessage, wordWrap];
   }, []);
 
   const style: React.CSSProperties = useMemo(() => {

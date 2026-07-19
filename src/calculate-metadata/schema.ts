@@ -12,6 +12,7 @@ export const width = z.discriminatedUnion("type", [
 ]);
 
 export const schema = z.object({
+  episode: z.string(),
   theme: themeSchema,
   width,
 });

@@ -18,7 +18,7 @@ import { schema } from "./schema";
 export const calculateMetadata: CalculateMetadataFunction<
   Props & z.infer<typeof schema>
 > = async ({ props }) => {
-  const contents = await getFiles();
+  const contents = await getFiles(props.episode);
 
   await waitUntilDone();
   const widthPerCharacter = measureText({
@@ -27,15 +27,6 @@ export const calculateMetadata: CalculateMetadataFunction<
     fontSize,
     validateFontIsLoaded: true,
   }).width;
-
-  const maxCharacters = Math.max(
-    ...contents
-      .map(({ value }) => value.split("\n"))
-      .flat()
-      .map((value) => value.replaceAll("\t", " ".repeat(tabSize)).length)
-      .flat(),
-  );
-  const codeWidth = widthPerCharacter * maxCharacters;
 
   const defaultStepDuration = 90;
 
@@ -46,24 +37,40 @@ export const calculateMetadata: CalculateMetadataFunction<
     twoSlashedCode.push(await processSnippet(snippet, props.theme));
   }
 
-  const naturalWidth = codeWidth + horizontalPadding * 2;
-  const divisibleByTwo = Math.ceil(naturalWidth / 2) * 2; // MP4 requires an even width
+  // Measure the processed code (annotation comments and twoslash
+  // directives removed), not the raw file contents
+  const maxCharacters = Math.max(
+    ...twoSlashedCode
+      .map(({ code }) => code.split("\n"))
+      .flat()
+      .map((line) => line.replaceAll("\t", " ".repeat(tabSize)).length),
+  );
+  const codeWidth = widthPerCharacter * maxCharacters;
 
-  const minimumWidth = props.width.type === "fixed" ? 0 : 1080;
-  const minimumWidthApplied = Math.max(minimumWidth, divisibleByTwo);
+  // MP4 requires an even width
+  const even = (value: number) => Math.ceil(value / 2) * 2;
+
+  // "fixed" caps the code box so long lines wrap (with the word-wrap
+  // handler); "auto" sizes the video to the longest line
+  const width =
+    props.width.type === "fixed"
+      ? even(props.width.value)
+      : Math.max(1080, even(codeWidth + horizontalPadding * 2));
+  const effectiveCodeWidth =
+    props.width.type === "fixed"
+      ? Math.min(codeWidth, width - horizontalPadding * 2)
+      : codeWidth;
 
   return {
     durationInFrames: contents.length * defaultStepDuration,
-    width:
-      props.width.type === "fixed"
-        ? Math.max(minimumWidthApplied, props.width.value)
-        : minimumWidthApplied,
+    width,
     props: {
+      episode: props.episode,
       theme: props.theme,
       width: props.width,
       steps: twoSlashedCode,
       themeColors,
-      codeWidth,
+      codeWidth: effectiveCodeWidth,
     },
   };
 };

@@ -1,7 +1,6 @@
 import { darken, mix, readableColor, rgba } from "polished";
 import { Easing, interpolate } from "remotion";
 import { useCardColor, useThemeColors } from "../../calculate-metadata/theme";
-import { fontFamily } from "../../font";
 import { textStyles } from "../clip-style";
 import { cardRadius } from "../code-style";
 import type { ClipComponent, OverlayClipDef } from "../types";
@@ -39,7 +38,6 @@ export const OverlayClip: ClipComponent<OverlayClipDef> = ({ clip }) => {
         border: `1px solid ${borderColor}`,
         borderRadius: cardRadius,
         padding: "24px 32px",
-        fontFamily,
         color: foreground,
         boxShadow: `0 8px 32px ${shadowColor}`,
         transform: `translateY(${translateY}px)`,

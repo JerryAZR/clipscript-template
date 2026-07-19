@@ -7,9 +7,9 @@ import {
   useCurrentFrame,
   useVideoConfig,
 } from "remotion";
-import { mix, readableColor } from "polished";
-import { useThemeColors } from "../calculate-metadata/theme";
+import { useDimmedColor } from "../calculate-metadata/theme";
 import { textStyles, TITLE_BAR_HEIGHT } from "./clip-style";
+import { cardPadding } from "./code-style";
 import type { ClipComponent, RectValue, Timeline, TimelineClip } from "./types";
 
 const resolveRectValue = (value: RectValue, dimension: number): number => {
@@ -35,7 +35,7 @@ const ClipPane: React.FC<{
   // Clip-local frame (this component is inside the clip's Sequence)
   const frame = useCurrentFrame();
   const { width, height } = useVideoConfig();
-  const themeColors = useThemeColors();
+  const dimmedTitle = useDimmedColor(0.3);
 
   const rect = clip.rect;
   if (!rect) {
@@ -85,12 +85,8 @@ const ClipPane: React.FC<{
           flexShrink: 0,
           display: "flex",
           alignItems: "center",
-          paddingLeft: 16,
-          color: mix(
-            0.3,
-            themeColors.background,
-            readableColor(themeColors.background),
-          ),
+          paddingLeft: cardPadding,
+          color: dimmedTitle,
         }}
       >
         {clip.paneTitle}

@@ -1,7 +1,5 @@
-import { readableColor } from "polished";
 import { interpolate, spring, useVideoConfig } from "remotion";
 import { useThemeColors } from "../../calculate-metadata/theme";
-import { fontFamily } from "../../font";
 import { textStyles } from "../clip-style";
 import type { AnimatedListClipDef, ClipComponent } from "../types";
 import { useClipFrame } from "../useClipFrame";
@@ -52,9 +50,8 @@ export const AnimatedListClip: ClipComponent<AnimatedListClipDef> = ({
     durationFrames,
   );
 
-  const foreground = readableColor(themeColors.background);
   const textColor = themeColors.editor.foreground;
-  const bulletColor = themeColors.editor.infoForeground ?? foreground;
+  const bulletColor = themeColors.editor.infoForeground;
 
   return (
     <div
@@ -67,7 +64,6 @@ export const AnimatedListClip: ClipComponent<AnimatedListClipDef> = ({
         justifyContent: "center",
         gap: 28,
         padding: "0 64px",
-        fontFamily,
         color: textColor,
       }}
     >

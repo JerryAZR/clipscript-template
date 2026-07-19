@@ -1,7 +1,6 @@
 import { interpolate } from "remotion";
 import { useThemeColors } from "../../calculate-metadata/theme";
-import { fontFamily } from "../../font";
-import { textStyles } from "../clip-style";
+import { centeredPaneStyle, textStyles } from "../clip-style";
 import type { ClipComponent, TitleClipDef } from "../types";
 import { useClipFrame } from "../useClipFrame";
 
@@ -18,13 +17,7 @@ export const TitleClip: ClipComponent<TitleClipDef> = ({ clip }) => {
   return (
     <div
       style={{
-        width: "100%",
-        height: "100%",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        fontFamily,
+        ...centeredPaneStyle,
         color: themeColors.editor.foreground,
         transform: `translateY(${translateY}px)`,
         textAlign: "center",

@@ -34,3 +34,13 @@ export type TextStyleName = keyof typeof textStyles;
 
 /** Height of the pane title bar rendered by ClipPane when clip.paneTitle is set */
 export const TITLE_BAR_HEIGHT = 48;
+
+/** The standard full-pane centered container most text clips start from */
+export const centeredPaneStyle: CSSProperties = {
+  width: "100%",
+  height: "100%",
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  justifyContent: "center",
+};

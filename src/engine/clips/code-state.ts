@@ -1,3 +1,7 @@
+import {
+  defaultStepInterval,
+  defaultTransitionDuration,
+} from "../types";
 import type { CodeClipDef, Rect, TimelineClip } from "../types";
 
 type CodeStore = {
@@ -38,8 +42,9 @@ export const resolveCodeState = (clips: TimelineClip[]): TimelineClip[] => {
     if (codeClip.steps.length === 0) {
       throw new Error(`clip '${clip.id}' has no steps`);
     }
-    const stepInterval = codeClip.stepInterval ?? 60;
-    const transitionDuration = codeClip.transitionDuration ?? 30;
+    const stepInterval = codeClip.stepInterval ?? defaultStepInterval;
+    const transitionDuration =
+      codeClip.transitionDuration ?? defaultTransitionDuration;
     if (transitionDuration > stepInterval) {
       console.warn(
         `clip '${clip.id}': transitionDuration (${transitionDuration}) > stepInterval (${stepInterval}) - morphs will overlap`,

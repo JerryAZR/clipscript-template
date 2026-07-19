@@ -59,6 +59,16 @@ export const useCardColor = (elevation = 0.04) => {
   );
 };
 
+/**
+ * Dimmed/secondary text color: the editor foreground mixed toward a base
+ * (the theme background by default; pass useCardColor() for text sitting on
+ * a card). Use this instead of inventing a per-clip dimming recipe.
+ */
+export const useDimmedColor = (amount: number, base?: string) => {
+  const themeColors = useThemeColors();
+  return mix(amount, base ?? themeColors.background, themeColors.editor.foreground);
+};
+
 export const ThemeProvider = ({
   children,
   themeColors,

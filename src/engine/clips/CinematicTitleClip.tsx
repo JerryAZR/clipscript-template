@@ -1,8 +1,6 @@
-import { mix } from "polished";
 import { interpolate, spring, useVideoConfig } from "remotion";
-import { useThemeColors } from "../../calculate-metadata/theme";
-import { fontFamily } from "../../font";
-import { textStyles } from "../clip-style";
+import { useDimmedColor, useThemeColors } from "../../calculate-metadata/theme";
+import { centeredPaneStyle, textStyles } from "../clip-style";
 import type { ClipComponent, CinematicTitleClipDef } from "../types";
 import { useClipFrame } from "../useClipFrame";
 
@@ -23,7 +21,7 @@ export const CinematicTitleClip: ClipComponent<CinematicTitleClipDef> = ({
 
   const foreground = themeColors.editor.foreground;
   const accent = themeColors.editor.infoForeground;
-  const subtitleColor = mix(0.25, themeColors.background, foreground);
+  const subtitleColor = useDimmedColor(0.25);
 
   const titleY = spring({
     frame,
@@ -52,13 +50,7 @@ export const CinematicTitleClip: ClipComponent<CinematicTitleClipDef> = ({
   return (
     <div
       style={{
-        width: "100%",
-        height: "100%",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        fontFamily,
+        ...centeredPaneStyle,
         textAlign: "center",
       }}
     >

@@ -25,6 +25,7 @@ export type ClipCommon = {
    * key-chain store. The renderer throws if a resolved clip has no rect.
    */
   rect?: Rect;
+  /** Stacking order (default 0); use ~10 for overlays above other panes */
   zIndex?: number;
   startAt: { line: string; offsetFrames?: number };
   endAt: ClipEndCondition[];
@@ -70,7 +71,10 @@ export type CodeClipDef = ClipCommon & {
 
 export type TerminalClipDef = ClipCommon & {
   type: "terminal";
-  /** Commands to type out, each followed by its output lines */
+  /**
+   * Commands to type out, each followed by its output lines. The window
+   * title comes from the first step's cwd (default: "terminal").
+   */
   steps: { cwd?: string; command: string; output?: string[] }[];
   /** Characters per frame (default 1) */
   typeSpeed?: number;
@@ -140,6 +144,14 @@ export type StoryboardClip =
 export type Storyboard = {
   clips: StoryboardClip[];
 };
+
+/**
+ * Code clip pacing defaults, shared by the state resolver and the component.
+ * Kept here (not code-style.ts) so pure logic can use them without pulling
+ * in the font-loading module chain.
+ */
+export const defaultStepInterval = 60;
+export const defaultTransitionDuration = 30;
 
 // Runtime layer: what the timeline compiler emits
 

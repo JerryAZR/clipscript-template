@@ -115,6 +115,10 @@ export const TerminalClip: ClipComponent<TerminalClipDef> = ({ clip }) => {
   const frame = useClipFrame(clip.transitionIn);
   const themeColors = useThemeColors();
 
+  if (clip.steps.length === 0) {
+    throw new Error(`clip '${clip.id}': terminal clip has no steps`);
+  }
+
   const lines = terminalLinesAt(clip.steps, clip, frame);
   const showCursor = clip.showCursor ?? true;
   const blinkOn = Math.floor(frame / 15) % 2 === 0;

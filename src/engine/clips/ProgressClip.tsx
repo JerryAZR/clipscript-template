@@ -1,8 +1,9 @@
-import { mix, rgba } from "polished";
+import { rgba } from "polished";
 import { Easing, interpolate } from "remotion";
-import { useThemeColors } from "../../calculate-metadata/theme";
-import { fontFamily } from "../../font";
-import { textStyles } from "../clip-style";
+import { useDimmedColor, useThemeColors } from "../../calculate-metadata/theme";
+import { centeredPaneStyle, textStyles } from "../clip-style";
+import { cardRadius } from "../code-style";
+import { itemStartFrames } from "./AnimatedListClip";
 import type {
   ClipComponent,
   ProgressClipDef,
@@ -45,22 +46,23 @@ export const ProgressClip: ClipComponent<ProgressClipDef> = ({ clip }) => {
 
   const foreground = themeColors.editor.foreground;
   const accent = themeColors.editor.infoForeground;
-  const dim = mix(0.55, themeColors.background, foreground);
+  const dim = useDimmedColor(0.55);
   // Universal diff-green convention, same value as the diff annotation
   const doneColor = "#3fb950";
 
   const flatItems = flattenItems(clip.items);
+  // Same stagger guarantee as the list clip: compressed if the window is
+  // short, so trailing items can never silently never-appear
+  const starts = itemStartFrames(
+    flatItems.length,
+    ITEM_STAGGER,
+    clip.endFrame - clip.startFrame,
+  );
 
   return (
     <div
       style={{
-        width: "100%",
-        height: "100%",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        fontFamily,
+        ...centeredPaneStyle,
         color: foreground,
       }}
     >
@@ -76,7 +78,7 @@ export const ProgressClip: ClipComponent<ProgressClipDef> = ({ clip }) => {
 
           const entrance = interpolate(
             frame,
-            [i * ITEM_STAGGER, i * ITEM_STAGGER + ITEM_FADE],
+            [starts[i], starts[i] + ITEM_FADE],
             [0, 1],
             {
               extrapolateLeft: "clamp",
@@ -106,7 +108,7 @@ export const ProgressClip: ClipComponent<ProgressClipDef> = ({ clip }) => {
                 transform: `translateY(${translateY}px)`,
                 marginTop: item.isChild ? 12 : i === 0 ? 0 : 28,
                 padding: item.isChild ? "4px 16px 4px 56px" : "8px 16px",
-                borderRadius: 12,
+                borderRadius: cardRadius,
                 backgroundColor: isCurrent ? rgba(accent, 0.1) : "transparent",
               }}
             >

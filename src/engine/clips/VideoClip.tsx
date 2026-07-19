@@ -9,12 +9,12 @@ import type { ClipComponent, VideoClipDef } from "../types";
 export const VideoClip: ClipComponent<VideoClipDef> = ({ clip }) => {
   const themeColors = useThemeColors();
   const episode = useEpisodeName();
+  const cardBackground = useCardColor();
 
   if (!clip.src) {
     throw new Error(`clip '${clip.id}': video clip has no src`);
   }
 
-  const cardBackground = useCardColor();
   const cardBorder = mix(
     0.12,
     readableColor(themeColors.background),

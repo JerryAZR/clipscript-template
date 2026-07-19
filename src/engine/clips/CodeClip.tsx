@@ -9,6 +9,10 @@ import {
   codeFontSize,
   lineHeightPx,
 } from "../code-style";
+import {
+  defaultStepInterval,
+  defaultTransitionDuration,
+} from "../types";
 import type { ClipComponent, CodeClipDef } from "../types";
 import { useClipFrame } from "../useClipFrame";
 
@@ -17,8 +21,8 @@ export const CodeClip: ClipComponent<CodeClipDef> = ({ clip }) => {
   const themeColors = useThemeColors();
   const highlightedCode = useHighlightedCode();
 
-  const stepInterval = clip.stepInterval ?? 60;
-  const transitionDuration = clip.transitionDuration ?? 30;
+  const stepInterval = clip.stepInterval ?? defaultStepInterval;
+  const transitionDuration = clip.transitionDuration ?? defaultTransitionDuration;
   const stepIndex = Math.min(
     Math.floor(frame / stepInterval),
     clip.steps.length - 1,
@@ -37,16 +41,16 @@ export const CodeClip: ClipComponent<CodeClipDef> = ({ clip }) => {
   }
 
   const scrollFrom = clip.scrollFrom ?? 0;
+  const scrollTarget = clip.scrollTo ?? scrollFrom;
   const scrollDuration = clip.scrollDuration ?? 30;
   const scrollProgress =
-    clip.scrollTo === undefined || scrollDuration === 0
+    scrollDuration === 0
       ? 1
       : interpolate(frame, [0, scrollDuration], [0, 1], {
           extrapolateLeft: "clamp",
           extrapolateRight: "clamp",
         });
-  const scrollLine =
-    scrollFrom + ((clip.scrollTo ?? scrollFrom) - scrollFrom) * scrollProgress;
+  const scrollLine = scrollFrom + (scrollTarget - scrollFrom) * scrollProgress;
   const scrollPx = Math.max(0, scrollLine - 1) * lineHeightPx;
 
   const cardBackground = useCardColor();

@@ -167,8 +167,9 @@ type-acquisition for npm imports in snippets would still touch the network.
    voiceover track (mean -23.6 dB). Smoke test derives durations the same
    way (measured when mp3s exist). OpenAI-compatible pipeline is a possible
    later addition; the engine only cares about the mp3 files.
-5. **Validation + docs** — coverage/lint in `calculateMetadata`; update
-   `codehike-video` skill to the new authoring workflow.
+5. **Validation + docs** — coverage/lint in `calculateMetadata`; skill set
+   restructured (`episode-authoring` / `clip-development` / `engine-internals`,
+   replacing `codehike-video`).
 
 ## Open: reactvideoeditor/remotion-templates submodule
 

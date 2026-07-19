@@ -142,6 +142,14 @@ export type ProgressClipDef = ClipCommon & {
   items: ProgressItem[];
 };
 
+export type CountdownClipDef = ClipCommon & {
+  type: "countdown";
+  /** Seconds to count down from (default 3) */
+  seconds?: number;
+  /** Text shown when the countdown finishes (default "GO!") */
+  goText?: string;
+};
+
 export type StoryboardClip =
   | CodeClipDef
   | TerminalClipDef
@@ -149,7 +157,8 @@ export type StoryboardClip =
   | OverlayClipDef
   | CinematicTitleClipDef
   | AnimatedListClipDef
-  | ProgressClipDef;
+  | ProgressClipDef
+  | CountdownClipDef;
 
 export type Storyboard = {
   clips: StoryboardClip[];

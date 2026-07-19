@@ -120,6 +120,7 @@ describe("smoke: Episode demo render", () => {
     const cinematicLine = rawTimeline.lines.find((l) => l.fullId === "more.cinematic")!;
     const listLine = rawTimeline.lines.find((l) => l.fullId === "more.list")!;
     const progressLine = rawTimeline.lines.find((l) => l.fullId === "more.progress")!;
+    const countdownLine = rawTimeline.lines.find((l) => l.fullId === "fence.countdown")!;
 
     const samplePoints: Record<string, number> = {
       introTitle: introLine.startFrame + 30,
@@ -141,6 +142,7 @@ describe("smoke: Episode demo render", () => {
       listEarly: listLine.startFrame + 35,
       listLate: listLine.endFrame - 5,
       progressMid: progressLine.startFrame + 45,
+      countdownMid: countdownLine.startFrame + 45,
     };
 
     // Absolute expected colors, computed the same way the components do
@@ -190,11 +192,12 @@ describe("smoke: Episode demo render", () => {
     const bg = hexToRgb(expectedBackground);
     for (const file of Object.values(frames)) {
       const png = readPng(file);
-      // Guards against broken/blank renders. Legitimately sparse frames
-      // (a single revealed list item mid-stagger) cover ~0.3-0.5% of pixels.
+      // Guards against broken/blank renders only. Legitimately sparse frames
+      // (a mid-stagger list, the 180px countdown ring) cover ~0.2-0.5% of
+      // pixels - the dedicated per-clip region assertions carry the strictness.
       expect(
         regionRatio(png, bg, { x: 0, y: 0, w: png.width, h: png.height }, true),
-      ).toBeGreaterThan(0.003);
+      ).toBeGreaterThan(0.001);
     }
   });
 
@@ -329,6 +332,15 @@ describe("smoke: Episode demo render", () => {
     // Heading + items inside the progress pane (x 20%-80%, y 10%-90%)
     expect(
       regionRatio(png, bg, { x: 500, y: 200, w: 900, h: 700 }, true),
+    ).toBeGreaterThan(0.005);
+  });
+
+  it("renders the countdown ring and digit", () => {
+    const png = readPng(frames.countdownMid);
+    const bg = hexToRgb(expectedBackground);
+    // The 180px ring + digit at the pane center
+    expect(
+      regionRatio(png, bg, { x: 830, y: 420, w: 260, h: 240 }, true),
     ).toBeGreaterThan(0.005);
   });
 });

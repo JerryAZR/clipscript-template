@@ -92,7 +92,7 @@ Rect numbers are px, `"NN%"` is percent of 1920x1080. Split screen = two clips w
 
 Defaults in parentheses. Key chains: clips sharing `key` continue exactly where the previous ended (code step, scroll, rect, filename) - they must not overlap and must keep the same top-left corner.
 
-Also available: **animated-list** (staggered bullet reveal), **progress** (done/current/todo checklist) - config in [rules/more-clips.md](rules/more-clips.md).
+Also available: **animated-list** (staggered bullet reveal), **progress** (done/current/todo checklist), **countdown** (ring timer; pair with a sync fence to hold the timeline) - config in [rules/more-clips.md](rules/more-clips.md).
 
 ## When the 80% path isn't enough
 

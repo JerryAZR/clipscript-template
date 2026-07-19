@@ -54,3 +54,8 @@ text = "Animated lists reveal your points one at a time."
 [[lines]]
 id = "more.progress"
 text = "And a progress checklist shows where we are in the episode."
+
+# Sync fence demo
+[[lines]]
+id = "fence.countdown"
+text = "This countdown holds the timeline until it reaches zero."

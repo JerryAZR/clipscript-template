@@ -28,3 +28,26 @@ via `children`.
 Statuses are static per clip - to advance the "current" marker as the episode
 progresses, use a sequence of progress clips anchored to successive lines,
 each with updated statuses.
+
+## countdown
+
+Ring countdown timer: a ring sweeps each second, the remaining number counts
+down, then a "GO!" springs in.
+
+- `seconds?` - seconds to count down from (default 3)
+- `goText?` - text shown when it finishes (default "GO!")
+
+Rarely used in typical tutorials, but it is the natural way to demonstrate a
+sync fence: end the clip with `offsetFrames` past the countdown's full length
+plus a `sync` so the narration waits for zero:
+
+```ts
+{
+  id: "count",
+  type: "countdown",
+  seconds: 3,
+  rect: { x: "35%", y: "15%", w: "30%", h: "70%" },
+  startAt: { line: "demo.countdown" },
+  endAt: [{ line: "demo.countdown", offsetFrames: 140, sync: "demo.countdown" }],
+}
+```

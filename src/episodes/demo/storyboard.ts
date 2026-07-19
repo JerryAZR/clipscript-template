@@ -173,6 +173,21 @@ const moreClips: Storyboard["clips"] = [
   },
 ];
 
+// Sync fence demo: the countdown runs 3 seconds and its sync fence holds
+// the timeline until the "GO!" has landed
+const fenceClips: Storyboard["clips"] = [
+  {
+    id: "countdown-1",
+    type: "countdown",
+    seconds: 5,
+    rect: { x: "35%", y: "15%", w: "30%", h: "70%" },
+    startAt: { line: "fence.countdown" },
+    endAt: [
+      { line: "fence.countdown", offsetFrames: 190, sync: "fence.countdown" },
+    ],
+  },
+];
+
 export const storyboard: Storyboard = {
   clips: [
     ...introClips,
@@ -180,5 +195,6 @@ export const storyboard: Storyboard = {
     ...codeClips,
     ...showcaseClips,
     ...moreClips,
+    ...fenceClips,
   ],
 };

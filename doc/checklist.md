@@ -21,6 +21,9 @@ per purpose; similar-purpose leftovers stay Niche in the inventory.
   Use case: "what we'll cover", summaries, checklists narrated one by one.
 - [x] **progress** (bevy) — outline with done/current/todo states.
   Use case: episode roadmap, multi-part progress. Needs de-sinicizing.
+- [x] **countdown** (RVE countdown-intro, was Niche) — ring countdown + GO.
+  Use case: sync-fence demos (holds the timeline until it reaches zero);
+  rarely used in typical tutorials but the perfect fence showcase.
 
 ## Batch 3 — flair
 

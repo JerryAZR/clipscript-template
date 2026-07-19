@@ -2,6 +2,7 @@ import type { ClipComponent, StoryboardClip } from "../types";
 import { AnimatedListClip } from "./AnimatedListClip";
 import { CinematicTitleClip } from "./CinematicTitleClip";
 import { CodeClip } from "./CodeClip";
+import { CountdownClip } from "./CountdownClip";
 import { OverlayClip } from "./OverlayClip";
 import { ProgressClip } from "./ProgressClip";
 import { TerminalClip } from "./TerminalClip";
@@ -23,4 +24,5 @@ export const sharedClipComponents: SharedClipComponents = {
   overlay: OverlayClip,
   "animated-list": AnimatedListClip,
   progress: ProgressClip,
+  countdown: CountdownClip,
 };

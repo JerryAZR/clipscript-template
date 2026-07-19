@@ -1,5 +1,6 @@
 import { mix } from "polished";
 import { useCardColor, useThemeColors } from "../../calculate-metadata/theme";
+import { CardHeader } from "./CardHeader";
 import {
   cardPadding,
   cardRadius,
@@ -145,37 +146,34 @@ export const TerminalClip: ClipComponent<TerminalClipDef> = ({ clip }) => {
         lineHeight: codeLineHeight,
       }}
     >
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: 8,
-          padding: `${cardPadding / 2}px ${cardPadding}px`,
-          userSelect: "none",
-        }}
-      >
-        {trafficLights.map((color) => (
-          <span
-            key={color}
-            style={{
-              width: 14,
-              height: 14,
-              borderRadius: 7,
-              backgroundColor: color,
-            }}
-          />
-        ))}
+      <CardHeader>
+        <span style={{ display: "flex", gap: 8 }}>
+          {trafficLights.map((color) => (
+            <span
+              key={color}
+              style={{
+                width: 14,
+                height: 14,
+                borderRadius: 7,
+                backgroundColor: color,
+              }}
+            />
+          ))}
+        </span>
         <span
           style={{
-            marginLeft: 8,
-            fontSize: codeFontSize * 0.7,
+            flex: 1,
+            textAlign: "center",
+            fontWeight: 600,
             color: textColor,
-            opacity: 0.6,
+            opacity: 0.7,
           }}
         >
           {title}
         </span>
-      </div>
+        {/* balance the traffic lights so the title is truly centered */}
+        <span style={{ width: 3 * 14 + 2 * 8 }} />
+      </CardHeader>
       <div style={{ flex: 1, overflow: "hidden", padding: `0 ${cardPadding}px` }}>
         {lines.map((line, i) => (
           <div

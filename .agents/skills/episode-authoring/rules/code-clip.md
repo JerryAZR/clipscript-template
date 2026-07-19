@@ -28,6 +28,8 @@ scrolling, and chain continuity.
   matching, survives big rewrites).
 - `scrollTo` - rendered line to scroll to (1-based); `scrollDuration` (default
   30, 0 = snap). Initial scroll comes from the chain (default 0).
+  When the file doesn't fit the pane, an editor-style overlay scrollbar
+  appears on the right, tracking the scroll position.
 
 ## Content
 

@@ -25,7 +25,7 @@ const LINE_HEIGHT = 36;
 const frames = {} as Record<string, string>;
 let outDir = "";
 let expectedBackground = "";
-let expectedCard = "";
+let expectedBand = "";
 
 const readPng = (file: string) => PNG.sync.read(fs.readFileSync(file));
 
@@ -146,7 +146,8 @@ describe("smoke: Episode demo render", () => {
     // Absolute expected colors, computed the same way the components do
     const themeColors = await getThemeColors("github-dark");
     expectedBackground = themeColors.background;
-    expectedCard = mix(0.04, readableColor(themeColors.background), themeColors.background);
+    // The header band: useCardColor(0.07)
+    expectedBand = mix(0.07, readableColor(themeColors.background), themeColors.background);
 
     outDir = fs.mkdtempSync(path.join(os.tmpdir(), "smoke-"));
     const serveUrl = await bundle({
@@ -176,12 +177,12 @@ describe("smoke: Episode demo render", () => {
     fs.rmSync(outDir, { recursive: true, force: true });
   });
 
-  it("uses the expected theme background and card colors", () => {
+  it("uses the expected theme background, band and card colors", () => {
     const png = readPng(frames.settledV1);
     expect(channelDiff(pixel(png, 4, 4), hexToRgb(expectedBackground))).toBeLessThanOrEqual(EPSILON);
-    // Inside the card, away from text: top-right corner of the tab row
+    // Inside the header band: top-right corner of the tab row
     expect(
-      channelDiff(pixel(png, PANE.x + PANE.w - 24, PANE.y + 12), hexToRgb(expectedCard)),
+      channelDiff(pixel(png, PANE.x + PANE.w - 24, PANE.y + 12), hexToRgb(expectedBand)),
     ).toBeLessThanOrEqual(EPSILON);
   });
 

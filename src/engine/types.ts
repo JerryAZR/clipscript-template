@@ -9,6 +9,23 @@ export type Rect = {
   h: RectValue;
 };
 
+/** Resolves a rect value against an absolute dimension (px or "NN%") */
+export const resolveRectValue = (value: RectValue, dimension: number): number => {
+  if (typeof value === "number") {
+    return value;
+  }
+  if (value.endsWith("%")) {
+    const parsed = parseFloat(value);
+    if (!Number.isNaN(parsed)) {
+      return (parsed / 100) * dimension;
+    }
+  }
+  // The storyboard only allows numbers or "%"-strings - anything else is a bug
+  throw new Error(
+    `Invalid rect value ${JSON.stringify(value)}; expected a number or a percentage string.`,
+  );
+};
+
 export type ClipEndCondition =
   | { line: string; offsetFrames?: number; sync?: string; end?: false }
   | { line: string; end: true };

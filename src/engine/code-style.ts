@@ -13,3 +13,6 @@ export const codeTabSize = 3;
 
 export const cardPadding = 16;
 export const cardRadius = 12;
+
+/** Filename tab row height: vertical padding + small text line */
+export const codeTabHeight = cardPadding + codeFontSize * 0.7 * codeLineHeight;

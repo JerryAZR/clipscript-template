@@ -13,6 +13,7 @@ import { estimateDurationFrames, parseNarration } from "../../src/engine/narrati
 import { calculateTimeline } from "../../src/engine/timeline";
 import type { CodeClipDef, TimelineClip } from "../../src/engine/types";
 import { getEpisode } from "../../src/episodes/registry";
+import { offlineLighterOverride } from "../../src/calculate-metadata/webpack-override";
 
 const EPSILON = 8;
 // Code pane of code-1/code-2: rect 10%,10%,80%,80% of 1920x1080
@@ -148,7 +149,10 @@ describe("smoke: Episode demo render", () => {
     expectedCard = mix(0.04, readableColor(themeColors.background), themeColors.background);
 
     outDir = fs.mkdtempSync(path.join(os.tmpdir(), "smoke-"));
-    const serveUrl = await bundle({ entryPoint: path.resolve("src/index.ts") });
+    const serveUrl = await bundle({
+      entryPoint: path.resolve("src/index.ts"),
+      webpackOverride: offlineLighterOverride,
+    });
     const composition = await selectComposition({
       serveUrl,
       id: "Episode",

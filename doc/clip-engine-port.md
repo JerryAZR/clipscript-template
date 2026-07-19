@@ -107,13 +107,17 @@ the transition machinery entirely.
 **Engine rule codified by that bug**: never measure DOM at mount - Remotion
 may premount offscreen. Measure per-frame or after visibility.
 
-**Twoslash is fully local** (no CDN dependency): `twoslash-cdn` accepts a
-custom `fetcher`; `scripts/prepare-twoslash-libs.mjs` (wired to `postinstall`)
-copies the TS compiler + lib types from `node_modules/typescript` into
-`public/vendor/ts-lib/` (gitignored, ~12MB), and the fetcher in
-`process-snippet.ts` rewrites `/cdn/*/typescript/lib/*` URLs to `staticFile`.
-Verified: `^?` callout renders with zero `playgroundcdn` requests. Only ATA
-type-acquisition for npm imports in snippets would still touch the network.
+**Twoslash is fully local** (no CDN dependency): `twoslash` core's
+`createTwoslasher` runs against a virtual `fsMap` that `process-snippet.ts`
+builds from `public/vendor/ts-lib/` (gitignored, ~12MB) at first use.
+`scripts/prepare-twoslash-libs.mjs` (wired to `postinstall`) copies the TS
+lib types + a `files.json` manifest there from `node_modules/typescript`.
+There is deliberately no ATA type-acquisition - snippets importing npm
+packages render "cannot find module" error annotations, loud and offline.
+(An earlier iteration used `twoslash-cdn` with a URL-rewriting fetcher; it
+was replaced because its hardcoded legacy lib list 404'd and its `resp.ok`
+blindness stored error pages as lib files - a CDN wrapper whose main feature
+we disabled was worse than owning the fsMap ourselves.)
 
 1. ~~**Engine core**~~ **DONE** — types, narration parser (`smol-toml`), fence
    timeline, `calculateMetadata`, `ClipRenderer`, `useClipFrame`; silent demo

@@ -20,7 +20,8 @@
     "react-dom": "19.2.3",
     "remotion": "^4.0.0",
     "smol-toml": "^1.7.0",
-    "twoslash-cdn": "0.3.1",
+    "twoslash": "^0.3.1",
+    "typescript": "^5.9.3",
     "zod": "4.3.6"
   },
   "devDependencies": {
@@ -34,7 +35,6 @@
     "pngjs": "^7.0.0",
     "prettier": "3.8.1",
     "tsx": "^4.23.1",
-    "typescript": "5.9.3",
     "vitest": "^4.1.10"
   },
   "scripts": {

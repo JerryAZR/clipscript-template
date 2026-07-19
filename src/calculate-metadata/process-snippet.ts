@@ -1,7 +1,7 @@
 import { highlight } from "codehike/code";
 import { staticFile } from "remotion";
-import { createTwoslashFromCDN } from "twoslash-cdn";
-import { CompilerOptions, JsxEmit, ModuleKind, ScriptTarget } from "typescript";
+import { createTwoslasher } from "twoslash";
+import ts, { CompilerOptions, JsxEmit, ModuleKind, ScriptTarget } from "typescript";
 import { PublicFolderFile } from "./get-files";
 import { Theme } from "./theme";
 
@@ -12,27 +12,38 @@ const compilerOptions: CompilerOptions = {
   module: ModuleKind.ESNext,
 };
 
-// twoslash-cdn downloads the TypeScript compiler and lib types from
-// playgroundcdn.typescriptlang.org at runtime. We serve them locally instead:
-// scripts/prepare-twoslash-libs.mjs copies them from node_modules/typescript
-// into public/vendor/ts-lib/ (wired to postinstall). Anything that is not a
-// compiler/lib file (e.g. ATA type acquisition for npm imports) still goes
-// to the network.
-const CDN_LIB_PATTERN = /\/cdn\/[^/]+\/typescript\/lib\/(.+)$/;
+// twoslash needs a virtual FS holding the TypeScript compiler's lib files.
+// We build it from public/vendor/ts-lib/, which scripts/prepare-twoslash-libs.mjs
+// (wired to postinstall) copies from node_modules/typescript - no playground
+// CDN involved. There is deliberately no npm type acquisition: a snippet
+// importing an npm package renders "cannot find module" error annotations,
+// loud and offline. Re-add @typescript/ata if that ever becomes a real need.
+let twoslasherPromise: Promise<ReturnType<typeof createTwoslasher>> | null =
+  null;
 
-const localLibFetcher: typeof fetch = (input, init) => {
-  const url = typeof input === "string" ? input : String(input);
-  const match = url.match(CDN_LIB_PATTERN);
-  if (match) {
-    return fetch(staticFile(`vendor/ts-lib/${match[1]}`), init);
-  }
-  return fetch(input, init);
+const getTwoslasher = () => {
+  twoslasherPromise ??= (async () => {
+    const manifestResp = await fetch(staticFile("vendor/ts-lib/files.json"));
+    if (!manifestResp.ok) {
+      throw new Error(
+        `ts-lib manifest not found (${manifestResp.status}) - run scripts/prepare-twoslash-libs.mjs`,
+      );
+    }
+    const files = (await manifestResp.json()) as string[];
+    const fsMap = new Map<string, string>();
+    await Promise.all(
+      files.map(async (file) => {
+        const resp = await fetch(staticFile(`vendor/ts-lib/${file}`));
+        if (!resp.ok) {
+          throw new Error(`ts-lib file failed to load: ${file} (${resp.status})`);
+        }
+        fsMap.set(`/${file}`, await resp.text());
+      }),
+    );
+    return createTwoslasher({ tsModule: ts, fsMap });
+  })();
+  return twoslasherPromise;
 };
-
-const twoslash = createTwoslashFromCDN({
-  compilerOptions,
-  fetcher: localLibFetcher,
-});
 
 export const processSnippet = async (step: PublicFolderFile, theme: Theme) => {
   const splitted = step.filename.split(".");
@@ -40,7 +51,7 @@ export const processSnippet = async (step: PublicFolderFile, theme: Theme) => {
 
   const twoslashResult =
     extension === "ts" || extension === "tsx"
-      ? await twoslash.run(step.value, extension, {
+      ? (await getTwoslasher())(step.value, extension, {
           compilerOptions,
         })
       : null;

@@ -1,7 +1,7 @@
-// Copies the TypeScript compiler and lib type definitions from
-// node_modules/typescript into public/vendor/ts-lib/, so twoslash-cdn
-// can serve them locally instead of fetching playgroundcdn.typescriptlang.org
-// at render time. Safe to re-run; run after npm install (wired to postinstall).
+// Copies the TypeScript lib type definitions from node_modules/typescript
+// into public/vendor/ts-lib/, so twoslash can load them locally at render
+// time instead of fetching a CDN. Safe to re-run; run after npm install
+// (wired to postinstall).
 import fs from "node:fs";
 import path from "node:path";
 
@@ -17,5 +17,12 @@ const files = fs
 for (const file of files) {
   fs.copyFileSync(path.join(src, file), path.join(dest, file));
 }
+
+// Manifest of what is available; src/calculate-metadata/process-snippet.ts
+// fetches it to know which lib files to load into twoslash's virtual FS.
+fs.writeFileSync(
+  path.join(dest, "files.json"),
+  JSON.stringify(files, null, 2) + "\n",
+);
 
 console.log(`Copied ${files.length} TypeScript files to ${dest}`);

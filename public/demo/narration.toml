@@ -1,0 +1,21 @@
+# Introduction
+[[lines]]
+id = "intro.first"
+text = "Welcome to the clip engine demo."
+
+[[lines]]
+id = "intro.second"
+text = "Narration drives the entire timeline."
+
+# Core concepts
+[[lines]]
+id = "concepts.clips"
+text = "Clips are modular visual blocks placed in rectangles."
+
+[[lines]]
+id = "concepts.timing"
+text = "They start and end anchored to narration lines."
+
+[[lines]]
+id = "concepts.span"
+text = "And a single clip can span as many lines as it needs."

@@ -5,6 +5,8 @@ type CodeStore = {
   scroll: number;
   rect: Rect;
   filename: string;
+  /** whether the last clip had a pane title bar (shifts the content area) */
+  paneTitle: boolean;
   /** endFrame + transitionOut of the last clip in the chain */
   tailFrame: number;
   clipId: string;
@@ -68,6 +70,11 @@ export const resolveCodeState = (clips: TimelineClip[]): TimelineClip[] => {
         );
       }
     }
+    if (store && Boolean(codeClip.paneTitle) !== store.paneTitle) {
+      console.warn(
+        `clip '${clip.id}' (key '${codeClip.key}'): paneTitle differs between chained clips - the title bar shifts the content area, the code will appear to jump`,
+      );
+    }
 
     const scrollFrom = store?.scroll ?? 0;
     const steps = store ? [store.step, ...codeClip.steps] : codeClip.steps;
@@ -85,6 +92,7 @@ export const resolveCodeState = (clips: TimelineClip[]): TimelineClip[] => {
       scroll: codeClip.scrollTo ?? scrollFrom,
       rect,
       filename,
+      paneTitle: Boolean(codeClip.paneTitle),
       tailFrame: codeClip.endFrame + (codeClip.transitionOut ?? 0),
       clipId: clip.id,
     });

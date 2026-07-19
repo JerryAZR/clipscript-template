@@ -32,6 +32,12 @@ export type ClipCommon = {
   transitionIn?: number;
   /** Frames of slide-out transition after clip end */
   transitionOut?: number;
+  /**
+   * Optional pane title bar rendered by the pane (ClipPane) above the clip
+   * content. Distinct from content-level title fields on title/overlay/
+   * progress clips: this is pane chrome, identical for every clip type.
+   */
+  paneTitle?: string;
 };
 
 export type TitleClipDef = ClipCommon & {

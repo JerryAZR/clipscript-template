@@ -88,6 +88,7 @@ const showcaseClips: Storyboard["clips"] = [
   {
     id: "terminal-1",
     type: "terminal",
+    paneTitle: "Terminal",
     steps: [
       {
         cwd: "~/app",
@@ -108,6 +109,7 @@ const showcaseClips: Storyboard["clips"] = [
     id: "video-1",
     type: "video",
     src: "cargo-run.mp4",
+    paneTitle: "cargo run",
     rect: { x: "10%", y: "15%", w: "55%", h: "70%" },
     startAt: { line: "showcase.video" },
     endAt: [{ line: "showcase.overlay", end: true }],

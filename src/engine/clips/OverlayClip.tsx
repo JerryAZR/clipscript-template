@@ -1,7 +1,9 @@
 import { darken, mix, readableColor, rgba } from "polished";
 import { Easing, interpolate } from "remotion";
-import { useThemeColors } from "../../calculate-metadata/theme";
+import { useCardColor, useThemeColors } from "../../calculate-metadata/theme";
 import { fontFamily } from "../../font";
+import { textStyles } from "../clip-style";
+import { cardRadius } from "../code-style";
 import type { ClipComponent, OverlayClipDef } from "../types";
 import { useClipFrame } from "../useClipFrame";
 
@@ -18,7 +20,7 @@ export const OverlayClip: ClipComponent<OverlayClipDef> = ({ clip }) => {
   const themeColors = useThemeColors();
 
   const foreground = readableColor(themeColors.background);
-  const cardBackground = mix(0.08, foreground, themeColors.background);
+  const cardBackground = useCardColor(0.08);
   const borderColor = rgba(mix(0.5, foreground, themeColors.background), 0.3);
   const shadowColor = rgba(darken(0.15, themeColors.background), 0.5);
 
@@ -35,7 +37,7 @@ export const OverlayClip: ClipComponent<OverlayClipDef> = ({ clip }) => {
         boxSizing: "border-box",
         backgroundColor: cardBackground,
         border: `1px solid ${borderColor}`,
-        borderRadius: 12,
+        borderRadius: cardRadius,
         padding: "24px 32px",
         fontFamily,
         color: foreground,
@@ -44,11 +46,11 @@ export const OverlayClip: ClipComponent<OverlayClipDef> = ({ clip }) => {
       }}
     >
       {clip.title ? (
-        <div style={{ fontSize: 36, fontWeight: 700, marginBottom: 12 }}>
+        <div style={{ ...textStyles.heading3, marginBottom: 12 }}>
           {clip.title}
         </div>
       ) : null}
-      <div style={{ fontSize: 30, lineHeight: 1.5, whiteSpace: "pre-wrap" }}>
+      <div style={{ ...textStyles.body, whiteSpace: "pre-wrap" }}>
         {clip.text}
       </div>
     </div>

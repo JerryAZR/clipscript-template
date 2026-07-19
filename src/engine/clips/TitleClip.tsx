@@ -1,6 +1,7 @@
 import { interpolate } from "remotion";
 import { useThemeColors } from "../../calculate-metadata/theme";
 import { fontFamily } from "../../font";
+import { textStyles } from "../clip-style";
 import type { ClipComponent, TitleClipDef } from "../types";
 import { useClipFrame } from "../useClipFrame";
 
@@ -29,9 +30,9 @@ export const TitleClip: ClipComponent<TitleClipDef> = ({ clip }) => {
         textAlign: "center",
       }}
     >
-      <div style={{ fontSize: 72, fontWeight: 700 }}>{clip.title}</div>
+      <div style={{ ...textStyles.heading1 }}>{clip.title}</div>
       {clip.subtitle ? (
-        <div style={{ fontSize: 36, opacity: 0.7, marginTop: 16 }}>
+        <div style={{ ...textStyles.subtitle, opacity: 0.7, marginTop: 16 }}>
           {clip.subtitle}
         </div>
       ) : null}

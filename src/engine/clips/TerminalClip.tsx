@@ -1,5 +1,5 @@
-import { mix, readableColor } from "polished";
-import { useThemeColors } from "../../calculate-metadata/theme";
+import { mix } from "polished";
+import { useCardColor, useThemeColors } from "../../calculate-metadata/theme";
 import {
   cardPadding,
   cardRadius,
@@ -119,8 +119,7 @@ export const TerminalClip: ClipComponent<TerminalClipDef> = ({ clip }) => {
   const showCursor = clip.showCursor ?? true;
   const blinkOn = Math.floor(frame / 15) % 2 === 0;
 
-  const foreground = readableColor(themeColors.background);
-  const cardBackground = mix(0.04, foreground, themeColors.background);
+  const cardBackground = useCardColor();
   const textColor = themeColors.editor.foreground;
   const outputColor = mix(0.4, cardBackground, textColor);
   const promptColor = themeColors.editor.infoForeground;

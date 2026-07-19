@@ -7,6 +7,9 @@ import {
   useCurrentFrame,
   useVideoConfig,
 } from "remotion";
+import { mix, readableColor } from "polished";
+import { useThemeColors } from "../calculate-metadata/theme";
+import { textStyles, TITLE_BAR_HEIGHT } from "./clip-style";
 import type { ClipComponent, RectValue, Timeline, TimelineClip } from "./types";
 
 const resolveRectValue = (value: RectValue, dimension: number): number => {
@@ -32,6 +35,7 @@ const ClipPane: React.FC<{
   // Clip-local frame (this component is inside the clip's Sequence)
   const frame = useCurrentFrame();
   const { width, height } = useVideoConfig();
+  const themeColors = useThemeColors();
 
   const rect = clip.rect;
   if (!rect) {
@@ -62,6 +66,43 @@ const ClipPane: React.FC<{
     });
   }
 
+  // Optional pane title bar: chrome above the content, identical for every
+  // clip type. The content area shrinks below it; clips fill 100% of the
+  // remaining space, so they need no changes.
+  const content = clip.paneTitle ? (
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        width: "100%",
+        height: "100%",
+      }}
+    >
+      <div
+        style={{
+          ...textStyles.paneTitle,
+          height: TITLE_BAR_HEIGHT,
+          flexShrink: 0,
+          display: "flex",
+          alignItems: "center",
+          paddingLeft: 16,
+          color: mix(
+            0.3,
+            themeColors.background,
+            readableColor(themeColors.background),
+          ),
+        }}
+      >
+        {clip.paneTitle}
+      </div>
+      <div style={{ flex: 1, minHeight: 0, position: "relative" }}>
+        {children}
+      </div>
+    </div>
+  ) : (
+    children
+  );
+
   return (
     <div
       style={{
@@ -75,7 +116,7 @@ const ClipPane: React.FC<{
         opacity,
       }}
     >
-      {children}
+      {content}
     </div>
   );
 };

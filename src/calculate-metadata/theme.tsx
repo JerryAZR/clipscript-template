@@ -1,4 +1,5 @@
 import { getThemeColors } from "@code-hike/lighter";
+import { mix, readableColor } from "polished";
 import React from "react";
 import { z } from "zod";
 
@@ -42,6 +43,20 @@ export const useThemeColors = () => {
   }
 
   return themeColors;
+};
+
+/**
+ * The standard card background (foreground mixed over the theme background).
+ * elevation 0.04 is the default card; 0.08 for cards stacked above other
+ * content (overlays). Use this instead of re-deriving the mix per clip.
+ */
+export const useCardColor = (elevation = 0.04) => {
+  const themeColors = useThemeColors();
+  return mix(
+    elevation,
+    readableColor(themeColors.background),
+    themeColors.background,
+  );
 };
 
 export const ThemeProvider = ({

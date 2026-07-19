@@ -74,13 +74,13 @@ export const storyboard: Storyboard = {
 
 ## Fields every clip has
 
-`id`, `type`, `rect?` (`{x,y,w,h}` - px or `"NN%"`), `zIndex?`, `startAt`, `endAt`, `transitionIn?`/`transitionOut?` (pane fade, frames). `endAt` is a list of conditions (clip ends at the max):
+`id`, `type`, `rect?` (`{x,y,w,h}` - px or `"NN%"`), `zIndex?`, `startAt`, `endAt`, `transitionIn?`/`transitionOut?` (pane fade, frames), `paneTitle?` (title bar rendered by the pane above the content). `endAt` is a list of conditions (clip ends at the max):
 
 - `{ line: "a.b" }` - when the line starts (`offsetFrames` shifts it)
 - `{ line: "a.b", end: true }` - when the line finishes (spans the whole line)
 - `{ line: "a.b", offsetFrames: 150, sync: "a.b" }` - fence: the timeline waits for this frame
 
-Rect numbers are px, `"NN%"` is percent of 1920x1080. Split screen = two clips with `w: "50%"`. Overlay on top = small rect + `zIndex: 10`.
+Rect numbers are px, `"NN%"` is percent of 1920x1080. Split screen = two clips with `w: "50%"`. Overlay on top = small rect + `zIndex: 10`. `paneTitle` labels a pane from the outside (comparison-style split screens); for one shared title above cooperating panes, place a `title` clip in a top rect instead.
 
 ## Clip types (common config)
 

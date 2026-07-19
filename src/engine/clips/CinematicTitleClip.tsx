@@ -2,6 +2,7 @@ import { mix } from "polished";
 import { interpolate, spring, useVideoConfig } from "remotion";
 import { useThemeColors } from "../../calculate-metadata/theme";
 import { fontFamily } from "../../font";
+import { textStyles } from "../clip-style";
 import type { ClipComponent, CinematicTitleClipDef } from "../types";
 import { useClipFrame } from "../useClipFrame";
 
@@ -63,8 +64,7 @@ export const CinematicTitleClip: ClipComponent<CinematicTitleClipDef> = ({
     >
       <div
         style={{
-          fontSize: 96,
-          fontWeight: 700,
+          ...textStyles.display,
           letterSpacing: "0.04em",
           color: foreground,
           opacity: titleOpacity,
@@ -86,8 +86,7 @@ export const CinematicTitleClip: ClipComponent<CinematicTitleClipDef> = ({
       {clip.subtitle ? (
         <div
           style={{
-            fontSize: 40,
-            fontWeight: 300,
+            ...textStyles.subtitle,
             letterSpacing: "0.08em",
             marginTop: 28,
             color: subtitleColor,

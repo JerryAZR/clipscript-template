@@ -49,7 +49,8 @@ export const TitleClip: ClipComponent<TitleClipDef> = ({ clip }) => {
 
 - **Frame-driven only.** No CSS transitions/animations, no WAAPI, no wall-clock time, no `Math.random`.
 - **Renderer owns transitions.** The pane's enter/exit fade is the renderer's. Clip content animates after `useClipFrame(clip.transitionIn)` - never re-animate the entrance.
-- **Theme colors.** `useThemeColors()` + `polished` (`mix`, `readableColor`, `rgba`, `darken`). No hardcoded colors except universal conventions (diff red/green, terminal traffic lights).
+- **Theme colors.** `useThemeColors()` + `polished` (`mix`, `readableColor`, `rgba`, `darken`). No hardcoded colors except universal conventions (diff red/green, terminal traffic lights). Card backgrounds: `useCardColor()` (0.04 elevation; 0.08 for cards above other content).
+- **Text styles.** Use the presets in `src/engine/clip-style.ts` (`textStyles.display/heading1-3/subtitle/bodyLarge/body/bodySmall/caption`) instead of inventing sizes - spread and override (`{...textStyles.body, color}`). Code metrics stay in `src/engine/code-style.ts`.
 - **Fail loudly** on missing/invalid config, naming the clip id.
 - **Keep layout stable** if the clip type will ever be chained or transitioned - token positions are measured, geometry shifts show as jumps.
 - **Pure logic first.** Frame math (like `terminalLinesAt`) goes in an exported pure function with vitest coverage; the component is a thin shell.

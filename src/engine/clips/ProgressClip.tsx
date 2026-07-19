@@ -2,6 +2,7 @@ import { mix, rgba } from "polished";
 import { Easing, interpolate } from "remotion";
 import { useThemeColors } from "../../calculate-metadata/theme";
 import { fontFamily } from "../../font";
+import { textStyles } from "../clip-style";
 import type {
   ClipComponent,
   ProgressClipDef,
@@ -64,7 +65,7 @@ export const ProgressClip: ClipComponent<ProgressClipDef> = ({ clip }) => {
       }}
     >
       {clip.title ? (
-        <div style={{ fontSize: 48, fontWeight: 700, marginBottom: 40 }}>
+        <div style={{ ...textStyles.heading2, marginBottom: 40 }}>
           {clip.title}
         </div>
       ) : null}
@@ -122,13 +123,13 @@ export const ProgressClip: ClipComponent<ProgressClipDef> = ({ clip }) => {
               </span>
               <span
                 style={{
-                  fontSize: item.isChild ? 26 : 40,
-                  fontWeight: isCurrent ? 700 : item.isChild ? 400 : 600,
+                  ...(item.isChild ? textStyles.bodySmall : textStyles.bodyLarge),
+                  // undefined would wipe the preset's weight - only override when current
+                  ...(isCurrent ? { fontWeight: 700 } : {}),
                   color: isCurrent ? foreground : textColor,
                   textDecoration: isDone ? "line-through" : "none",
                   textDecorationColor: dim,
                   textDecorationThickness: 2,
-                  lineHeight: 1.4,
                 }}
               >
                 {item.text}

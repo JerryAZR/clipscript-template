@@ -120,6 +120,36 @@ describe("resolveCodeState", () => {
     expect(resolved[0].steps).toEqual(["v1.ts", "v2.ts"]);
   });
 
+  it("warns when chained clips differ in paneTitle presence", () => {
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+    resolveCodeState([
+      codeClip({ id: "c1", key: "k", paneTitle: "The file" }),
+      codeClip({ id: "c2", key: "k", steps: ["v2.ts"], startFrame: 200 }),
+    ]);
+    expect(warn).toHaveBeenCalledWith(
+      expect.stringMatching(/paneTitle differs between chained clips/),
+    );
+    warn.mockRestore();
+  });
+
+  it("does not warn when the whole chain has paneTitle", () => {
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+    resolveCodeState([
+      codeClip({ id: "c1", key: "k", paneTitle: "The file" }),
+      codeClip({
+        id: "c2",
+        key: "k",
+        steps: ["v2.ts"],
+        paneTitle: "The file",
+        startFrame: 200,
+      }),
+    ]);
+    expect(warn).not.toHaveBeenCalledWith(
+      expect.stringMatching(/paneTitle differs/),
+    );
+    warn.mockRestore();
+  });
+
   it("throws on empty steps", () => {
     expect(() => resolveCodeState([codeClip({ id: "c", steps: [] })])).toThrow(
       /clip 'c' has no steps/,

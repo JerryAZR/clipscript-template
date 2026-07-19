@@ -2,6 +2,7 @@ import { readableColor } from "polished";
 import { interpolate, spring, useVideoConfig } from "remotion";
 import { useThemeColors } from "../../calculate-metadata/theme";
 import { fontFamily } from "../../font";
+import { textStyles } from "../clip-style";
 import type { AnimatedListClipDef, ClipComponent } from "../types";
 import { useClipFrame } from "../useClipFrame";
 
@@ -93,9 +94,7 @@ export const AnimatedListClip: ClipComponent<AnimatedListClipDef> = ({
               display: "flex",
               alignItems: "center",
               gap: 20,
-              fontSize: 34,
-              fontWeight: 500,
-              lineHeight: 1.4,
+              ...textStyles.body,
               opacity,
               transform: `translateX(${translateX}px)`,
             }}

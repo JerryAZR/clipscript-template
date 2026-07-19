@@ -1,7 +1,7 @@
 import { Video } from "@remotion/media";
 import { mix, readableColor } from "polished";
 import { staticFile } from "remotion";
-import { useThemeColors } from "../../calculate-metadata/theme";
+import { useCardColor, useThemeColors } from "../../calculate-metadata/theme";
 import { cardRadius } from "../code-style";
 import { useEpisodeName } from "../EpisodeNameContext";
 import type { ClipComponent, VideoClipDef } from "../types";
@@ -14,9 +14,12 @@ export const VideoClip: ClipComponent<VideoClipDef> = ({ clip }) => {
     throw new Error(`clip '${clip.id}': video clip has no src`);
   }
 
-  const foreground = readableColor(themeColors.background);
-  const cardBackground = mix(0.04, foreground, themeColors.background);
-  const cardBorder = mix(0.12, foreground, themeColors.background);
+  const cardBackground = useCardColor();
+  const cardBorder = mix(
+    0.12,
+    readableColor(themeColors.background),
+    themeColors.background,
+  );
 
   // The clip's Sequence window already aligns playback to startFrame/endFrame;
   // trimBefore only skips into the recording itself.

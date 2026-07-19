@@ -1,6 +1,5 @@
-import { mix, readableColor } from "polished";
+import { useCardColor, useThemeColors } from "../../calculate-metadata/theme";
 import { interpolate } from "remotion";
-import { useThemeColors } from "../../calculate-metadata/theme";
 import { CodeTransition } from "../CodeTransition";
 import { useHighlightedCode } from "../HighlightContext";
 import {
@@ -50,8 +49,7 @@ export const CodeClip: ClipComponent<CodeClipDef> = ({ clip }) => {
     scrollFrom + ((clip.scrollTo ?? scrollFrom) - scrollFrom) * scrollProgress;
   const scrollPx = Math.max(0, scrollLine - 1) * lineHeightPx;
 
-  const foreground = readableColor(themeColors.background);
-  const cardBackground = mix(0.04, foreground, themeColors.background);
+  const cardBackground = useCardColor();
 
   return (
     <div

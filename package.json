@@ -21,18 +21,27 @@
     "zod": "4.3.6"
   },
   "devDependencies": {
+    "@remotion/bundler": "^4.0.490",
     "@remotion/eslint-config-flat": "^4.0.0",
+    "@remotion/renderer": "^4.0.490",
+    "@types/pngjs": "^6.0.5",
     "@types/react": "19.2.7",
     "@types/web": "0.0.166",
     "eslint": "9.19.0",
+    "pngjs": "^7.0.0",
     "prettier": "3.8.1",
-    "typescript": "5.9.3"
+    "typescript": "5.9.3",
+    "vitest": "^4.1.10"
   },
   "scripts": {
     "dev": "remotion studio",
     "build": "remotion bundle",
     "upgrade": "remotion upgrade",
-    "lint": "tsc && eslint src"
+    "lint": "tsc && eslint src tests",
+    "test": "vitest run",
+    "test:unit": "vitest run src",
+    "test:smoke": "vitest run tests/smoke",
+    "postinstall": "node scripts/prepare-twoslash-libs.mjs"
   },
   "private": true
 }

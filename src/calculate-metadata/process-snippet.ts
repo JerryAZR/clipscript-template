@@ -1,4 +1,5 @@
 import { highlight } from "codehike/code";
+import { staticFile } from "remotion";
 import { createTwoslashFromCDN } from "twoslash-cdn";
 import { CompilerOptions, JsxEmit, ModuleKind, ScriptTarget } from "typescript";
 import { PublicFolderFile } from "./get-files";
@@ -11,8 +12,26 @@ const compilerOptions: CompilerOptions = {
   module: ModuleKind.ESNext,
 };
 
+// twoslash-cdn downloads the TypeScript compiler and lib types from
+// playgroundcdn.typescriptlang.org at runtime. We serve them locally instead:
+// scripts/prepare-twoslash-libs.mjs copies them from node_modules/typescript
+// into public/vendor/ts-lib/ (wired to postinstall). Anything that is not a
+// compiler/lib file (e.g. ATA type acquisition for npm imports) still goes
+// to the network.
+const CDN_LIB_PATTERN = /\/cdn\/[^/]+\/typescript\/lib\/(.+)$/;
+
+const localLibFetcher: typeof fetch = (input, init) => {
+  const url = typeof input === "string" ? input : String(input);
+  const match = url.match(CDN_LIB_PATTERN);
+  if (match) {
+    return fetch(staticFile(`vendor/ts-lib/${match[1]}`), init);
+  }
+  return fetch(input, init);
+};
+
 const twoslash = createTwoslashFromCDN({
   compilerOptions,
+  fetcher: localLibFetcher,
 });
 
 export const processSnippet = async (step: PublicFolderFile, theme: Theme) => {

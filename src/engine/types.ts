@@ -62,7 +62,45 @@ export type CodeClipDef = ClipCommon & {
   scrollDuration?: number;
 };
 
-export type StoryboardClip = TitleClipDef | CodeClipDef;
+export type TerminalClipDef = ClipCommon & {
+  type: "terminal";
+  /** Commands to type out, each followed by its output lines */
+  steps: { cwd?: string; command: string; output?: string[] }[];
+  /** Characters per frame (default 1) */
+  typeSpeed?: number;
+  /** Frames to pause after a command is fully typed (default 15) */
+  pauseAfterCommand?: number;
+  /** Frames between output lines appearing (default 10) */
+  outputLineDelay?: number;
+  /** Blinking block cursor (default true) */
+  showCursor?: boolean;
+};
+
+export type VideoClipDef = ClipCommon & {
+  type: "video";
+  /** Video file in public/<episode>/video/ */
+  src: string;
+  /** Skip this many frames of the recording (default 0) */
+  startFrom?: number;
+  playbackRate?: number;
+  /** Default true */
+  muted?: boolean;
+  /** Default false */
+  loop?: boolean;
+};
+
+export type OverlayClipDef = ClipCommon & {
+  type: "overlay";
+  title?: string;
+  text: string;
+};
+
+export type StoryboardClip =
+  | TitleClipDef
+  | CodeClipDef
+  | TerminalClipDef
+  | VideoClipDef
+  | OverlayClipDef;
 
 export type Storyboard = {
   clips: StoryboardClip[];

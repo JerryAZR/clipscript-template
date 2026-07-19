@@ -10,6 +10,7 @@
     "@remotion/cli": "^4.0.0",
     "@remotion/fonts": "4.0.490",
     "@remotion/layout-utils": "^4.0.0",
+    "@remotion/media": "^4.0.490",
     "@remotion/studio": "^4.0.0",
     "codehike": "1.0.4",
     "polished": "4.3.1",

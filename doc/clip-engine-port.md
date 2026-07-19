@@ -151,8 +151,14 @@ type-acquisition for npm imports in snippets would still touch the network.
    (timing is the framework's). Demo: `code-1`/`code-2` chain over
    `public/demo/code/v1-3.ts`, verified with stills + negative tests
    (overlap error, 404 step error).
-3. **Terminal clip + split-screen demo** — code left, terminal right; one clip
-   spanning several narration lines. Validates the two key patterns.
+3. ~~**Terminal clip + split-screen demo**~~ **DONE (Batch 1)** — terminal
+   (pure `terminalLinesAt` frame math + 13 unit tests), video
+   (@remotion/media embed; note: `@remotion/media` was added as a dependency),
+   overlay (themed callout card). Demo showcase section: split code+terminal,
+   video embed spanning two lines, overlay stacked on top. Smoke coverage:
+   split-pane presence, video playback (frames differ over time), overlay
+   presence. Also caught and fixed an inverted-logic bug in the smoke
+   `regionRatio` helper that made region assertions measure the inverse.
 4. **TTS pre-build** — `scripts/tts.mts`; real voiceover in demo episode.
    (Network in some environments may block the TTS endpoint — degrade gracefully.)
 5. **Validation + docs** — coverage/lint in `calculateMetadata`; update

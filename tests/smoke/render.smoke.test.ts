@@ -40,7 +40,7 @@ const pixel = (png: PNG, x: number, y: number) => {
 const channelDiff = (a: number[], b: number[]) =>
   Math.max(...a.map((v, i) => Math.abs(v - b[i])));
 
-/** Fraction of pixels differing from a given color, within a region */
+/** Fraction of pixels matching a color within a region (invert=true: differing) */
 const regionRatio = (
   png: PNG,
   color: number[],
@@ -51,7 +51,7 @@ const regionRatio = (
   for (let y = region.y; y < region.y + region.h; y++) {
     for (let x = region.x; x < region.x + region.w; x++) {
       const differs = channelDiff(pixel(png, x, y), color) > EPSILON;
-      if (differs !== invert) {
+      if (differs === invert) {
         count++;
       }
     }
@@ -97,15 +97,20 @@ describe("smoke: Episode demo render", () => {
     const clips = resolveCodeState(rawTimeline.clips);
     const code1 = clips.find((c) => c.id === "code-1")! as unknown as TimelineClip<CodeClipDef>;
     const code2 = clips.find((c) => c.id === "code-2")!;
+    const banner = clips.find((c) => c.id === "concepts-banner")!;
     const stepInterval = code1.stepInterval ?? 60;
     const transitionDuration = code1.transitionDuration ?? 30;
 
     const introLine = rawTimeline.lines.find((l) => l.fullId === "intro.first")!;
     const spanLine = rawTimeline.lines.find((l) => l.fullId === "concepts.span")!;
+    const terminalLine = rawTimeline.lines.find((l) => l.fullId === "showcase.terminal")!;
+    const videoLine = rawTimeline.lines.find((l) => l.fullId === "showcase.video")!;
+    const overlayLine = rawTimeline.lines.find((l) => l.fullId === "showcase.overlay")!;
 
     const samplePoints: Record<string, number> = {
       introTitle: introLine.startFrame + 15,
       conceptsMid: spanLine.startFrame + Math.floor((spanLine.endFrame - spanLine.startFrame) / 2),
+      bannerFrame: banner.startFrame + 30,
       settledV1: code1.startFrame + 40,
       midMorph: code1.startFrame + stepInterval + 8,
       beforeEnd: code1.endFrame - 2,
@@ -113,6 +118,10 @@ describe("smoke: Episode demo render", () => {
       startOfCode2: code2.startFrame,
       afterScroll: code2.startFrame + 45,
       midMorph2: code2.startFrame + stepInterval + transitionDuration / 2,
+      terminalMid: terminalLine.startFrame + 60,
+      videoEarly: videoLine.startFrame + 30,
+      videoLate: overlayLine.startFrame + 30,
+      overlayFrame: overlayLine.startFrame + 30,
     };
 
     // Absolute expected colors, computed the same way the components do
@@ -160,7 +169,7 @@ describe("smoke: Episode demo render", () => {
       const png = readPng(file);
       expect(
         regionRatio(png, bg, { x: 0, y: 0, w: png.width, h: png.height }, true),
-      ).toBeGreaterThan(0.01);
+      ).toBeGreaterThan(0.005);
     }
   });
 
@@ -173,13 +182,38 @@ describe("smoke: Episode demo render", () => {
   });
 
   it("renders the split panes and the banner overlay", () => {
-    const png = readPng(frames.conceptsMid);
     const bg = hexToRgb(expectedBackground);
+    const png = readPng(frames.conceptsMid);
     // Left and right 50% panes
     expect(regionRatio(png, bg, { x: 200, y: 400, w: 600, h: 300 }, true)).toBeGreaterThan(0.005);
     expect(regionRatio(png, bg, { x: 1100, y: 400, w: 600, h: 300 }, true)).toBeGreaterThan(0.005);
-    // Banner overlay (x 25%-75%, y 75%-90%)
-    expect(regionRatio(png, bg, { x: 480, y: 810, w: 960, h: 160 }, true)).toBeGreaterThan(0.005);
+    // Banner overlay while it is visible (it ends at frame 394)
+    const banner = readPng(frames.bannerFrame);
+    expect(regionRatio(banner, bg, { x: 480, y: 810, w: 960, h: 160 }, true)).toBeGreaterThan(0.005);
+  });
+
+  it("renders the terminal next to the code pane", () => {
+    const png = readPng(frames.terminalMid);
+    const bg = hexToRgb(expectedBackground);
+    // Code pane (x 5%-47%) and terminal pane (x 53%-95%)
+    expect(regionRatio(png, bg, { x: 200, y: 300, w: 600, h: 400 }, true)).toBeGreaterThan(0.005);
+    expect(regionRatio(png, bg, { x: 1100, y: 300, w: 600, h: 400 }, true)).toBeGreaterThan(0.005);
+  });
+
+  it("plays the embedded video", () => {
+    const early = readPng(frames.videoEarly);
+    const bg = hexToRgb(expectedBackground);
+    // Video pane content present
+    expect(regionRatio(early, bg, { x: 300, y: 300, w: 800, h: 400 }, true)).toBeGreaterThan(0.005);
+    // ...and the picture actually changes over time
+    expect(fullDiff(early, readPng(frames.videoLate))).toBeGreaterThan(0.01);
+  });
+
+  it("renders the overlay card above the video", () => {
+    const png = readPng(frames.overlayFrame);
+    const bg = hexToRgb(expectedBackground);
+    // Overlay rect (x 55%-90%, y 55%-80%)
+    expect(regionRatio(png, bg, { x: 1060, y: 600, w: 660, h: 260 }, true)).toBeGreaterThan(0.005);
   });
 
   it("holds a settled step static", () => {

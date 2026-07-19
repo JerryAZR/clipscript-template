@@ -4,6 +4,7 @@ import { getEpisode } from "../episodes/registry";
 import type { EpisodeProps } from "./calculate-metadata";
 import { ClipRenderer } from "./ClipRenderer";
 import { sharedClipComponents } from "./clips";
+import { EpisodeNameProvider } from "./EpisodeNameContext";
 import { HighlightProvider } from "./HighlightContext";
 import type { ClipComponent } from "./types";
 
@@ -27,9 +28,11 @@ export const Episode: React.FC<EpisodeProps> = ({
   return (
     <ThemeProvider themeColors={themeColors}>
       <HighlightProvider highlightedCode={highlightedCode}>
-        <AbsoluteFill style={{ backgroundColor: themeColors.background }}>
-          <ClipRenderer timeline={timeline} clipComponents={clipComponents} />
-        </AbsoluteFill>
+        <EpisodeNameProvider name={episode}>
+          <AbsoluteFill style={{ backgroundColor: themeColors.background }}>
+            <ClipRenderer timeline={timeline} clipComponents={clipComponents} />
+          </AbsoluteFill>
+        </EpisodeNameProvider>
       </HighlightProvider>
     </ThemeProvider>
   );

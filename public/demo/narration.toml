@@ -28,3 +28,16 @@ text = "A code clip follows a file as it evolves, one morph at a time."
 [[lines]]
 id = "code.chain"
 text = "And a later clip picks up exactly where the previous one left off."
+
+# Showcase
+[[lines]]
+id = "showcase.terminal"
+text = "The terminal clip types commands and reveals their output, deterministically."
+
+[[lines]]
+id = "showcase.video"
+text = "Screen recordings embed in any pane, aligned to the timeline."
+
+[[lines]]
+id = "showcase.overlay"
+text = "And overlay cards stack on top for notes and callouts."

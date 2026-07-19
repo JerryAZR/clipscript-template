@@ -73,6 +73,57 @@ const codeClips: Storyboard["clips"] = [
   },
 ];
 
+// Showcase: terminal beside the code, a video embed spanning two lines,
+// and an overlay card stacked on top of it
+const showcaseClips: Storyboard["clips"] = [
+  {
+    id: "code-3",
+    type: "code",
+    key: "main",
+    steps: ["v3.ts"],
+    rect: { x: "5%", y: "15%", w: "42%", h: "70%" },
+    startAt: { line: "showcase.terminal" },
+    endAt: [{ line: "showcase.terminal", end: true }],
+  },
+  {
+    id: "terminal-1",
+    type: "terminal",
+    steps: [
+      {
+        cwd: "~/app",
+        command: "npm install",
+        output: ["added 361 packages in 21s"],
+      },
+      {
+        cwd: "~/app",
+        command: "npm run lint",
+        output: ["> template-code-hike@1.0.0 lint", "> tsc && eslint src"],
+      },
+    ],
+    rect: { x: "53%", y: "15%", w: "42%", h: "70%" },
+    startAt: { line: "showcase.terminal" },
+    endAt: [{ line: "showcase.terminal", end: true }],
+  },
+  {
+    id: "video-1",
+    type: "video",
+    src: "cargo-run.mp4",
+    rect: { x: "10%", y: "15%", w: "55%", h: "70%" },
+    startAt: { line: "showcase.video" },
+    endAt: [{ line: "showcase.overlay", end: true }],
+  },
+  {
+    id: "overlay-1",
+    type: "overlay",
+    title: "Note",
+    text: "Overlay cards stack on top\nfor tips and callouts.",
+    rect: { x: "55%", y: "55%", w: "35%", h: "25%" },
+    zIndex: 10,
+    startAt: { line: "showcase.overlay" },
+    endAt: [{ line: "showcase.overlay", end: true }],
+  },
+];
+
 export const storyboard: Storyboard = {
-  clips: [...introClips, ...conceptClips, ...codeClips],
+  clips: [...introClips, ...conceptClips, ...codeClips, ...showcaseClips],
 };

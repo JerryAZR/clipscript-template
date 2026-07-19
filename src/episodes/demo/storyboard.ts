@@ -88,7 +88,6 @@ const showcaseClips: Storyboard["clips"] = [
   {
     id: "terminal-1",
     type: "terminal",
-    paneTitle: "Terminal",
     steps: [
       {
         cwd: "~/app",

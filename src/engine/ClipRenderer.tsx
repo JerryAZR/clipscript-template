@@ -7,26 +7,11 @@ import {
   useCurrentFrame,
   useVideoConfig,
 } from "remotion";
-import { useDimmedColor } from "../calculate-metadata/theme";
+import { rgba } from "polished";
+import { useThemeColors } from "../calculate-metadata/theme";
 import { textStyles, TITLE_BAR_HEIGHT } from "./clip-style";
-import { cardPadding } from "./code-style";
-import type { ClipComponent, RectValue, Timeline, TimelineClip } from "./types";
-
-const resolveRectValue = (value: RectValue, dimension: number): number => {
-  if (typeof value === "number") {
-    return value;
-  }
-  if (value.endsWith("%")) {
-    const parsed = parseFloat(value);
-    if (!Number.isNaN(parsed)) {
-      return (parsed / 100) * dimension;
-    }
-  }
-  // The storyboard only allows numbers or "%"-strings - anything else is a bug
-  throw new Error(
-    `Invalid rect value ${JSON.stringify(value)}; expected a number or a percentage string.`,
-  );
-};
+import { resolveRectValue } from "./types";
+import type { ClipComponent, Timeline, TimelineClip } from "./types";
 
 const ClipPane: React.FC<{
   clip: TimelineClip;
@@ -35,7 +20,7 @@ const ClipPane: React.FC<{
   // Clip-local frame (this component is inside the clip's Sequence)
   const frame = useCurrentFrame();
   const { width, height } = useVideoConfig();
-  const dimmedTitle = useDimmedColor(0.3);
+  const themeColors = useThemeColors();
 
   const rect = clip.rect;
   if (!rect) {
@@ -66,9 +51,11 @@ const ClipPane: React.FC<{
     });
   }
 
-  // Optional pane title bar: chrome above the content, identical for every
-  // clip type. The content area shrinks below it; clips fill 100% of the
-  // remaining space, so they need no changes.
+  // Optional pane title: chrome above the content, identical for every clip
+  // type. Centered heading with a fading separator below (like the original
+  // project's SceneTitle). The content area shrinks below it; clips fill
+  // 100% of the remaining space, so they need no changes.
+  const titleForeground = themeColors.editor.foreground;
   const content = clip.paneTitle ? (
     <div
       style={{
@@ -80,16 +67,29 @@ const ClipPane: React.FC<{
     >
       <div
         style={{
-          ...textStyles.paneTitle,
           height: TITLE_BAR_HEIGHT,
           flexShrink: 0,
           display: "flex",
-          alignItems: "center",
-          paddingLeft: cardPadding,
-          color: dimmedTitle,
+          flexDirection: "column",
+          justifyContent: "flex-end",
         }}
       >
-        {clip.paneTitle}
+        <div
+          style={{
+            ...textStyles.heading2,
+            textAlign: "center",
+            color: titleForeground,
+          }}
+        >
+          {clip.paneTitle}
+        </div>
+        <div
+          style={{
+            height: 2,
+            marginTop: 12,
+            background: `linear-gradient(90deg, transparent, ${rgba(titleForeground, 0.3)}, transparent)`,
+          }}
+        />
       </div>
       <div style={{ flex: 1, minHeight: 0, position: "relative" }}>
         {children}

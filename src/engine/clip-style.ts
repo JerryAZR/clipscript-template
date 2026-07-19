@@ -26,14 +26,12 @@ export const textStyles = {
   bodySmall: { fontFamily, fontSize: 26, fontWeight: 400, lineHeight: 1.4 },
   /** Hints, tab-ish labels */
   caption: { fontFamily, fontSize: 24, fontWeight: 400, lineHeight: 1.4 },
-  /** The pane title bar (ClipPane chrome) */
-  paneTitle: { fontFamily, fontSize: 24, fontWeight: 600, lineHeight: 1.2 },
 } satisfies Record<string, CSSProperties>;
 
 export type TextStyleName = keyof typeof textStyles;
 
-/** Height of the pane title bar rendered by ClipPane when clip.paneTitle is set */
-export const TITLE_BAR_HEIGHT = 48;
+/** Height of the pane title area rendered by ClipPane when clip.paneTitle is set */
+export const TITLE_BAR_HEIGHT = 88;
 
 /** The standard full-pane centered container most text clips start from */
 export const centeredPaneStyle: CSSProperties = {

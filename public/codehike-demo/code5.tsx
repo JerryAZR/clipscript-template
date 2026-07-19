@@ -5,7 +5,7 @@ const user = {
 	location: "Ipsum",
 };
 
-// !mark(1:1) 40 15
+// !mark(1:1)
 console.log(user.name);
 // !diff(1:1) +
 console.log(user.location); // !callout[18:26] added in this step

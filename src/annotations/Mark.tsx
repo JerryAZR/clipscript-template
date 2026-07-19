@@ -2,27 +2,17 @@ import { AnnotationHandler, InnerLine } from "codehike/code";
 import { rgba } from "polished";
 import { interpolate, useCurrentFrame } from "remotion";
 
-export const MARK_DEFAULT_DELAY = 35;
-export const MARK_DEFAULT_DURATION = 15;
+// Query carries style only (an optional color) - timing is the framework's
+// job, not the marker's: `// !mark(1:2) #22c55e` or bare `// !mark(1:2)`
+export const MARK_DELAY = 35;
+export const MARK_DURATION = 15;
 export const MARK_DEFAULT_COLOR = "#eab308";
 
-// Query format: "<delay in frames> <duration in frames> <color>"
-// e.g. `// !mark(1:2) 40 20 #22c55e` - all parts optional
-export const parseMarkQuery = (query?: string) => {
-  const parts = (query || "").split(" ").filter(Boolean);
-  const delay = Number(parts[0]);
-  const duration = Number(parts[1]);
-  return {
-    delay: Number.isNaN(delay) ? MARK_DEFAULT_DELAY : delay,
-    duration: Number.isNaN(duration) ? MARK_DEFAULT_DURATION : duration,
-    color: parts[2] || MARK_DEFAULT_COLOR,
-  };
-};
+const colorOf = (query?: string) => query?.trim() || MARK_DEFAULT_COLOR;
 
-const useMarkProgress = (query?: string) => {
-  const { delay, duration } = parseMarkQuery(query);
+const useMarkProgress = () => {
   const frame = useCurrentFrame();
-  return interpolate(frame, [delay, delay + duration], [0, 1], {
+  return interpolate(frame, [MARK_DELAY, MARK_DELAY + MARK_DURATION], [0, 1], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
   });
@@ -34,8 +24,8 @@ export const mark: AnnotationHandler = {
   // layout stays identical between steps with and without marks,
   // otherwise token transitions would animate the layout shift.
   Line: ({ annotation, ...props }) => {
-    const progress = useMarkProgress(annotation?.query);
-    const { color } = parseMarkQuery(annotation?.query);
+    const progress = useMarkProgress();
+    const color = colorOf(annotation?.query);
     return (
       <div
         style={{
@@ -53,8 +43,8 @@ export const mark: AnnotationHandler = {
     );
   },
   Inline: ({ annotation, children }) => {
-    const progress = useMarkProgress(annotation.query);
-    const { color } = parseMarkQuery(annotation.query);
+    const progress = useMarkProgress();
+    const color = colorOf(annotation.query);
     return (
       <div
         style={{

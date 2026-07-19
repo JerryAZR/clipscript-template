@@ -19,3 +19,12 @@ text = "They start and end anchored to narration lines."
 [[lines]]
 id = "concepts.span"
 text = "And a single clip can span as many lines as it needs."
+
+# Code clips
+[[lines]]
+id = "code.intro"
+text = "A code clip follows a file as it evolves, one morph at a time."
+
+[[lines]]
+id = "code.chain"
+text = "And a later clip picks up exactly where the previous one left off."

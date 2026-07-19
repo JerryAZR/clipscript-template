@@ -20,7 +20,11 @@ export type ClipEndCondition =
  */
 export type ClipCommon = {
   id: string;
-  rect: Rect;
+  /**
+   * Optional at authoring time so chained clips can inherit it from their
+   * key-chain store. The renderer throws if a resolved clip has no rect.
+   */
+  rect?: Rect;
   zIndex?: number;
   startAt: { line: string; offsetFrames?: number };
   endAt: ClipEndCondition[];
@@ -36,7 +40,29 @@ export type TitleClipDef = ClipCommon & {
   subtitle?: string;
 };
 
-export type StoryboardClip = TitleClipDef;
+export type CodeClipDef = ClipCommon & {
+  type: "code";
+  /** Persistence chain id - clips with the same key share code/scroll state */
+  key?: string;
+  /** Code files in public/<episode>/code/. After resolution: effective list with the chain carry-in prepended */
+  steps: string[];
+  /** Tab label. Default: basename of the last step */
+  filename?: string;
+  /** Frames between step morphs (default 60) */
+  stepInterval?: number;
+  /** Morph length in frames (default 30) */
+  transitionDuration?: number;
+  /** Morph granularity (default "token"; "line" survives big rewrites) */
+  transition?: "token" | "line";
+  /** Injected by the state resolver, not authored: rendered line to start scrolled at */
+  scrollFrom?: number;
+  /** Rendered line to scroll to, 1-based (default: stay at scrollFrom) */
+  scrollTo?: number;
+  /** Scroll animation length in frames (default 30; 0 = snap) */
+  scrollDuration?: number;
+};
+
+export type StoryboardClip = TitleClipDef | CodeClipDef;
 
 export type Storyboard = {
   clips: StoryboardClip[];

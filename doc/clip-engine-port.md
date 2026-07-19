@@ -105,9 +105,20 @@ scripts/tts.mts      narration.toml → voiceover/*.mp3 (hash-cached)
      styles (slide/wipe/push, from RVE recipes) are deliberately deferred;
      extension point: the enter/exit progress in `ClipPane` maps to
      transforms via a future per-clip transition-style field.
-2. **Code clip** — merge our existing `mark`/`diff`/`focus`/`callout` annotations
-   + token/line `CodeTransition`; fix bevy's global-frame fades and LINE_HEIGHT
-   guesswork (measure, don't hardcode).
+2. ~~**Code clip**~~ **DONE** — `CodeClipDef` (steps, `key`, `scrollTo`,
+   `stepInterval`, `transitionDuration`, `transition: token|line`,
+   `filename`), compile-time key-chain state threading
+   (`src/engine/clips/code-state.ts`) with the three rulings: same-key
+   overlap incl. transitionOut tails = error, top-left mismatch = warn,
+   inherit-unless-overridden (step, scroll, rect, filename). Engine
+   `CodeTransition` takes a `frame` prop and is re-keyed per step (remount =
+   state reset); line-granularity via a `.ch-line` wrapper annotation.
+   Pre-highlighting in `calculateMetadata` via the existing processSnippet
+   path (extension→lang + twoslash). `code-style.ts` constants kill the
+   LINE_HEIGHT guesswork. Mark/diff queries simplified to style-only
+   (timing is the framework's). Demo: `code-1`/`code-2` chain over
+   `public/demo/code/v1-3.ts`, verified with stills + negative tests
+   (overlap error, 404 step error).
 3. **Terminal clip + split-screen demo** — code left, terminal right; one clip
    spanning several narration lines. Validates the two key patterns.
 4. **TTS pre-build** — `scripts/tts.mts`; real voiceover in demo episode.

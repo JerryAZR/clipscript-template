@@ -33,6 +33,13 @@ const ClipPane: React.FC<{
   const frame = useCurrentFrame();
   const { width, height } = useVideoConfig();
 
+  const rect = clip.rect;
+  if (!rect) {
+    throw new Error(
+      `clip '${clip.id}' has no rect (and none to inherit from its key chain).`,
+    );
+  }
+
   const transitionIn = clip.transitionIn ?? 0;
   const transitionOut = clip.transitionOut ?? 0;
   const exitStart = clip.endFrame - clip.startFrame;
@@ -59,10 +66,10 @@ const ClipPane: React.FC<{
     <div
       style={{
         position: "absolute",
-        left: resolveRectValue(clip.rect.x, width),
-        top: resolveRectValue(clip.rect.y, height),
-        width: resolveRectValue(clip.rect.w, width),
-        height: resolveRectValue(clip.rect.h, height),
+        left: resolveRectValue(rect.x, width),
+        top: resolveRectValue(rect.y, height),
+        width: resolveRectValue(rect.w, width),
+        height: resolveRectValue(rect.h, height),
         overflow: "hidden",
         zIndex: clip.zIndex ?? 0,
         opacity,

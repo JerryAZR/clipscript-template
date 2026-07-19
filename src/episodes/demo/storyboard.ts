@@ -48,6 +48,30 @@ const conceptClips: Storyboard["clips"] = [
   },
 ];
 
+// Code clips: a keyed chain over one evolving file. code-2 inherits rect,
+// filename, the carry-in step (v2) and scroll state from code-1.
+const codeClips: Storyboard["clips"] = [
+  {
+    id: "code-1",
+    type: "code",
+    key: "main",
+    steps: ["v1.ts", "v2.ts"],
+    filename: "users.ts",
+    rect: { x: "10%", y: "10%", w: "80%", h: "80%" },
+    startAt: { line: "code.intro" },
+    endAt: [{ line: "code.intro", end: true }],
+  },
+  {
+    id: "code-2",
+    type: "code",
+    key: "main",
+    steps: ["v3.ts"],
+    scrollTo: 20,
+    startAt: { line: "code.chain" },
+    endAt: [{ line: "code.chain", end: true }],
+  },
+];
+
 export const storyboard: Storyboard = {
-  clips: [...introClips, ...conceptClips],
+  clips: [...introClips, ...conceptClips, ...codeClips],
 };

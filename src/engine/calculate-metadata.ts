@@ -1,11 +1,14 @@
 import { getThemeColors } from "@code-hike/lighter";
+import type { HighlightedCode } from "codehike/code";
 import type { CalculateMetadataFunction } from "remotion";
 import { z } from "zod";
 import { themeSchema, ThemeColors } from "../calculate-metadata/theme";
 import { getEpisode } from "../episodes/registry";
+import { resolveCodeState } from "./clips/code-state";
+import { highlightCodeSteps } from "./highlight";
 import { estimateDurationFrames, loadNarration } from "./narration";
 import { calculateTimeline } from "./timeline";
-import type { Timeline } from "./types";
+import type { CodeClipDef, Timeline } from "./types";
 
 /**
  * CalculateMetadataFunction does not receive the composition fps, so duration
@@ -24,6 +27,7 @@ export type EpisodeProps = {
   theme: z.infer<typeof themeSchema>;
   timeline: Timeline | null;
   themeColors: ThemeColors | null;
+  highlightedCode: Record<string, HighlightedCode> | null;
 };
 
 export const episodeCalculateMetadata: CalculateMetadataFunction<
@@ -37,8 +41,24 @@ export const episodeCalculateMetadata: CalculateMetadataFunction<
     durationFrames: estimateDurationFrames(line.text, EPISODE_FPS),
   }));
 
-  const timeline = calculateTimeline(lines, storyboard.clips);
-  const themeColors = await getThemeColors(props.theme);
+  const rawTimeline = calculateTimeline(lines, storyboard.clips);
+  const timeline: Timeline = {
+    ...rawTimeline,
+    clips: resolveCodeState(rawTimeline.clips),
+  };
+
+  const codeSrcs = [
+    ...new Set(
+      timeline.clips
+        .filter((clip) => clip.type === "code")
+        .flatMap((clip) => (clip as Timeline["clips"][number] & CodeClipDef).steps),
+    ),
+  ];
+
+  const [themeColors, highlightedCode] = await Promise.all([
+    getThemeColors(props.theme),
+    highlightCodeSteps(props.episode, codeSrcs, props.theme),
+  ]);
 
   return {
     durationInFrames: timeline.totalFrames,
@@ -46,6 +66,7 @@ export const episodeCalculateMetadata: CalculateMetadataFunction<
       ...props,
       timeline,
       themeColors,
+      highlightedCode,
     },
   };
 };

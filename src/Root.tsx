@@ -36,6 +36,7 @@ export const RemotionRoot = () => {
           theme: defaultTheme,
           timeline: null,
           themeColors: null,
+          highlightedCode: null,
         }}
         fps={EPISODE_FPS}
         width={1920}

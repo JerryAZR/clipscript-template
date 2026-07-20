@@ -1,6 +1,4 @@
 import { AnnotationHandler, BlockAnnotation, InnerLine } from "codehike/code";
-import { interpolate, useCurrentFrame } from "remotion";
-import { MARK_DELAY, MARK_DURATION } from "./Mark";
 
 // `// !diff(1:2) +` marks lines as added (green), `// !diff(1:2) -` as removed (red).
 // Composes with the `mark` handler by re-emitting a colored mark annotation,
@@ -14,15 +12,6 @@ export const diff: AnnotationHandler = {
   },
   // Like `mark`, no `onlyIfAnnotated` so the layout never changes between steps.
   Line: ({ annotation, ...props }) => {
-    const frame = useCurrentFrame();
-    const opacity = annotation
-      ? interpolate(
-          frame,
-          [MARK_DELAY, MARK_DELAY + MARK_DURATION],
-          [0, 1],
-          { extrapolateLeft: "clamp", extrapolateRight: "clamp" },
-        )
-      : 0;
     const removed = annotation?.query.trim().startsWith("-");
     const color = removed ? "#f85149" : "#3fb950";
 
@@ -37,7 +26,6 @@ export const diff: AnnotationHandler = {
             width: "2ch",
             flexShrink: 0,
             userSelect: "none",
-            opacity,
             color,
           }}
         >

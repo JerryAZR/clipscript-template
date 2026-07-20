@@ -35,7 +35,9 @@ written by hand as comments.
 
 ## Notes
 
-- Annotation timings are fixed defaults relative to the clip/step (fades land
-  shortly after the code settles). Don't try to time annotations via the query.
+- Annotations appear instantly with their code state - no fade-in. A
+  carried-over annotation never re-fades, which keeps chained clips
+  visually continuous; a morph introduces the new step's annotations with
+  the step's content.
 - Removed lines in a diff (`!diff -`) belong in the OLD step's file; added
   lines in the NEW step's file. The token transition animates the change.

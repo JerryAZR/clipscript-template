@@ -5,7 +5,6 @@ import {
   Pre,
 } from "codehike/code";
 import { mix, readableColor } from "polished";
-import { interpolate, useCurrentFrame } from "remotion";
 import { useThemeColors } from "../calculate-metadata/theme";
 
 export const callout: AnnotationHandler = {
@@ -23,12 +22,6 @@ export const callout: AnnotationHandler = {
   AnnotatedLine: ({ annotation, ...props }) => {
     const { column, codeblock } = annotation.data;
     const { indentation } = props;
-    const frame = useCurrentFrame();
-
-    const opacity = interpolate(frame, [25, 35], [0, 1], {
-      extrapolateLeft: "clamp",
-      extrapolateRight: "clamp",
-    });
 
     const themeColors = useThemeColors();
 
@@ -40,7 +33,6 @@ export const callout: AnnotationHandler = {
         <InnerLine merge={props} />
         <div
           style={{
-            opacity,
             minWidth: `${column + 4}ch`,
             marginLeft: `${indentation}ch`,
             width: "fit-content",

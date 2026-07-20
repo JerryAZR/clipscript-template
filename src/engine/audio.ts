@@ -19,14 +19,15 @@ export const measureAudioDuration = async (blob: Blob): Promise<number> => {
 /**
  * Resolves narration lines to durations: measured from the voiceover mp3 when
  * it exists (produced by scripts/tts.mts), estimated from text length when it
- * doesn't (silent episodes still render).
+ * doesn't (silent episodes still render). Estimation shifts the whole
+ * timeline, so missing voiceover is reported, once, not silent.
  */
 export const resolveLineAudio = async (
   episode: string,
   lines: NarrationLine[],
   fps: number,
 ): Promise<ResolvedLine[]> => {
-  return Promise.all(
+  const resolved = await Promise.all(
     lines.map(async (line): Promise<ResolvedLine> => {
       const audio = `${episode}/voiceover/${line.fullId}.mp3`;
       const response = await fetch(staticFile(audio));
@@ -45,4 +46,11 @@ export const resolveLineAudio = async (
       };
     }),
   );
+  const estimated = resolved.filter((line) => line.audio === null);
+  if (estimated.length > 0) {
+    console.warn(
+      `[episode '${episode}'] ${estimated.length}/${resolved.length} lines have no voiceover, durations estimated: ${estimated.map((l) => l.fullId).join(", ")}`,
+    );
+  }
+  return resolved;
 };

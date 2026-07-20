@@ -9,6 +9,7 @@ import { resolveCodeState } from "./clips/code-state";
 import { highlightCodeSteps } from "./highlight";
 import { loadNarration } from "./narration";
 import { calculateTimeline } from "./timeline";
+import { validateStoryboard } from "./validate";
 import type { CodeClipDef, Timeline } from "./types";
 
 /**
@@ -56,6 +57,21 @@ export const episodeCalculateMetadata: CalculateMetadataFunction<
     getThemeColors(props.theme),
     highlightCodeSteps(props.episode, codeSrcs, props.theme),
   ]);
+
+  const lineCounts = Object.fromEntries(
+    Object.entries(highlightedCode).map(([src, code]) => [
+      src,
+      code.code.split("\n").length,
+    ]),
+  );
+  for (const warning of validateStoryboard({
+    lines: timeline.lines,
+    clips: timeline.clips,
+    totalFrames: timeline.totalFrames,
+    lineCounts,
+  })) {
+    console.warn(`[episode '${props.episode}'] ${warning}`);
+  }
 
   return {
     durationInFrames: timeline.totalFrames,

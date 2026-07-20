@@ -49,7 +49,7 @@ prioritized development list.
 | progress-steps | Step indicator filling in sequence | Niche (bevy `progress` covers the use case better) |
 | rotating-carousel | 3D rotating card carousel | Niche |
 | sound-wave | Audio waveform bar visualiser | Niche (revisit when voiceover lands) |
-| text-highlight | Sequential word highlighting | **Will port** — emphasize key terms in overlays |
+| text-highlight | Sequential word highlighting | Niche — useful pattern reference (per-word timing), but not a clip; terminal covers typing |
 
 ### Background
 | Template | Summary | Assessment |

@@ -29,8 +29,6 @@ per purpose; similar-purpose leftovers stay Niche in the inventory.
 
 - [x] **notification-pop** (RVE) — stacking toasts.
   Use case: "tests pass", "commit landed", "CI green" beats.
-- [ ] **text-highlight** (RVE) — sequential word highlighting.
-  Use case: emphasizing key terms inside overlay cards.
 - [x] **chapter-title** (RVE) — numbered chapter card with extending lines.
   Use case: multi-chapter tutorials (distinct purpose from the episode opener).
 - [x] **progress-steps** (RVE) — horizontal stepper with animated advance.
@@ -52,6 +50,9 @@ per purpose; similar-purpose leftovers stay Niche in the inventory.
   (batch 2 / batch 3) as candidates; default tracker TBD after real use.
 - Outro recap: bevy **outro-summary** wins over RVE end-card.
 - Typing effect: **terminal** covers it; typewriter-subtitle stays Niche.
+- **text-highlight** stays Niche/not planned: worth reading as a pattern
+  (per-word timing inside text), but not a clip - the terminal typewriter
+  covers the common need, and overlay text stays static.
 - Transitions (RVE transition category, letterbox-reveal, spotlight-reveal,
   whip-pan, pixel-transition, card-flip) are not clips - they are candidates for
   the pane-transition style field if/when we add it.
@@ -60,5 +61,5 @@ per purpose; similar-purpose leftovers stay Niche in the inventory.
 ## Framework work (not clips, sequential)
 
 - [x] TTS pipeline (narration.toml → voiceover mp3s, hash-cached) + measured durations.
-- [ ] Validation/lint pass (coverage, transition sanity, scroll continuity).
+- [x] Validation/lint pass (coverage, transition sanity, scroll continuity).
 - [ ] Skill updates for the new authoring workflow.

@@ -1,5 +1,5 @@
 import { interpolate, spring, useVideoConfig } from "remotion";
-import { useDimmedColor, useThemeColors } from "../../calculate-metadata/theme";
+import { useAccentColor, useDimmedColor, useThemeColors } from "../../calculate-metadata/theme";
 import { textStyles } from "../clip-style";
 import type { ClipComponent, CountdownClipDef } from "../types";
 import { useClipFrame } from "../useClipFrame";
@@ -21,7 +21,7 @@ export const CountdownClip: ClipComponent<CountdownClipDef> = ({ clip }) => {
   const { fps } = useVideoConfig();
   const themeColors = useThemeColors();
 
-  const accent = themeColors.editor.infoForeground;
+  const accent = useAccentColor();
   const foreground = themeColors.editor.foreground;
   const track = useDimmedColor(0.85);
 

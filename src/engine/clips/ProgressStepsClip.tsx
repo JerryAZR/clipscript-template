@@ -1,6 +1,6 @@
 import { mix, readableColor, rgba } from "polished";
 import { spring, useVideoConfig } from "remotion";
-import { useDimmedColor, useThemeColors } from "../../calculate-metadata/theme";
+import { useAccentColor, useDimmedColor, useThemeColors } from "../../calculate-metadata/theme";
 import { centeredPaneStyle, textStyles } from "../clip-style";
 import type { ClipComponent, ProgressStepsClipDef } from "../types";
 import { useClipFrame } from "../useClipFrame";
@@ -121,7 +121,7 @@ export const ProgressStepsClip: ClipComponent<ProgressStepsClipDef> = ({
   const themeColors = useThemeColors();
 
   const foreground = themeColors.editor.foreground;
-  const accent = themeColors.editor.infoForeground;
+  const accent = useAccentColor();
   const dim = useDimmedColor(0.55);
   const track = useDimmedColor(0.8);
 

@@ -1,5 +1,5 @@
 import { interpolate, spring, useVideoConfig } from "remotion";
-import { useDimmedColor, useThemeColors } from "../../calculate-metadata/theme";
+import { useAccentColor, useDimmedColor, useThemeColors } from "../../calculate-metadata/theme";
 import { centeredPaneStyle, textStyles } from "../clip-style";
 import type { ClipComponent, CinematicTitleClipDef } from "../types";
 import { useClipFrame } from "../useClipFrame";
@@ -20,7 +20,7 @@ export const CinematicTitleClip: ClipComponent<CinematicTitleClipDef> = ({
   const themeColors = useThemeColors();
 
   const foreground = themeColors.editor.foreground;
-  const accent = themeColors.editor.infoForeground;
+  const accent = useAccentColor();
   const subtitleColor = useDimmedColor(0.25);
 
   const titleY = spring({

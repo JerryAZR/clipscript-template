@@ -1,5 +1,5 @@
 import { interpolate, spring, useVideoConfig } from "remotion";
-import { useDimmedColor, useThemeColors } from "../../calculate-metadata/theme";
+import { useAccentColor, useDimmedColor, useThemeColors } from "../../calculate-metadata/theme";
 import { centeredPaneStyle, textStyles } from "../clip-style";
 import type { ChapterTitleClipDef, ClipComponent } from "../types";
 import { useClipFrame } from "../useClipFrame";
@@ -21,7 +21,7 @@ export const ChapterTitleClip: ClipComponent<ChapterTitleClipDef> = ({
   const themeColors = useThemeColors();
 
   const foreground = themeColors.editor.foreground;
-  const accent = themeColors.editor.infoForeground;
+  const accent = useAccentColor();
   const labelColor = useDimmedColor(0.4);
   const titleColor = useDimmedColor(0.25);
 

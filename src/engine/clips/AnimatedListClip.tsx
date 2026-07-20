@@ -1,5 +1,5 @@
 import { interpolate, spring, useVideoConfig } from "remotion";
-import { useThemeColors } from "../../calculate-metadata/theme";
+import { useAccentColor, useThemeColors } from "../../calculate-metadata/theme";
 import { textStyles } from "../clip-style";
 import type { AnimatedListClipDef, ClipComponent } from "../types";
 import { useClipFrame } from "../useClipFrame";
@@ -51,7 +51,7 @@ export const AnimatedListClip: ClipComponent<AnimatedListClipDef> = ({
   );
 
   const textColor = themeColors.editor.foreground;
-  const bulletColor = themeColors.editor.infoForeground;
+  const bulletColor = useAccentColor();
 
   return (
     <div

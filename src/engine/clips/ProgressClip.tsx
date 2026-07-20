@@ -1,6 +1,6 @@
 import { rgba } from "polished";
 import { Easing, interpolate } from "remotion";
-import { useDimmedColor, useThemeColors } from "../../calculate-metadata/theme";
+import { useAccentColor, useDimmedColor, useThemeColors } from "../../calculate-metadata/theme";
 import { centeredPaneStyle, textStyles } from "../clip-style";
 import { cardRadius } from "../code-style";
 import { itemStartFrames } from "./AnimatedListClip";
@@ -45,7 +45,7 @@ export const ProgressClip: ClipComponent<ProgressClipDef> = ({ clip }) => {
   const themeColors = useThemeColors();
 
   const foreground = themeColors.editor.foreground;
-  const accent = themeColors.editor.infoForeground;
+  const accent = useAccentColor();
   const dim = useDimmedColor(0.55);
   // Universal diff-green convention, same value as the diff annotation
   const doneColor = "#3fb950";

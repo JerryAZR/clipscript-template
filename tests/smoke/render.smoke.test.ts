@@ -7,13 +7,10 @@ import path from "node:path";
 import { mix, readableColor } from "polished";
 import { PNG } from "pngjs";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
-import { resolveCodeState } from "../../src/engine/clips/code-state";
-import { measureAudioDuration } from "../../src/engine/audio";
-import { estimateDurationFrames, parseNarration } from "../../src/engine/narration";
-import { calculateTimeline } from "../../src/engine/timeline";
-import type { CodeClipDef, TimelineClip } from "../../src/engine/types";
-import { getEpisode } from "../../src/episodes/registry";
+import { resolveRectValue } from "../../src/engine/types";
+import type { CodeClipDef, Timeline, TimelineClip } from "../../src/engine/types";
 import { offlineLighterOverride } from "../../src/calculate-metadata/webpack-override";
+import { loadEpisodeTimeline } from "../../scripts/timeline-node";
 
 const EPSILON = 8;
 // Code pane of code-1/code-2: rect 10%,10%,80%,80% of 1920x1080
@@ -21,11 +18,17 @@ const PANE = { x: 192, y: 108, w: 1536, h: 864 };
 const TAB_HEIGHT = 36;
 const CODE_TOP = PANE.y + TAB_HEIGHT;
 const LINE_HEIGHT = 36;
+// Presence threshold inside a clip's own pane (sparse clips like the
+// countdown ring cover only a few % of their rect)
+const PANE_CONTENT_RATIO = 0.002;
 
 const frames = {} as Record<string, string>;
 let outDir = "";
 let expectedBackground = "";
 let expectedBand = "";
+let expectedCard = "";
+let timeline: Timeline;
+let samplePoints: Record<string, number> = {};
 
 const readPng = (file: string) => PNG.sync.read(fs.readFileSync(file));
 
@@ -85,47 +88,49 @@ const cropDiff = (
 
 const fullDiff = (a: PNG, b: PNG) => cropDiff(a, b, 0, 0, 0, 0, a.width, a.height);
 
+/** Clips visible at a frame (transitionOut tails included) */
+const activeClipsAt = (frame: number) =>
+  timeline.clips.filter(
+    (c) => frame >= c.startFrame && frame < c.endFrame + (c.transitionOut ?? 0),
+  );
+
+const clipRegion = (clip: TimelineClip) => {
+  if (!clip.rect) {
+    throw new Error(`clip '${clip.id}' has no rect after resolution`);
+  }
+  return {
+    x: Math.round(resolveRectValue(clip.rect.x, 1920)),
+    y: Math.round(resolveRectValue(clip.rect.y, 1080)),
+    w: Math.round(resolveRectValue(clip.rect.w, 1920)),
+    h: Math.round(resolveRectValue(clip.rect.h, 1080)),
+  };
+};
+
 describe("smoke: Episode demo render", () => {
   beforeAll(async () => {
-    const { storyboard } = getEpisode("demo");
-    const narration = parseNarration(
-      fs.readFileSync(path.resolve("public/demo/narration.toml"), "utf8"),
-    );
-    // Mirror the engine: measured durations from voiceover mp3s when present
-    const lines = await Promise.all(
-      narration.map(async (line) => {
-        const mp3 = path.resolve(`public/demo/voiceover/${line.fullId}.mp3`);
-        if (fs.existsSync(mp3)) {
-          const seconds = await measureAudioDuration(
-            new Blob([fs.readFileSync(mp3)]),
-          );
-          return { ...line, durationFrames: Math.max(1, Math.round(seconds * 30)) };
-        }
-        return { ...line, durationFrames: estimateDurationFrames(line.text, 30) };
-      }),
-    );
-    const rawTimeline = calculateTimeline(lines, storyboard.clips);
-    const clips = resolveCodeState(rawTimeline.clips);
+    timeline = await loadEpisodeTimeline("demo");
+    const clips = timeline.clips;
     const code1 = clips.find((c) => c.id === "code-1")! as unknown as TimelineClip<CodeClipDef>;
     const code2 = clips.find((c) => c.id === "code-2")!;
     const banner = clips.find((c) => c.id === "concepts-banner")!;
     const stepInterval = code1.stepInterval ?? 60;
     const transitionDuration = code1.transitionDuration ?? 30;
 
-    const introLine = rawTimeline.lines.find((l) => l.fullId === "intro.first")!;
-    const spanLine = rawTimeline.lines.find((l) => l.fullId === "concepts.span")!;
-    const terminalLine = rawTimeline.lines.find((l) => l.fullId === "showcase.terminal")!;
-    const videoLine = rawTimeline.lines.find((l) => l.fullId === "showcase.video")!;
-    const overlayLine = rawTimeline.lines.find((l) => l.fullId === "showcase.overlay")!;
-    const cinematicLine = rawTimeline.lines.find((l) => l.fullId === "more.cinematic")!;
-    const listLine = rawTimeline.lines.find((l) => l.fullId === "more.list")!;
-    const progressLine = rawTimeline.lines.find((l) => l.fullId === "more.progress")!;
-    const countdownLine = rawTimeline.lines.find((l) => l.fullId === "fence.countdown")!;
-    const chapterLine = rawTimeline.lines.find((l) => l.fullId === "flair.chapter")!;
-    const notifyLine = rawTimeline.lines.find((l) => l.fullId === "flair.notify")!;
-    const stepsLine = rawTimeline.lines.find((l) => l.fullId === "flair.steps")!;
+    const line = (id: string) => timeline.lines.find((l) => l.fullId === id)!;
+    const introLine = line("intro.first");
+    const spanLine = line("concepts.span");
+    const terminalLine = line("showcase.terminal");
+    const videoLine = line("showcase.video");
+    const overlayLine = line("showcase.overlay");
+    const cinematicLine = line("more.cinematic");
+    const listLine = line("more.list");
+    const progressLine = line("more.progress");
+    const countdownLine = line("fence.countdown");
+    const chapterLine = line("flair.chapter");
+    const notifyLine = line("flair.notify");
+    const stepsLine = line("flair.steps");
 
-    const samplePoints: Record<string, number> = {
+    samplePoints = {
       introTitle: introLine.startFrame + 30,
       conceptsMid: spanLine.startFrame + Math.floor((spanLine.endFrame - spanLine.startFrame) / 2),
       bannerFrame: banner.startFrame + 30,
@@ -156,6 +161,8 @@ describe("smoke: Episode demo render", () => {
     expectedBackground = themeColors.background;
     // The header band: useCardColor(0.07)
     expectedBand = mix(0.07, readableColor(themeColors.background), themeColors.background);
+    // The card body: useCardColor(0.04)
+    expectedCard = mix(0.04, readableColor(themeColors.background), themeColors.background);
 
     outDir = fs.mkdtempSync(path.join(os.tmpdir(), "smoke-"));
     const serveUrl = await bundle({
@@ -194,60 +201,68 @@ describe("smoke: Episode demo render", () => {
     ).toBeLessThanOrEqual(EPSILON);
   });
 
-  it("every sampled frame contains content", () => {
+  it("every active clip renders content inside its own pane", () => {
     const bg = hexToRgb(expectedBackground);
-    for (const file of Object.values(frames)) {
-      const png = readPng(file);
-      // Guards against broken/blank renders only. Legitimately sparse frames
-      // (a mid-stagger list, the 180px countdown ring) cover ~0.2-0.5% of
-      // pixels - the dedicated per-clip region assertions carry the strictness.
-      expect(
-        regionRatio(png, bg, { x: 0, y: 0, w: png.width, h: png.height }, true),
-      ).toBeGreaterThan(0.001);
+    for (const [name, frame] of Object.entries(samplePoints)) {
+      const active = activeClipsAt(frame);
+      expect(active.length, `no clip active at '${name}' (frame ${frame})`).toBeGreaterThan(0);
+      const png = readPng(frames[name]);
+      for (const clip of active) {
+        expect(
+          regionRatio(png, bg, clipRegion(clip), true),
+          `clip '${clip.id}' renders nothing inside its pane at '${name}' (frame ${frame})`,
+        ).toBeGreaterThan(PANE_CONTENT_RATIO);
+      }
     }
   });
 
-  it("renders the title clip", () => {
-    const png = readPng(frames.introTitle);
-    const bg = hexToRgb(expectedBackground);
-    expect(
-      regionRatio(png, bg, { x: 480, y: 430, w: 960, h: 220 }, true),
-    ).toBeGreaterThan(0.005);
-  });
+  it("spaces code lines one lineHeight apart (absolute geometry)", () => {
+    // Relative-only checks cannot see uniformly-wrong layout (e.g. every line
+    // rendering twice as tall): measure the vertical pitch of text runs in
+    // the code pane against the same constant the scroll math uses.
+    const png = readPng(frames.settledV1);
+    const card = hexToRgb(expectedCard);
+    const sampleXs = [40, 90, 150, 240, 360].map((dx) => PANE.x + dx);
+    const rowHasText = (y: number) =>
+      sampleXs.some((x) => channelDiff(pixel(png, x, y), card) > EPSILON);
 
-  it("renders the split panes and the banner overlay", () => {
-    const bg = hexToRgb(expectedBackground);
-    const png = readPng(frames.conceptsMid);
-    // Left and right 50% panes
-    expect(regionRatio(png, bg, { x: 200, y: 400, w: 600, h: 300 }, true)).toBeGreaterThan(0.005);
-    expect(regionRatio(png, bg, { x: 1100, y: 400, w: 600, h: 300 }, true)).toBeGreaterThan(0.005);
-    // Banner overlay while it is visible (it ends at frame 394)
-    const banner = readPng(frames.bannerFrame);
-    expect(regionRatio(banner, bg, { x: 480, y: 810, w: 960, h: 160 }, true)).toBeGreaterThan(0.005);
-  });
-
-  it("renders the terminal next to the code pane", () => {
-    const png = readPng(frames.terminalMid);
-    const bg = hexToRgb(expectedBackground);
-    // Code pane (x 5%-47%) and terminal pane (x 53%-95%)
-    expect(regionRatio(png, bg, { x: 200, y: 300, w: 600, h: 400 }, true)).toBeGreaterThan(0.005);
-    expect(regionRatio(png, bg, { x: 1100, y: 300, w: 600, h: 400 }, true)).toBeGreaterThan(0.005);
+    const rows: boolean[] = [];
+    for (let y = PANE.y + 46; y < PANE.y + PANE.h - 8; y++) {
+      rows.push(rowHasText(y));
+    }
+    // Autocorrelation: at the true line pitch, text rows map onto text rows.
+    // Uniformly wrong geometry (e.g. doubled line height) peaks at the wrong
+    // dy; blank source lines only lower the score, they don't shift the peak.
+    let bestDy = 0;
+    let bestScore = -1;
+    for (let dy = 24; dy <= 72; dy++) {
+      let matches = 0;
+      for (let i = 0; i + dy < rows.length; i++) {
+        if (rows[i] === rows[i + dy]) {
+          matches++;
+        }
+      }
+      const score = matches / (rows.length - dy);
+      if (score > bestScore) {
+        bestScore = score;
+        bestDy = dy;
+      }
+    }
+    expect(bestDy).toBeGreaterThanOrEqual(LINE_HEIGHT - 3);
+    expect(bestDy).toBeLessThanOrEqual(LINE_HEIGHT + 3);
   });
 
   it("plays the embedded video", () => {
-    const early = readPng(frames.videoEarly);
-    const bg = hexToRgb(expectedBackground);
-    // Video pane content present
-    expect(regionRatio(early, bg, { x: 300, y: 300, w: 800, h: 400 }, true)).toBeGreaterThan(0.005);
-    // ...and the picture actually changes over time
-    expect(fullDiff(early, readPng(frames.videoLate))).toBeGreaterThan(0.01);
+    // The picture actually changes over time
+    expect(fullDiff(readPng(frames.videoEarly), readPng(frames.videoLate))).toBeGreaterThan(0.01);
   });
 
-  it("renders the overlay card above the video", () => {
-    const png = readPng(frames.overlayFrame);
-    const bg = hexToRgb(expectedBackground);
-    // Overlay rect (x 55%-90%, y 55%-80%)
-    expect(regionRatio(png, bg, { x: 1060, y: 600, w: 660, h: 260 }, true)).toBeGreaterThan(0.005);
+  it("reveals list items one by one", () => {
+    const late = readPng(frames.listLate);
+    // Early frame is missing the later items
+    expect(
+      cropDiff(readPng(frames.listEarly), late, 400, 450, 400, 450, 1100, 400),
+    ).toBeGreaterThan(0.005);
   });
 
   it("holds a settled step static", () => {
@@ -299,81 +314,5 @@ describe("smoke: Episode demo render", () => {
 
   it("morphs to the next step after the scroll", () => {
     expect(fullDiff(readPng(frames.afterScroll), readPng(frames.midMorph2))).toBeGreaterThan(0.02);
-  });
-
-  it("renders the cinematic title with its accent underline", () => {
-    const png = readPng(frames.cinematicMid);
-    const bg = hexToRgb(expectedBackground);
-    // Title + underline around the screen center
-    expect(
-      regionRatio(png, bg, { x: 560, y: 380, w: 800, h: 320 }, true),
-    ).toBeGreaterThan(0.005);
-  });
-
-  it("reveals list items one by one", () => {
-    const bg = hexToRgb(expectedBackground);
-    const late = readPng(frames.listLate);
-    // List pane settled: items present in the lower rows too
-    expect(
-      regionRatio(late, bg, { x: 400, y: 450, w: 1100, h: 400 }, true),
-    ).toBeGreaterThan(0.005);
-    // Early frame is missing the later items
-    expect(
-      cropDiff(
-        readPng(frames.listEarly),
-        late,
-        400,
-        450,
-        400,
-        450,
-        1100,
-        400,
-      ),
-    ).toBeGreaterThan(0.005);
-  });
-
-  it("renders the progress checklist", () => {
-    const png = readPng(frames.progressMid);
-    const bg = hexToRgb(expectedBackground);
-    // Heading + items inside the progress pane (x 20%-80%, y 10%-90%)
-    expect(
-      regionRatio(png, bg, { x: 500, y: 200, w: 900, h: 700 }, true),
-    ).toBeGreaterThan(0.005);
-  });
-
-  it("renders the countdown ring and digit", () => {
-    const png = readPng(frames.countdownMid);
-    const bg = hexToRgb(expectedBackground);
-    // The 440px ring + digit at the pane center
-    expect(
-      regionRatio(png, bg, { x: 740, y: 350, w: 440, h: 380 }, true),
-    ).toBeGreaterThan(0.005);
-  });
-
-  it("renders the chapter card", () => {
-    const png = readPng(frames.chapterMid);
-    const bg = hexToRgb(expectedBackground);
-    // Number + extending lines + title around the center
-    expect(
-      regionRatio(png, bg, { x: 660, y: 300, w: 600, h: 480 }, true),
-    ).toBeGreaterThan(0.005);
-  });
-
-  it("renders all notification toasts", () => {
-    const png = readPng(frames.notifyLate);
-    const bg = hexToRgb(expectedBackground);
-    // Right-aligned toast stack (x 55%-95%)
-    expect(
-      regionRatio(png, bg, { x: 1100, y: 150, w: 700, h: 700 }, true),
-    ).toBeGreaterThan(0.005);
-  });
-
-  it("renders the stepper with all steps complete", () => {
-    const png = readPng(frames.stepsLate);
-    const bg = hexToRgb(expectedBackground);
-    // Heading + the circle/line row across the pane
-    expect(
-      regionRatio(png, bg, { x: 300, y: 450, w: 1300, h: 250 }, true),
-    ).toBeGreaterThan(0.005);
   });
 });

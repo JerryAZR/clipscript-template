@@ -60,6 +60,12 @@ export const useCardColor = (elevation = 0.04) => {
 };
 
 /**
+ * The theme accent (prompt markers, bullets, rings, underlines). One named
+ * place so the convention is findable and changeable.
+ */
+export const useAccentColor = () => useThemeColors().editor.infoForeground;
+
+/**
  * Dimmed/secondary text color: the editor foreground mixed toward a base
  * (the theme background by default; pass useCardColor() for text sitting on
  * a card). Use this instead of inventing a per-clip dimming recipe.

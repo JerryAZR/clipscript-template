@@ -1,17 +1,13 @@
-import fs from "node:fs";
-import { parseNarration, estimateDurationFrames } from "../src/engine/narration";
-import { calculateTimeline } from "../src/engine/timeline";
-import { getEpisode } from "../src/episodes/registry";
+import { loadEpisodeTimeline } from "./timeline-node";
 
-const { storyboard } = getEpisode("demo");
-const narration = parseNarration(
-  fs.readFileSync("public/demo/narration.toml", "utf8"),
-);
-const lines = narration.map((l) => ({
-  ...l,
-  durationFrames: estimateDurationFrames(l.text, 30),
-}));
-const t = calculateTimeline(lines, storyboard.clips);
+// Prints the demo episode's computed timeline: line frame ranges and resolved
+// clip frame ranges. Measured voiceover durations when mp3s exist, estimates
+// otherwise (matching the engine). Usage: npx tsx scripts/timeline-check.ts [episode]
+const t = await loadEpisodeTimeline(process.argv[2] ?? "demo");
 console.log("totalFrames", t.totalFrames);
-for (const l of t.lines) console.log(l.fullId, l.startFrame, l.endFrame);
-for (const c of t.clips) console.log("clip", c.id, c.startFrame, c.endFrame);
+for (const l of t.lines) {
+  console.log(l.fullId, l.startFrame, l.endFrame);
+}
+for (const c of t.clips) {
+  console.log("clip", c.id, c.startFrame, c.endFrame);
+}

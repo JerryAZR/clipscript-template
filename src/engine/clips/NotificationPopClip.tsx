@@ -1,6 +1,7 @@
 import { readableColor, rgba } from "polished";
 import { interpolate, spring, useVideoConfig } from "remotion";
 import {
+  useAccentColor,
   useCardColor,
   useDimmedColor,
   useThemeColors,
@@ -35,7 +36,7 @@ export const NotificationPopClip: ClipComponent<NotificationPopClipDef> = ({
     durationFrames,
   );
 
-  const accent = themeColors.editor.infoForeground;
+  const accent = useAccentColor();
   const cardBackground = useCardColor(0.08);
   const foreground = themeColors.editor.foreground;
   const bodyColor = useDimmedColor(0.25, cardBackground);

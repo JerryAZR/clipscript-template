@@ -1,5 +1,5 @@
 import { mix } from "polished";
-import { useCardColor, useThemeColors } from "../../calculate-metadata/theme";
+import { useAccentColor, useCardColor, useThemeColors } from "../../calculate-metadata/theme";
 import { CardHeader } from "./CardHeader";
 import {
   cardPadding,
@@ -126,7 +126,7 @@ export const TerminalClip: ClipComponent<TerminalClipDef> = ({ clip }) => {
   const cardBackground = useCardColor();
   const textColor = themeColors.editor.foreground;
   const outputColor = mix(0.4, cardBackground, textColor);
-  const promptColor = themeColors.editor.infoForeground;
+  const promptColor = useAccentColor();
 
   const title = clip.steps.find((step) => step.cwd)?.cwd ?? "terminal";
 

@@ -20,6 +20,8 @@ export const diff: AnnotationHandler = {
       // bare fragment would stack the gutter above the code and double every
       // line's height. The gutter stays in flow (always reserved, so
       // switching between diff and non-diff steps never shifts the code).
+      // The column's background and separator are pane-level chrome drawn by
+      // the code clip itself - here we only place the sign.
       <div style={{ display: "flex" }}>
         <span
           style={{

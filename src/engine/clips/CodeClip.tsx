@@ -1,4 +1,8 @@
-import { useCardColor, useThemeColors } from "../../calculate-metadata/theme";
+import {
+  useCardColor,
+  useDimmedColor,
+  useThemeColors,
+} from "../../calculate-metadata/theme";
 import { rgba } from "polished";
 import { interpolate, useVideoConfig } from "remotion";
 import { CodeTransition } from "../CodeTransition";
@@ -9,6 +13,7 @@ import {
   cardPadding,
   cardRadius,
   codeFontFamily,
+  codeFontSize,
   codeTabHeight,
   lineHeightPx,
 } from "../code-style";
@@ -88,6 +93,8 @@ export const CodeClip: ClipComponent<CodeClipDef> = ({ clip }) => {
   const showScrollbar = fileHeight > contentHeight;
 
   const cardBackground = useCardColor();
+  const gutterBackground = useCardColor(0.02);
+  const gutterBorder = useDimmedColor(0.8);
 
   return (
     <div
@@ -105,6 +112,22 @@ export const CodeClip: ClipComponent<CodeClipDef> = ({ clip }) => {
     >
       <CardHeader title={clip.filename} icon="file" />
       <div style={{ flex: 1, overflow: "hidden", position: "relative" }}>
+        {/* Gutter column: pane-level chrome (full height, darker, separated)
+            that the per-line diff signs scroll over. Spans from the card
+            edge through the sign zone (padding + 2ch). */}
+        <div
+          style={{
+            position: "absolute",
+            left: 0,
+            top: 0,
+            bottom: 0,
+            width: `calc(${cardPadding}px + 2ch)`,
+            fontFamily: codeFontFamily,
+            fontSize: codeFontSize,
+            backgroundColor: gutterBackground,
+            borderRight: `1px solid ${gutterBorder}`,
+          }}
+        />
         <div
           style={{
             transform: `translateY(${-scrollPx}px)`,

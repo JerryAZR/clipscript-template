@@ -150,6 +150,41 @@ export type CountdownClipDef = ClipCommon & {
   goText?: string;
 };
 
+export type ChapterTitleClipDef = ClipCommon & {
+  type: "chapter-title";
+  /** Chapter number, displayed large */
+  chapter: number;
+  /** Chapter title below the number */
+  title: string;
+  /** Small uppercase label above the number (default "Chapter") */
+  label?: string;
+};
+
+export type NotificationItem = {
+  title: string;
+  body?: string;
+  /** Accent color for the avatar dot (default: theme accent) */
+  color?: string;
+  /** Red count badge on the first notification (optional) */
+  badge?: number;
+};
+
+export type NotificationPopClipDef = ClipCommon & {
+  type: "notification-pop";
+  notifications: NotificationItem[];
+  /** Frames between consecutive notifications (default 20) */
+  stagger?: number;
+};
+
+export type ProgressStepsClipDef = ClipCommon & {
+  type: "progress-steps";
+  /** Heading above the stepper (optional) */
+  title?: string;
+  steps: string[];
+  /** Frames per step advance (default 24) */
+  stepInterval?: number;
+};
+
 export type StoryboardClip =
   | CodeClipDef
   | TerminalClipDef
@@ -158,7 +193,10 @@ export type StoryboardClip =
   | CinematicTitleClipDef
   | AnimatedListClipDef
   | ProgressClipDef
-  | CountdownClipDef;
+  | CountdownClipDef
+  | ChapterTitleClipDef
+  | NotificationPopClipDef
+  | ProgressStepsClipDef;
 
 export type Storyboard = {
   clips: StoryboardClip[];

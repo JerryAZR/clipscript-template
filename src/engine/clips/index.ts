@@ -1,10 +1,13 @@
 import type { ClipComponent, StoryboardClip } from "../types";
 import { AnimatedListClip } from "./AnimatedListClip";
+import { ChapterTitleClip } from "./ChapterTitleClip";
 import { CinematicTitleClip } from "./CinematicTitleClip";
 import { CodeClip } from "./CodeClip";
 import { CountdownClip } from "./CountdownClip";
+import { NotificationPopClip } from "./NotificationPopClip";
 import { OverlayClip } from "./OverlayClip";
 import { ProgressClip } from "./ProgressClip";
+import { ProgressStepsClip } from "./ProgressStepsClip";
 import { TerminalClip } from "./TerminalClip";
 import { VideoClip } from "./VideoClip";
 
@@ -25,4 +28,7 @@ export const sharedClipComponents: SharedClipComponents = {
   "animated-list": AnimatedListClip,
   progress: ProgressClip,
   countdown: CountdownClip,
+  "chapter-title": ChapterTitleClip,
+  "notification-pop": NotificationPopClip,
+  "progress-steps": ProgressStepsClip,
 };

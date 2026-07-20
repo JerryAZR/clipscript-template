@@ -59,3 +59,16 @@ text = "And a progress checklist shows where we are in the episode."
 [[lines]]
 id = "fence.countdown"
 text = "This countdown holds the timeline until it reaches zero."
+
+# Flair
+[[lines]]
+id = "flair.chapter"
+text = "Chapter cards break a long tutorial into numbered sections."
+
+[[lines]]
+id = "flair.notify"
+text = "Notifications pop in for quick beats, like a passing test run."
+
+[[lines]]
+id = "flair.steps"
+text = "And a stepper walks through the stages of a workflow."

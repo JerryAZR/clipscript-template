@@ -188,6 +188,42 @@ const fenceClips: Storyboard["clips"] = [
   },
 ];
 
+// Flair: chapter cards, notification toasts, and a horizontal stepper
+const flairClips: Storyboard["clips"] = [
+  {
+    id: "chapter-1",
+    type: "chapter-title",
+    chapter: 2,
+    title: "Advanced Topics",
+    rect: { x: 0, y: 0, w: "100%", h: "100%" },
+    startAt: { line: "flair.chapter" },
+    endAt: [{ line: "flair.chapter", end: true }],
+  },
+  {
+    id: "notify-1",
+    type: "notification-pop",
+    notifications: [
+      { title: "Tests passed", body: "76 tests in 28s", badge: 3 },
+      { title: "CI green", body: "lint, unit and smoke all passed" },
+      { title: "Render complete", body: "demo.mp4 written to out/" },
+    ],
+    rect: { x: "55%", y: "10%", w: "40%", h: "80%" },
+    transitionIn: 15,
+    startAt: { line: "flair.notify" },
+    endAt: [{ line: "flair.notify", end: true }],
+  },
+  {
+    id: "steps-1",
+    type: "progress-steps",
+    title: "Episode workflow",
+    steps: ["Script", "Voiceover", "Storyboard", "Render"],
+    rect: { x: "10%", y: "20%", w: "80%", h: "60%" },
+    transitionIn: 15,
+    startAt: { line: "flair.steps" },
+    endAt: [{ line: "flair.steps", end: true }],
+  },
+];
+
 export const storyboard: Storyboard = {
   clips: [
     ...introClips,
@@ -196,5 +232,6 @@ export const storyboard: Storyboard = {
     ...showcaseClips,
     ...moreClips,
     ...fenceClips,
+    ...flairClips,
   ],
 };

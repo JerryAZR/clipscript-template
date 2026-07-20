@@ -27,12 +27,16 @@ per purpose; similar-purpose leftovers stay Niche in the inventory.
 
 ## Batch 3 — flair
 
-- [ ] **notification-pop** (RVE) — stacking toasts.
+- [x] **notification-pop** (RVE) — stacking toasts.
   Use case: "tests pass", "commit landed", "CI green" beats.
 - [ ] **text-highlight** (RVE) — sequential word highlighting.
   Use case: emphasizing key terms inside overlay cards.
-- [ ] **chapter-title** (RVE) — numbered chapter card with extending lines.
+- [x] **chapter-title** (RVE) — numbered chapter card with extending lines.
   Use case: multi-chapter tutorials (distinct purpose from the episode opener).
+- [x] **progress-steps** (RVE) — horizontal stepper with animated advance.
+  Ported as a candidate progress tracker alongside bevy **progress**:
+  stepper wins on animation, checklist wins on hierarchy/nesting.
+  Default tracker TBD after use in real episodes.
 
 ## Later (unscheduled)
 
@@ -44,7 +48,8 @@ per purpose; similar-purpose leftovers stay Niche in the inventory.
 
 - Episode opener: **cinematic-title-intro** wins over title-split, animated-text,
   bounce-text, popping-text, slide-text (all Niche).
-- Outline/progress: bevy **progress** wins over RVE progress-steps.
+- Outline/progress: bevy **progress** vs RVE **progress-steps** - both ported
+  (batch 2 / batch 3) as candidates; default tracker TBD after real use.
 - Outro recap: bevy **outro-summary** wins over RVE end-card.
 - Typing effect: **terminal** covers it; typewriter-subtitle stays Niche.
 - Transitions (RVE transition category, letterbox-reveal, spotlight-reveal,

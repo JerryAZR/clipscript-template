@@ -121,6 +121,9 @@ describe("smoke: Episode demo render", () => {
     const listLine = rawTimeline.lines.find((l) => l.fullId === "more.list")!;
     const progressLine = rawTimeline.lines.find((l) => l.fullId === "more.progress")!;
     const countdownLine = rawTimeline.lines.find((l) => l.fullId === "fence.countdown")!;
+    const chapterLine = rawTimeline.lines.find((l) => l.fullId === "flair.chapter")!;
+    const notifyLine = rawTimeline.lines.find((l) => l.fullId === "flair.notify")!;
+    const stepsLine = rawTimeline.lines.find((l) => l.fullId === "flair.steps")!;
 
     const samplePoints: Record<string, number> = {
       introTitle: introLine.startFrame + 30,
@@ -143,6 +146,9 @@ describe("smoke: Episode demo render", () => {
       listLate: listLine.endFrame - 5,
       progressMid: progressLine.startFrame + 45,
       countdownMid: countdownLine.startFrame + 45,
+      chapterMid: chapterLine.startFrame + 50,
+      notifyLate: notifyLine.endFrame - 10,
+      stepsLate: stepsLine.endFrame - 10,
     };
 
     // Absolute expected colors, computed the same way the components do
@@ -338,9 +344,36 @@ describe("smoke: Episode demo render", () => {
   it("renders the countdown ring and digit", () => {
     const png = readPng(frames.countdownMid);
     const bg = hexToRgb(expectedBackground);
-    // The 180px ring + digit at the pane center
+    // The 440px ring + digit at the pane center
     expect(
-      regionRatio(png, bg, { x: 830, y: 420, w: 260, h: 240 }, true),
+      regionRatio(png, bg, { x: 740, y: 350, w: 440, h: 380 }, true),
+    ).toBeGreaterThan(0.005);
+  });
+
+  it("renders the chapter card", () => {
+    const png = readPng(frames.chapterMid);
+    const bg = hexToRgb(expectedBackground);
+    // Number + extending lines + title around the center
+    expect(
+      regionRatio(png, bg, { x: 660, y: 300, w: 600, h: 480 }, true),
+    ).toBeGreaterThan(0.005);
+  });
+
+  it("renders all notification toasts", () => {
+    const png = readPng(frames.notifyLate);
+    const bg = hexToRgb(expectedBackground);
+    // Right-aligned toast stack (x 55%-95%)
+    expect(
+      regionRatio(png, bg, { x: 1100, y: 150, w: 700, h: 700 }, true),
+    ).toBeGreaterThan(0.005);
+  });
+
+  it("renders the stepper with all steps complete", () => {
+    const png = readPng(frames.stepsLate);
+    const bg = hexToRgb(expectedBackground);
+    // Heading + the circle/line row across the pane
+    expect(
+      regionRatio(png, bg, { x: 300, y: 450, w: 1300, h: 250 }, true),
     ).toBeGreaterThan(0.005);
   });
 });

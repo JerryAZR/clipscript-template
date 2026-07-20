@@ -51,3 +51,42 @@ plus a `sync` so the narration waits for zero:
   endAt: [{ line: "demo.countdown", offsetFrames: 140, sync: "demo.countdown" }],
 }
 ```
+
+## chapter-title
+
+Numbered chapter card: small "Chapter" label, big springing number, extending
+accent lines, chapter title below.
+
+- `chapter: number` - the displayed number
+- `title: string` - chapter title
+- `label?` - the small uppercase label (default "Chapter")
+
+Use for multi-chapter tutorials; distinct from `cinematic-title` (the episode
+opener).
+
+## notification-pop
+
+Toast stack sliding in from the right, for "tests pass" / "CI green" beats.
+
+- `notifications: { title, body?, color?, badge? }[]` - toasts in order;
+  `color` is the avatar dot (default theme accent), `badge` shows a red count
+  bubble
+- `stagger?` - frames between toasts (default 20; compressed if the window is
+  short, so no toast is ever dropped)
+
+Toasts right-align inside the pane - give it a right-side rect. Heading text
+belongs in `paneTitle`, not the clip.
+
+## progress-steps
+
+Horizontal stepper: numbered circles connected by filling lines, advancing
+one step at a time (circle fills + pulses, connector sweeps to the next).
+
+- `steps: string[]` - stage labels in order
+- `title?` - heading above the stepper
+- `stepInterval?` - frames per step (default 24; compressed if the window is
+  short, so the stepper always completes)
+
+Competes with `progress` (the vertical checklist) as the progress tracker:
+`progress-steps` wins on animation quality, `progress` wins on hierarchy and
+nesting. Both are ported; pick per episode, default TBD.

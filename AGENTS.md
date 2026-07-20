@@ -22,6 +22,18 @@ modular clips anchored to narration lines.
 - `npx tsx scripts/tts.mts --episode <name>` — generate voiceover (edge-tts, hash-cached)
 - `npx remotion still <Comp> --frame=N` — render one frame for visual checks
 
+## Episodes (registered in `src/episodes/registry.ts`)
+
+- `showcase` — the framework's ad video; the polished example of what the
+  engine can do
+- `code-tutorial` — a realistic tutorial slice (code chain, annotations,
+  terminal, overlay). Reference for authoring real episodes
+- `clip-gallery` — one line per clip type; a visual catalog + minimal config
+  examples
+- `demo` — engine test fixture (kitchen sink covering every clip; the smoke
+  suite targets it). Not a reference for authors
+- `codehike-demo` — legacy hand-rolled Code Hike demo, outside the clip engine
+
 ## Rules that apply everywhere
 
 - Narration lines drive all pacing; clips anchor to line ids, never compute frames by hand.

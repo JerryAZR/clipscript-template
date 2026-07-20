@@ -1,0 +1,130 @@
+import type { Storyboard } from "../../engine/types";
+
+// A visual catalog: one line per clip type, minimal config per entry.
+// The storyboard doubles as copy-paste reference for authors.
+
+export const storyboard: Storyboard = {
+  clips: [
+    {
+      id: "g-cinematic",
+      type: "cinematic-title",
+      title: "Clip Gallery",
+      subtitle: "every clip type, one at a time",
+      rect: { x: 0, y: 0, w: "100%", h: "100%" },
+      startAt: { line: "gallery.intro" },
+      endAt: [{ line: "gallery.intro", end: true }],
+    },
+    {
+      id: "g-chapter",
+      type: "chapter-title",
+      chapter: 2,
+      title: "Behind the scenes",
+      rect: { x: 0, y: 0, w: "100%", h: "100%" },
+      startAt: { line: "gallery.chapter" },
+      endAt: [{ line: "gallery.chapter", end: true }],
+    },
+    {
+      id: "g-code",
+      type: "code",
+      steps: ["v1.ts", "v2.ts"],
+      filename: "users.ts",
+      rect: { x: "15%", y: "15%", w: "70%", h: "70%" },
+      scrollTo: 8,
+      startAt: { line: "gallery.code" },
+      endAt: [{ line: "gallery.code", end: true }],
+    },
+    {
+      id: "g-terminal",
+      type: "terminal",
+      steps: [
+        {
+          cwd: "~/app",
+          command: "npm test",
+          output: ["Tests  2 passed (2)"],
+        },
+      ],
+      rect: { x: "15%", y: "15%", w: "70%", h: "70%" },
+      transitionIn: 15,
+      startAt: { line: "gallery.terminal" },
+      endAt: [{ line: "gallery.terminal", end: true }],
+    },
+    {
+      id: "g-video",
+      type: "video",
+      src: "cargo-run.mp4",
+      paneTitle: "cargo run",
+      rect: { x: "15%", y: "15%", w: "70%", h: "70%" },
+      transitionIn: 15,
+      startAt: { line: "gallery.video" },
+      endAt: [{ line: "gallery.video", end: true }],
+    },
+    {
+      id: "g-overlay",
+      type: "overlay",
+      title: "Note",
+      text: "Overlay cards stack on top\nfor tips and callouts.",
+      rect: { x: "30%", y: "30%", w: "40%", h: "30%" },
+      transitionIn: 15,
+      startAt: { line: "gallery.overlay" },
+      endAt: [{ line: "gallery.overlay", end: true }],
+    },
+    {
+      id: "g-list",
+      type: "animated-list",
+      items: [
+        "Narration is the master clock",
+        "Clips anchor to lines, never frames",
+        "State chains carry code across clips",
+      ],
+      rect: { x: "15%", y: "15%", w: "70%", h: "70%" },
+      transitionIn: 15,
+      startAt: { line: "gallery.list" },
+      endAt: [{ line: "gallery.list", end: true }],
+    },
+    {
+      id: "g-progress",
+      type: "progress",
+      title: "In this episode",
+      items: [
+        { text: "Write the script", status: "done" },
+        { text: "Place the clips", status: "current" },
+        { text: "Render", status: "todo" },
+      ],
+      rect: { x: "25%", y: "15%", w: "50%", h: "70%" },
+      transitionIn: 15,
+      startAt: { line: "gallery.progress" },
+      endAt: [{ line: "gallery.progress", end: true }],
+    },
+    {
+      id: "g-steps",
+      type: "progress-steps",
+      steps: ["Script", "Voiceover", "Storyboard", "Render"],
+      rect: { x: "15%", y: "25%", w: "70%", h: "50%" },
+      transitionIn: 15,
+      startAt: { line: "gallery.steps" },
+      endAt: [{ line: "gallery.steps", end: true }],
+    },
+    {
+      id: "g-notify",
+      type: "notification-pop",
+      notifications: [
+        { title: "Tests passed", body: "2 tests in 1s", badge: 1 },
+        { title: "Render complete", body: "episode.mp4 written" },
+      ],
+      rect: { x: "50%", y: "15%", w: "45%", h: "70%" },
+      transitionIn: 15,
+      startAt: { line: "gallery.notify" },
+      endAt: [{ line: "gallery.notify", end: true }],
+    },
+    {
+      id: "g-countdown",
+      type: "countdown",
+      seconds: 3,
+      rect: { x: "30%", y: "15%", w: "40%", h: "70%" },
+      startAt: { line: "gallery.countdown" },
+      endAt: [
+        { line: "gallery.countdown", offsetFrames: 130, sync: "gallery.countdown" },
+      ],
+    },
+  ],
+};

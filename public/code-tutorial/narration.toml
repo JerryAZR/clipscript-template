@@ -1,0 +1,44 @@
+# Hardening a user store: two problems, two fixes, in order
+[[lines]]
+id = "title"
+text = "Hardening a user store, step by step."
+
+[[lines]]
+id = "intro.file"
+text = "Here is our store: add, remove, find, and describe."
+
+[[lines]]
+id = "focus.adduser"
+text = "The function we will harden is addUser - it trusts its input completely."
+
+[[lines]]
+id = "change.guard"
+text = "So first, we reject negative ages right at the door."
+
+[[lines]]
+id = "test.run"
+text = "Quick sanity check before we move on."
+
+[[lines]]
+id = "mark.leak"
+text = "But there is a second issue, hiding in describeUser."
+
+[[lines]]
+id = "explain.leak"
+text = "location is optional - without a fallback, this prints undefined."
+
+[[lines]]
+id = "change.fallback"
+text = "So we drop the raw interpolation."
+
+[[lines]]
+id = "change.default"
+text = "And give it a safe default instead."
+
+[[lines]]
+id = "test.again"
+text = "One more run to be sure."
+
+[[lines]]
+id = "recap"
+text = "Guard the input, then double-check the output."

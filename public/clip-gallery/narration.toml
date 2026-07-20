@@ -1,0 +1,44 @@
+# One line per clip type - a visual catalog, not a story
+[[lines]]
+id = "gallery.intro"
+text = "A tour of the clip types."
+
+[[lines]]
+id = "gallery.chapter"
+text = "Chapter cards mark the sections of a longer tutorial."
+
+[[lines]]
+id = "gallery.code"
+text = "Code clips morph a file forward, one step at a time."
+
+[[lines]]
+id = "gallery.terminal"
+text = "Terminals type commands and reveal output, deterministically."
+
+[[lines]]
+id = "gallery.video"
+text = "Screen recordings embed in any pane."
+
+[[lines]]
+id = "gallery.overlay"
+text = "Overlay cards stack notes on top of anything."
+
+[[lines]]
+id = "gallery.list"
+text = "Animated lists reveal points one by one."
+
+[[lines]]
+id = "gallery.progress"
+text = "Checklists track where you are in the episode."
+
+[[lines]]
+id = "gallery.steps"
+text = "Steppers walk through the stages of a workflow."
+
+[[lines]]
+id = "gallery.notify"
+text = "Notifications pop in for quick beats."
+
+[[lines]]
+id = "gallery.countdown"
+text = "And a countdown can hold the timeline until it finishes."

@@ -6,6 +6,7 @@ import { schema } from "./calculate-metadata/schema";
 import { defaultTheme } from "./calculate-metadata/theme";
 import { EPISODE_FPS, episodeCalculateMetadata, episodeSchema } from "./engine/calculate-metadata";
 import { Episode } from "./engine/Episode";
+import { listEpisodes } from "./episodes/registry";
 
 export const RemotionRoot = () => {
   return (
@@ -44,6 +45,26 @@ export const RemotionRoot = () => {
         calculateMetadata={episodeCalculateMetadata}
         schema={episodeSchema}
       />
+      {/* One composition per registered episode, so Studio lists them */}
+      {listEpisodes().map((name) => (
+        <Composition
+          key={name}
+          id={name}
+          component={Episode}
+          defaultProps={{
+            episode: name,
+            theme: defaultTheme,
+            timeline: null,
+            themeColors: null,
+            highlightedCode: null,
+          }}
+          fps={EPISODE_FPS}
+          width={1920}
+          height={1080}
+          calculateMetadata={episodeCalculateMetadata}
+          schema={episodeSchema}
+        />
+      ))}
     </>
   );
 };

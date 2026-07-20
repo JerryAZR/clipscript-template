@@ -1,5 +1,6 @@
 import type { ClipComponent, Storyboard } from "../engine/types";
 import { storyboard as demo } from "./demo/storyboard";
+import { storyboard as showcase } from "./showcase/storyboard";
 
 export type EpisodeModule = {
   storyboard: Storyboard;
@@ -9,7 +10,11 @@ export type EpisodeModule = {
 
 const episodes: Record<string, EpisodeModule> = {
   demo: { storyboard: demo },
+  showcase: { storyboard: showcase },
 };
+
+/** Registered episode names (Root.tsx registers one composition per name) */
+export const listEpisodes = () => Object.keys(episodes);
 
 export const getEpisode = (episode: string): EpisodeModule => {
   const module = episodes[episode];

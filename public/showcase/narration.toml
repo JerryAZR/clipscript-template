@@ -1,0 +1,72 @@
+# The hook: this video is the demo
+[[lines]]
+id = "hook.compiled"
+text = "This video was not edited. It was compiled."
+
+[[lines]]
+id = "hook.script"
+text = "Every frame you are seeing is generated from a plain text script."
+
+# What it is
+[[lines]]
+id = "intro.framework"
+text = "This is a narration-driven video framework, built on Remotion."
+
+[[lines]]
+id = "intro.clock"
+text = "You write the voiceover. The timeline builds itself."
+
+# Code clips
+[[lines]]
+id = "code.pain"
+text = "Recording code edits is tedious. So don't record them."
+
+[[lines]]
+id = "code.morph"
+text = "Drop in your code steps, and the framework morphs between them, token by token."
+
+[[lines]]
+id = "code.annotations"
+text = "Diffs, highlights, and type callouts come for free."
+
+# Terminal
+[[lines]]
+id = "term.deterministic"
+text = "Terminals type themselves. Deterministically, every single frame."
+
+# Layout
+[[lines]]
+id = "layout.panes"
+text = "Split screens, overlays, callouts. Clips are just rectangles you compose."
+
+# Structure
+[[lines]]
+id = "struct.chapters"
+text = "Chapter cards, checklists, and steppers keep long tutorials organized."
+
+# The fence
+[[lines]]
+id = "fence.hold"
+text = "And when timing really matters, a fence holds the narration until the visual is done."
+
+# Authoring feel
+[[lines]]
+id = "author.files"
+text = "Authoring is a script file and a typed storyboard."
+
+[[lines]]
+id = "author.anchor"
+text = "Clips anchor to line ids, never to magic frame numbers."
+
+[[lines]]
+id = "author.retime"
+text = "Change the script, and everything re-times."
+
+# Outro
+[[lines]]
+id = "outro.offline"
+text = "Local fonts, local highlighting, fully offline renders."
+
+[[lines]]
+id = "outro.cta"
+text = "Fork it, and make your next tutorial write itself."

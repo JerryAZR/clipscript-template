@@ -1,4 +1,4 @@
-# Highlighting and twoslash
+# Highlighting
 
 ## Pre-highlighting (`src/engine/highlight.ts`)
 
@@ -9,22 +9,12 @@ every code clip (including chain carry-ins) is fetched from
 with the episode's theme. Results flow via `HighlightContext` as
 `Record<stepSrc, HighlightedCode>`.
 
-## twoslash (`src/calculate-metadata/process-snippet.ts`)
-
-ts/tsx files first run through twoslash (a real TypeScript compiler) for:
-
-- `// ^?` type queries -> `callout` annotations with a highlighted type block
-- compiler errors -> `error` annotations
-
-twoslash runs fully offline on `twoslash` core (`createTwoslasher`):
-`scripts/prepare-twoslash-libs.mjs` (wired to `postinstall`) copies the
-compiler's lib types from `node_modules/typescript` into
-`public/vendor/ts-lib/` (gitignored, ~12MB) plus a `files.json` manifest.
-`process-snippet.ts` lazily loads that manifest + lib files into a virtual
-`fsMap` once per render process. There is deliberately no npm type
-acquisition (ATA) - a snippet importing an npm package renders "cannot find
-module" error annotations, loud and offline. Re-add `@typescript/ata` if
-that ever becomes a real need.
+Highlighting is pure syntax highlighting (TextMate grammars via
+`@code-hike/lighter`) - no semantic layer. twoslash was dropped: it only
+ever served ts/tsx type callouts and error squiggles, unused by real
+episodes, at the cost of a 12MB vendored compiler lib set. If type
+callouts or compiler-error annotations are ever needed again, the old
+implementation is in git history (`process-snippet.ts` before the drop).
 
 ## Offline lighter (`remotion.config.ts`)
 

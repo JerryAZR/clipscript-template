@@ -10,7 +10,7 @@ import {
   tabSize,
   waitUntilDone,
 } from "../font";
-import { Props } from "../Main";
+import { Props } from "../CodeHikeDemo";
 import { getFiles } from "./get-files";
 import { processSnippet } from "./process-snippet";
 import { schema } from "./schema";

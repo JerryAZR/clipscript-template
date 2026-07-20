@@ -11,7 +11,7 @@ Only when modifying or debugging the engine's own machinery: the timeline compil
 
 ## Architecture in one page
 
-**Compile time** (`calculateMetadata`, async, Node/browser): parse narration.toml and storyboard.ts → measure audio durations (Mediabunny; estimated when missing) → `calculateTimeline` (fence algorithm → absolute frames) → `resolveCodeState` (key-chain threading: carry-in steps, scroll/rect/filename inheritance, overlap validation) → pre-highlight code (twoslash + lighter). Output: fully resolved `Timeline` + props.
+**Compile time** (`calculateMetadata`, async, Node/browser): parse narration.toml and storyboard.ts → measure audio durations (Mediabunny; estimated when missing) → `calculateTimeline` (fence algorithm → absolute frames) → `resolveCodeState` (key-chain threading: carry-in steps, scroll/rect/filename inheritance, overlap validation) → pre-highlight code (lighter). Output: fully resolved `Timeline` + props.
 
 **Runtime** (per frame, synchronous): `ClipRenderer` mounts each clip in a `<Sequence from durationInFrames>` at its resolved rect with zIndex and renderer-owned fade transitions. Clips are `React.FC<{clip}>` components reading only their resolved config and `useClipFrame()`.
 
@@ -28,4 +28,4 @@ Module map: `src/engine/` - `types.ts` (clip defs, `ClipCommon` mixin + union), 
 
 - Timeline compiler + key-chain state resolver - [rules/timeline.md](rules/timeline.md)
 - CodeTransition two-pass mechanics + the premount bug - [rules/code-transition.md](rules/code-transition.md)
-- Highlighting and twoslash (local libs, annotation extraction) - [rules/highlighting.md](rules/highlighting.md)
+- Highlighting (offline lighter, annotation extraction) - [rules/highlighting.md](rules/highlighting.md)

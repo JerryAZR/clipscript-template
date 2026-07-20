@@ -87,6 +87,10 @@ one step at a time (circle fills + pulses, connector sweeps to the next).
 - `stepInterval?` - frames per step (default 24; compressed if the window is
   short, so the stepper always completes)
 
+Natural width: `steps.length * 160 + (steps.length - 1) * 120` px (4 steps ≈
+1000px). Content wider than the rect is silently clipped by `overflow:
+hidden` - give the pane enough width.
+
 Competes with `progress` (the vertical checklist) as the progress tracker:
 `progress-steps` wins on animation quality, `progress` wins on hierarchy and
 nesting. Both are ported; pick per episode, default TBD.

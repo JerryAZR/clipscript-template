@@ -1,5 +1,5 @@
 import { Composition } from "remotion";
-import { Main } from "./Main";
+import { CodeHikeDemo } from "./CodeHikeDemo";
 
 import { calculateMetadata } from "./calculate-metadata/calculate-metadata";
 import { schema } from "./calculate-metadata/schema";
@@ -11,9 +11,10 @@ import { listEpisodes } from "./episodes/registry";
 export const RemotionRoot = () => {
   return (
     <>
+      {/* Hand-rolled Code Hike token transitions, outside the clip engine */}
       <Composition
-        id="Main"
-        component={Main}
+        id="codehike-demo"
+        component={CodeHikeDemo}
         defaultProps={{
           steps: null,
           themeColors: null,

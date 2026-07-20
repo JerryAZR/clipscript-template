@@ -12,7 +12,7 @@ modular clips anchored to narration lines.
 - `src/episodes/<episode>/` — `storyboard.ts` (typed clip list) per episode
 - `src/annotations/` — Code Hike annotation handlers (mark, diff, focus, callout, error)
 - `doc/` — `checklist.md` (roadmap), `clip-inventory.md`, `clip-engine-port.md` (design history)
-- `scripts/` — `tts.mts` (voiceover), `prepare-twoslash-libs.mjs` (postinstall), `timeline-check.ts`
+- `scripts/` — `tts.mts` (voiceover), `timeline-check.ts`, `timeline-node.ts` (shared node timeline loader)
 
 ## Commands
 

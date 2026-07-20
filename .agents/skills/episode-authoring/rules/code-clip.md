@@ -33,9 +33,8 @@ scrolling, and chain continuity.
 
 ## Content
 
-- Syntax highlighting + twoslash (`^?` type callouts, error annotations) for
-  ts/tsx; other languages by extension.
-- Annotations as comments in the code files - see [annotations.md](annotations.md).
-- Language is inferred from the file extension.
+- Syntax highlighting via Code Hike (TextMate grammars), language inferred
+  from the file extension. Annotations as comments in the code files - see
+  [annotations.md](annotations.md).
 
 Source: `src/engine/clips/CodeClip.tsx`.

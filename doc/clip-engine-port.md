@@ -93,9 +93,9 @@ both endpoints, scroll-target verification via crop matching, title/split/
 banner presence. CI: `.github/workflows/ci.yml` (lint → unit → smoke, with
 cached Remotion browser).
 
-Known conscious test gaps: OCR/content correctness (out of scope), twoslash
-output correctness, the `transitionOut` exit fade (no demo clip uses it),
-the `transition: "line"` granularity path (no demo coverage), and
+Known conscious test gaps: OCR/content correctness (out of scope), the
+`transitionOut` exit fade (no demo clip uses it), the `transition: "line"`
+granularity path (no demo coverage), and
 React-component error paths (unknown clip type) - no React test setup.
 
 **Bug found by the smoke test (fixed)**: Sequences premount offscreen
@@ -107,17 +107,17 @@ the transition machinery entirely.
 **Engine rule codified by that bug**: never measure DOM at mount - Remotion
 may premount offscreen. Measure per-frame or after visibility.
 
-**Twoslash is fully local** (no CDN dependency): `twoslash` core's
-`createTwoslasher` runs against a virtual `fsMap` that `process-snippet.ts`
-builds from `public/vendor/ts-lib/` (gitignored, ~12MB) at first use.
-`scripts/prepare-twoslash-libs.mjs` (wired to `postinstall`) copies the TS
-lib types + a `files.json` manifest there from `node_modules/typescript`.
-There is deliberately no ATA type-acquisition - snippets importing npm
-packages render "cannot find module" error annotations, loud and offline.
-(An earlier iteration used `twoslash-cdn` with a URL-rewriting fetcher; it
-was replaced because its hardcoded legacy lib list 404'd and its `resp.ok`
-blindness stored error pages as lib files - a CDN wrapper whose main feature
-we disabled was worse than owning the fsMap ourselves.)
+**Twoslash was later dropped entirely.** It only ever served ts/tsx `^?`
+type callouts and compiler-error annotations - features no real episode
+used - at the cost of a 12MB vendored lib set, a postinstall copy step, a
+101-file fsMap fetch per render, and a hard failure on display files with
+imports. The old implementation (twoslash core + a self-built fsMap,
+fully offline) is in git history if type callouts are ever wanted back.
+History of the path: `twoslash-cdn` with a URL-rewriting fetcher was
+replaced by twoslash core because the wrapper's hardcoded legacy lib list
+404'd and its `resp.ok` blindness stored error pages as lib files; the
+core version was then deleted as over-engineering for what it delivered.
+
 
 1. ~~**Engine core**~~ **DONE** — types, narration parser (`smol-toml`), fence
    timeline, `calculateMetadata`, `ClipRenderer`, `useClipFrame`; silent demo
@@ -150,7 +150,7 @@ we disabled was worse than owning the fsMap ourselves.)
    `CodeTransition` takes a `frame` prop and is re-keyed per step (remount =
    state reset); line-granularity via a `.ch-line` wrapper annotation.
    Pre-highlighting in `calculateMetadata` via the existing processSnippet
-   path (extension→lang + twoslash). `code-style.ts` constants kill the
+   path (extension→lang). `code-style.ts` constants kill the
    LINE_HEIGHT guesswork. Mark/diff queries simplified to style-only
    (timing is the framework's). Demo: `code-1`/`code-2` chain over
    `public/demo/code/v1-3.ts`, verified with stills + negative tests

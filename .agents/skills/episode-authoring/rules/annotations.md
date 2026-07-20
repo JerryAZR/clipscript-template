@@ -28,16 +28,10 @@ column/line ranges.
   `// !focus(2:5)`
 - **callout** - a tooltip-style box under the line, pointing at the column.
   Query: the note text. `console.log(user.location); // !callout[18:26] added in this step`
-- **error** - wavy red underline + error message box. Generated automatically
-  from TypeScript compiler errors in ts/tsx files (see below); rarely written by hand.
 
-## TypeScript extras (ts/tsx only)
-
-Files go through twoslash (a real TypeScript compiler running locally):
-
-- `console.log(user); // ^?` - shows the type at `^?` as a callout box.
-- Compiler errors become `error` annotations automatically. To assert an
-  expected error: `// @errors: 2339` on its own line.
+There are no TypeScript extras: twoslash (which provided `^?` type callouts
+and automatic compiler-error annotations) was dropped. All annotations are
+written by hand as comments.
 
 ## Notes
 

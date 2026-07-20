@@ -98,6 +98,6 @@ Also available: **animated-list** (staggered bullet reveal), **progress** (done/
 
 - Full storyboard reference (all end conditions, validation rules) - [rules/storyboard-format.md](rules/storyboard-format.md)
 - Voiceover details (voices, cache, replacing the pipeline) - [rules/narration-and-voiceover.md](rules/narration-and-voiceover.md)
-- Code annotations (mark, diff, focus, callout, twoslash) - [rules/annotations.md](rules/annotations.md)
+- Code annotations (mark, diff, focus, callout) - [rules/annotations.md](rules/annotations.md)
 - Debugging renders - [rules/verification.md](rules/verification.md)
 - Per-clip deep dives - [rules/code-clip.md](rules/code-clip.md), [terminal-clip.md](rules/terminal-clip.md), [video-clip.md](rules/video-clip.md), [overlay-clip.md](rules/overlay-clip.md), [cinematic-title-clip.md](rules/cinematic-title-clip.md)

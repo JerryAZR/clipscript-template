@@ -1,4 +1,3 @@
-// @ts-nocheck
 import type { Storyboard } from "../../engine/types";
 
 // Hook: the video's own script on screen while the narration calls it out

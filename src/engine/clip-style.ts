@@ -8,8 +8,8 @@ import { fontFamily } from "../font";
  * color-free: colors come from useThemeColors() at the use site.
  */
 export const textStyles = {
-  /** Full-screen cinematic openers */
-  display: { fontFamily, fontSize: 96, fontWeight: 700, lineHeight: 1.1 },
+  /** Full-screen display type (openers, chapter numbers, countdown digits) */
+  display: { fontFamily, fontSize: 128, fontWeight: 700, lineHeight: 1.1 },
   /** Full-pane title cards */
   heading1: { fontFamily, fontSize: 72, fontWeight: 700, lineHeight: 1.2 },
   /** Section headings inside a pane */

@@ -68,7 +68,7 @@ export const CinematicTitleClip: ClipComponent<CinematicTitleClipDef> = ({
       <div
         style={{
           width: `${underlineWidth}%`,
-          maxWidth: 360,
+          maxWidth: 480,
           height: 4,
           marginTop: 24,
           borderRadius: 2,

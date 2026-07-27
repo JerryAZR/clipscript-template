@@ -1,0 +1,28 @@
+# annotate-diff showcase: prepare sources, run the tool, wire outputs, render
+[[lines]]
+id = "intro.title"
+text = "Diff views, generated from plain file versions."
+
+[[lines]]
+id = "prepare.sources"
+text = "Start with two clean versions of the same file - before the change, and after."
+
+[[lines]]
+id = "invoke.command"
+text = "Run the annotator on them. It writes the step files, and reports what to review."
+
+[[lines]]
+id = "outputs.text"
+text = "The output is plain text - the same markers you would write by hand."
+
+[[lines]]
+id = "wire.storyboard"
+text = "Reference the generated files as steps in your storyboard."
+
+[[lines]]
+id = "result.animated"
+text = "The code clip renders the diff - line blocks for the big changes, and an inline view for the rename."
+
+[[lines]]
+id = "result.static"
+text = "Or review the whole change in a single static frame."

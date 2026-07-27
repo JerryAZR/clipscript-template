@@ -2,6 +2,7 @@ import type { ClipComponent, Storyboard } from "../engine/types";
 import { storyboard as codeTutorial } from "./code-tutorial/storyboard";
 import { storyboard as clipGallery } from "./clip-gallery/storyboard";
 import { storyboard as demo } from "./demo/storyboard";
+import { storyboard as diffTool } from "./diff-tool/storyboard";
 import { storyboard as showcase } from "./showcase/storyboard";
 
 export type EpisodeModule = {
@@ -15,6 +16,7 @@ const episodes: Record<string, EpisodeModule> = {
   showcase: { storyboard: showcase },
   "code-tutorial": { storyboard: codeTutorial },
   "clip-gallery": { storyboard: clipGallery },
+  "diff-tool": { storyboard: diffTool },
 };
 
 /** Registered episode names (Root.tsx registers one composition per name) */

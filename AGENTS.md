@@ -31,6 +31,9 @@ modular clips anchored to narration lines.
   terminal, overlay). Reference for authoring real episodes
 - `clip-gallery` — one line per clip type; a visual catalog + minimal config
   examples
+- `diff-tool` — annotate-diff workflow showcase: prepare sources, run the
+  tool, wire outputs, rendered result. Its `code/gen/` assets are the tool's
+  real output (see the storyboard header for the exact commands)
 - `demo` — engine test fixture (kitchen sink covering every clip; the smoke
   suite targets it). Not a reference for authors
 - `codehike-demo` — legacy hand-rolled Code Hike demo, outside the clip engine

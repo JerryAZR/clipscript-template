@@ -24,6 +24,15 @@ column/line ranges.
   `// !mark(1:2)` or `// !mark[13:17] #22c55e`
 - **diff** - mark lines as added/removed, like a diff. Query: `+` or `-`.
   `// !diff(1:5) +` renders a green background with a `+` gutter sign.
+- **from** - token-level diff of a single line, for changes better shown as a
+  mutation than a replaced line. Trailing comment whose query is the full OLD
+  version of the line; the renderer computes the word diff. Inserted text gets
+  a green background, removed text is injected struck through on red:
+  `int renamed_var = f(); // !from int old_var = f();` renders
+  `int old_var(struck) renamed_var(green) = f();`. Covers insertion,
+  replacement and mid-line deletion; use line-level `!diff` for whole-line
+  rewrites or removed lines. Leading whitespace of the old line is ignored
+  (re-aligned to the new line's indent).
 - **focus** - keep annotated lines bright, dim everything else.
   `// !focus(2:5)`
 - **callout** - a tooltip-style box under the line, pointing at the column.
@@ -41,3 +50,4 @@ written by hand as comments.
   the step's content.
 - Removed lines in a diff (`!diff -`) belong in the OLD step's file; added
   lines in the NEW step's file. The token transition animates the change.
+- `!from` comments live in the NEW step's file, on the line in its new state.

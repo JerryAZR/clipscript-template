@@ -26,10 +26,11 @@ export const storyboard: Storyboard = {
     {
       id: "g-code",
       type: "code",
-      steps: ["v1.ts", "v2.ts"],
+      steps: ["v1.ts", "v2.ts", "v3.ts"],
       filename: "users.ts",
       rect: { x: "15%", y: "15%", w: "70%", h: "70%" },
       scrollTo: 8,
+      stepInterval: 45,
       startAt: { line: "gallery.code" },
       endAt: [{ line: "gallery.code", end: true }],
     },

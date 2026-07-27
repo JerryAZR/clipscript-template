@@ -13,6 +13,7 @@
     "@remotion/media": "^4.0.490",
     "@remotion/studio": "^4.0.0",
     "codehike": "1.0.4",
+    "diff": "^9.0.0",
     "mediabunny": "^1.50.9",
     "msedge-tts": "^2.0.7",
     "polished": "4.3.1",

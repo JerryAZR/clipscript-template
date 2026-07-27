@@ -14,6 +14,7 @@ import { mark } from "./annotations/Mark";
 import { applyStyle } from "./utils";
 
 import { errorInline, errorMessage } from "./annotations/Error";
+import { del, ins } from "./annotations/InlineDiff";
 import { tokenTransitions } from "./annotations/InlineToken";
 import { wordWrap } from "./annotations/WordWrap";
 import { fontFamily, fontSize, tabSize } from "./font";
@@ -77,7 +78,7 @@ export function CodeTransition({
   });
 
   const handlers: AnnotationHandler[] = useMemo(() => {
-    return [tokenTransitions, mark, diff, focus, callout, errorInline, errorMessage, wordWrap];
+    return [tokenTransitions, mark, diff, ins, del, focus, callout, errorInline, errorMessage, wordWrap];
   }, []);
 
   const style: React.CSSProperties = useMemo(() => {

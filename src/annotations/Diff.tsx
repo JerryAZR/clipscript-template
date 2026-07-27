@@ -1,5 +1,9 @@
 import { AnnotationHandler, BlockAnnotation, InnerLine } from "codehike/code";
 
+// Universal diff red/green - one of the few allowed hardcoded colors.
+export const DIFF_ADD_COLOR = "#3fb950";
+export const DIFF_REMOVE_COLOR = "#f85149";
+
 // `// !diff(1:2) +` marks lines as added (green), `// !diff(1:2) -` as removed (red).
 // Composes with the `mark` handler by re-emitting a colored mark annotation,
 // so `mark` must be present in the handlers array as well.
@@ -7,13 +11,13 @@ export const diff: AnnotationHandler = {
   name: "diff",
   transform: (annotation: BlockAnnotation) => {
     const removed = annotation.query.trim().startsWith("-");
-    const color = removed ? "#f85149" : "#3fb950";
+    const color = removed ? DIFF_REMOVE_COLOR : DIFF_ADD_COLOR;
     return [annotation, { ...annotation, name: "mark", query: color }];
   },
   // Like `mark`, no `onlyIfAnnotated` so the layout never changes between steps.
   Line: ({ annotation, ...props }) => {
     const removed = annotation?.query.trim().startsWith("-");
-    const color = removed ? "#f85149" : "#3fb950";
+    const color = removed ? DIFF_REMOVE_COLOR : DIFF_ADD_COLOR;
 
     return (
       // Flex row: InnerLine is block-level in this Code Hike version, so a

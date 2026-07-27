@@ -12,6 +12,7 @@ import { callout } from "../annotations/Callout";
 import { diff } from "../annotations/Diff";
 import { errorInline, errorMessage } from "../annotations/Error";
 import { focus } from "../annotations/Focus";
+import { del, ins } from "../annotations/InlineDiff";
 import { tokenTransitions } from "../annotations/InlineToken";
 import { mark } from "../annotations/Mark";
 import { applyStyle } from "../utils";
@@ -113,6 +114,8 @@ export function CodeTransition({
       transition === "line" ? lineTransitions : tokenTransitions,
       mark,
       diff,
+      ins,
+      del,
       focus,
       callout,
       errorInline,

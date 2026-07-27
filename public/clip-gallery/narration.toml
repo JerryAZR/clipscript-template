@@ -9,7 +9,7 @@ text = "Chapter cards mark the sections of a longer tutorial."
 
 [[lines]]
 id = "gallery.code"
-text = "Code clips morph a file forward, one step at a time."
+text = "Code clips morph a file forward, one step at a time, down to single words."
 
 [[lines]]
 id = "gallery.terminal"

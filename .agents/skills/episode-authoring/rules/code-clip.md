@@ -37,4 +37,22 @@ scrolling, and chain continuity.
   from the file extension. Annotations as comments in the code files - see
   [annotations.md](annotations.md).
 
+## Generating annotated steps
+
+Hand-writing `!diff`/`!from` markers is mechanical - generate them from
+pristine file versions instead and review the result in git diff:
+
+```
+npx tsx scripts/annotate-diff.mts --out public/<episode>/code/ v1.ts v2.ts [v3.ts ...]
+npx tsx scripts/annotate-diff.mts --static --out public/<episode>/code/ v1.ts v2.ts
+```
+
+Default (animated) mode writes one annotated step file per input version.
+`--static` writes one merged diff file per transition (`v2.ts + v3.ts ->
+v3.diff.ts`): the full new file with removed lines inserted at their
+positions, all marked - a "review this change" beat that drops into `steps`
+like any other file. Options: `--threshold` (inline pairing sensitivity,
+0.5), `--force` (overwrite). Inputs must be pristine and share one
+extension; the summary printout lists every line-level fallback to review.
+
 Source: `src/engine/clips/CodeClip.tsx`.

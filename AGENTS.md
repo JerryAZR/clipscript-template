@@ -12,7 +12,7 @@ modular clips anchored to narration lines.
 - `src/episodes/<episode>/` — `storyboard.ts` (typed clip list) per episode
 - `src/annotations/` — Code Hike annotation handlers (mark, diff, focus, callout, error)
 - `doc/` — `checklist.md` (roadmap), `clip-inventory.md`, `clip-engine-port.md` (design history)
-- `scripts/` — `tts.mts` (voiceover), `timeline-check.ts`, `timeline-node.ts` (shared node timeline loader)
+- `scripts/` — `tts.mts` (voiceover), `annotate-diff.mts` (annotated code steps from file versions), `timeline-check.ts`, `timeline-node.ts` (shared node timeline loader)
 
 ## Commands
 
@@ -20,6 +20,7 @@ modular clips anchored to narration lines.
 - `npm run lint` — tsc + eslint
 - `npm test` / `test:unit` / `test:smoke` — vitest + render smoke tests
 - `npx tsx scripts/tts.mts --episode <name>` — generate voiceover (edge-tts, hash-cached)
+- `npx tsx scripts/annotate-diff.mts --out public/<ep>/code/ v1.ts v2.ts [...]` — generate annotated code steps from pristine versions (`--static` for merged diff views)
 - `npx remotion still <Comp> --frame=N` — render one frame for visual checks
 
 ## Episodes (registered in `src/episodes/registry.ts`)

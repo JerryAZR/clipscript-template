@@ -1,3 +1,4 @@
+import { rects } from "../../engine/clip-style";
 import type { Storyboard } from "../../engine/types";
 
 // annotate-diff showcase: pristine sources -> tool invocation -> raw outputs
@@ -13,7 +14,7 @@ export const storyboard: Storyboard = {
       type: "cinematic-title",
       title: "annotate-diff",
       subtitle: "diff views, generated",
-      rect: { x: 0, y: 0, w: "100%", h: "100%" },
+      rect: rects.full,
       startAt: { line: "intro.title" },
       endAt: [{ line: "intro.title", end: true }],
     },
@@ -24,7 +25,7 @@ export const storyboard: Storyboard = {
       type: "code",
       steps: ["v1.ts"],
       filename: "v1.ts",
-      rect: { x: "4%", y: "8%", w: "44%", h: "84%" },
+      rect: rects.splitLeft,
       transitionIn: 15,
       startAt: { line: "prepare.sources" },
       endAt: [{ line: "prepare.sources", end: true }],
@@ -34,7 +35,7 @@ export const storyboard: Storyboard = {
       type: "code",
       steps: ["v2.ts"],
       filename: "v2.ts",
-      rect: { x: "52%", y: "8%", w: "44%", h: "84%" },
+      rect: rects.splitRight,
       transitionIn: 15,
       startAt: { line: "prepare.sources", offsetFrames: 20 },
       endAt: [{ line: "prepare.sources", end: true }],
@@ -94,7 +95,7 @@ export const storyboard: Storyboard = {
       key: "result",
       steps: ["gen/v1.ts", "gen/v2.ts"],
       filename: "users.ts",
-      rect: { x: "10%", y: "10%", w: "80%", h: "80%" },
+      rect: rects.large,
       scrollTo: 8,
       stepInterval: 45,
       startAt: { line: "result.animated" },

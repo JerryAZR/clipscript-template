@@ -1,3 +1,4 @@
+import { rects } from "../../engine/clip-style";
 import type { Storyboard } from "../../engine/types";
 
 // Introduction: one full-screen cinematic title spanning two narration lines
@@ -7,7 +8,7 @@ const introClips: Storyboard["clips"] = [
     type: "cinematic-title",
     title: "Clip Engine",
     subtitle: "Narration-driven videos",
-    rect: { x: 0, y: 0, w: "100%", h: "100%" },
+    rect: rects.full,
     startAt: { line: "intro.first" },
     endAt: [{ line: "intro.second", end: true }],
   },
@@ -57,7 +58,7 @@ const codeClips: Storyboard["clips"] = [
     key: "main",
     steps: ["v1.ts", "v2.ts"],
     filename: "users.ts",
-    rect: { x: "10%", y: "10%", w: "80%", h: "80%" },
+    rect: rects.large,
     scrollTo: 8,
     startAt: { line: "code.intro" },
     endAt: [{ line: "code.intro", end: true }],
@@ -132,7 +133,7 @@ const moreClips: Storyboard["clips"] = [
     type: "cinematic-title",
     title: "More Clips",
     subtitle: "titles, lists and checklists",
-    rect: { x: 0, y: 0, w: "100%", h: "100%" },
+    rect: rects.full,
     startAt: { line: "more.cinematic" },
     endAt: [{ line: "more.cinematic", end: true }],
   },
@@ -144,7 +145,7 @@ const moreClips: Storyboard["clips"] = [
       "Clips anchor to lines, never frames",
       "State chains carry code across clips",
     ],
-    rect: { x: "15%", y: "15%", w: "70%", h: "70%" },
+    rect: rects.medium,
     transitionIn: 15,
     startAt: { line: "more.list" },
     endAt: [{ line: "more.list", end: true }],
@@ -195,7 +196,7 @@ const flairClips: Storyboard["clips"] = [
     type: "chapter-title",
     chapter: 2,
     title: "Advanced Topics",
-    rect: { x: 0, y: 0, w: "100%", h: "100%" },
+    rect: rects.full,
     startAt: { line: "flair.chapter" },
     endAt: [{ line: "flair.chapter", end: true }],
   },

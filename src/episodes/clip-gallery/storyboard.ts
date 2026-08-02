@@ -1,3 +1,4 @@
+import { rects } from "../../engine/clip-style";
 import type { Storyboard } from "../../engine/types";
 
 // A visual catalog: one line per clip type, minimal config per entry.
@@ -10,7 +11,7 @@ export const storyboard: Storyboard = {
       type: "cinematic-title",
       title: "Clip Gallery",
       subtitle: "every clip type, one at a time",
-      rect: { x: 0, y: 0, w: "100%", h: "100%" },
+      rect: rects.full,
       startAt: { line: "gallery.intro" },
       endAt: [{ line: "gallery.intro", end: true }],
     },
@@ -19,7 +20,7 @@ export const storyboard: Storyboard = {
       type: "chapter-title",
       chapter: 2,
       title: "Behind the scenes",
-      rect: { x: 0, y: 0, w: "100%", h: "100%" },
+      rect: rects.full,
       startAt: { line: "gallery.chapter" },
       endAt: [{ line: "gallery.chapter", end: true }],
     },
@@ -28,7 +29,7 @@ export const storyboard: Storyboard = {
       type: "code",
       steps: ["v1.ts", "v2.ts", "v3.ts"],
       filename: "users.ts",
-      rect: { x: "15%", y: "15%", w: "70%", h: "70%" },
+      rect: rects.medium,
       scrollTo: 8,
       stepInterval: 45,
       startAt: { line: "gallery.code" },
@@ -44,7 +45,7 @@ export const storyboard: Storyboard = {
           output: ["Tests  2 passed (2)"],
         },
       ],
-      rect: { x: "15%", y: "15%", w: "70%", h: "70%" },
+      rect: rects.medium,
       transitionIn: 15,
       startAt: { line: "gallery.terminal" },
       endAt: [{ line: "gallery.terminal", end: true }],
@@ -54,7 +55,7 @@ export const storyboard: Storyboard = {
       type: "video",
       src: "cargo-run.mp4",
       paneTitle: "cargo run",
-      rect: { x: "15%", y: "15%", w: "70%", h: "70%" },
+      rect: rects.medium,
       transitionIn: 15,
       startAt: { line: "gallery.video" },
       endAt: [{ line: "gallery.video", end: true }],
@@ -77,7 +78,7 @@ export const storyboard: Storyboard = {
         "Clips anchor to lines, never frames",
         "State chains carry code across clips",
       ],
-      rect: { x: "15%", y: "15%", w: "70%", h: "70%" },
+      rect: rects.medium,
       transitionIn: 15,
       startAt: { line: "gallery.list" },
       endAt: [{ line: "gallery.list", end: true }],

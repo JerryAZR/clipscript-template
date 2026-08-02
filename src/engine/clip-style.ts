@@ -1,5 +1,6 @@
 import type { CSSProperties } from "react";
 import { fontFamily } from "../font";
+import type { Rect } from "./types";
 
 /**
  * Named text-style presets for clip content (think Word's Heading 1/Body).
@@ -29,6 +30,26 @@ export const textStyles = {
 } satisfies Record<string, CSSProperties>;
 
 export type TextStyleName = keyof typeof textStyles;
+
+/**
+ * Standard pane rects (the layout counterpart of textStyles). Pick the
+ * nearest preset; use a custom rect only as an explicit, scene-specific
+ * choice (inset cards, asymmetric layouts).
+ */
+export const rects = {
+  /** Full-bleed: title pages, full-frame backgrounds */
+  full: { x: 0, y: 0, w: "100%", h: "100%" },
+  /** The standard single window (file, terminal, video) */
+  large: { x: "10%", y: "10%", w: "80%", h: "80%" },
+  /** Smaller centered window with more breathing room */
+  medium: { x: "20%", y: "20%", w: "60%", h: "60%" },
+  /** Left half of a side-by-side pair (comparisons, source + output) */
+  splitLeft: { x: "5%", y: "10%", w: "44%", h: "80%" },
+  /** Right half of a side-by-side pair */
+  splitRight: { x: "51%", y: "10%", w: "44%", h: "80%" },
+} satisfies Record<string, Rect>;
+
+export type RectName = keyof typeof rects;
 
 /** Height of the pane title area rendered by ClipPane when clip.paneTitle is set */
 export const TITLE_BAR_HEIGHT = 88;

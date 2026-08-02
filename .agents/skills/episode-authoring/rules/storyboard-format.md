@@ -34,10 +34,13 @@ clip duration are all hard errors at load time, naming the clip.
 
 ## Rects
 
-Numbers are pixels, `"NN%"` strings are percent of the composition (1920x1080).
-Two clips with `w: "50%"` side by side is the standard split screen; a small
-rect + `zIndex: 10` stacks a card on top. `rect` is optional on keyed code
-clips (inherited from the chain) and required otherwise.
+Prefer the standard presets from `rects` in `src/engine/clip-style.ts`
+(`full`, `large`, `medium`, `splitLeft`, `splitRight`) over hand-written
+values. Custom rects: numbers are pixels, `"NN%"` strings are percent of the
+composition (1920x1080) - use them for inset cards and asymmetric layouts,
+not to re-invent a standard size. A small rect + `zIndex: 10` stacks a card
+on top. `rect` is optional on keyed code clips (inherited from the chain)
+and required otherwise.
 
 ## Key chains (code clips)
 

@@ -10,7 +10,7 @@ choreography is fixed - there is nothing to tune.
   type: "cinematic-title",
   title: "Building the Engine",
   subtitle: "part 2",              // optional
-  rect: { x: 0, y: 0, w: "100%", h: "100%" },
+  rect: rects.full,                // full-bleed (from engine/clip-style)
   startAt: { line: "intro.first" },
   endAt: [{ line: "intro.first", end: true }],
 }

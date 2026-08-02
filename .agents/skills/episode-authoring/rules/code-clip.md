@@ -10,7 +10,7 @@ scrolling, and chain continuity.
   key: "main",                     // optional: chains state with other "main" clips
   steps: ["v1.ts", "v2.ts"],       // files in public/<episode>/code/
   filename: "users.ts",            // tab label (default: last step's basename)
-  rect: { x: "10%", y: "10%", w: "80%", h: "80%" },
+  rect: rects.large,               // standard single window (from engine/clip-style)
   startAt: { line: "code.intro" },
   endAt: [{ line: "code.chain", end: true }],
 }

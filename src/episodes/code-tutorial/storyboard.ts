@@ -1,3 +1,4 @@
+import { rects } from "../../engine/clip-style";
 import type { Storyboard } from "../../engine/types";
 
 // Hardening a user store: a real walkthrough. One line, one beat - each
@@ -10,7 +11,7 @@ const titleClips: Storyboard["clips"] = [
     type: "cinematic-title",
     title: "Hardening a User Store",
     subtitle: "a step-by-step refactor",
-    rect: { x: 0, y: 0, w: "100%", h: "100%" },
+    rect: rects.full,
     startAt: { line: "title" },
     endAt: [{ line: "title", end: true }],
   },
@@ -25,7 +26,7 @@ const codeClips: Storyboard["clips"] = [
     key: "tut",
     steps: ["v1.ts"],
     filename: "users.ts",
-    rect: { x: "10%", y: "10%", w: "80%", h: "80%" },
+    rect: rects.large,
     scrollTo: 8,
     startAt: { line: "intro.file" },
     endAt: [{ line: "intro.file", end: true }],
@@ -87,7 +88,7 @@ const testClips: Storyboard["clips"] = [
         output: ["✓ rejects negative ages", "Tests  1 passed (1)"],
       },
     ],
-    rect: { x: "15%", y: "15%", w: "70%", h: "70%" },
+    rect: rects.medium,
     transitionIn: 15,
     startAt: { line: "test.run" },
     endAt: [{ line: "test.run", end: true }],
@@ -106,7 +107,7 @@ const testClips: Storyboard["clips"] = [
         ],
       },
     ],
-    rect: { x: "15%", y: "15%", w: "70%", h: "70%" },
+    rect: rects.medium,
     transitionIn: 15,
     startAt: { line: "test.again" },
     endAt: [{ line: "test.again", end: true }],
@@ -133,7 +134,7 @@ const recapClips: Storyboard["clips"] = [
     id: "recap-list",
     type: "animated-list",
     items: ["Guard the input", "Then double-check the output"],
-    rect: { x: "20%", y: "20%", w: "60%", h: "60%" },
+    rect: rects.medium,
     transitionIn: 15,
     startAt: { line: "recap" },
     endAt: [{ line: "recap", end: true }],

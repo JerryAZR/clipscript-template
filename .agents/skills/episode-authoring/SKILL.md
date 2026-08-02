@@ -35,6 +35,7 @@ npx tsx scripts/tts.mts --episode <name>   # [--voice en-US-AriaNeural] [--rate 
 **3. Write the storyboard** - typed clip objects referencing line ids, never frames:
 
 ```ts
+import { rects } from "../../engine/clip-style";
 import type { Storyboard } from "../../engine/types";
 
 export const storyboard: Storyboard = {
@@ -44,7 +45,7 @@ export const storyboard: Storyboard = {
       type: "cinematic-title",
       title: "Episode Title",
       subtitle: "optional",
-      rect: { x: 0, y: 0, w: "100%", h: "100%" },
+      rect: rects.full,
       startAt: { line: "intro.first" },
       endAt: [{ line: "intro.first", end: true }],
     },
@@ -54,7 +55,7 @@ export const storyboard: Storyboard = {
       key: "main",
       steps: ["v1.ts", "v2.ts"],          // files in public/<episode>/code/
       filename: "users.ts",               // tab label
-      rect: { x: "10%", y: "10%", w: "80%", h: "80%" },
+      rect: rects.splitLeft,
       startAt: { line: "code.intro" },
       endAt: [{ line: "code.intro", end: true }],
     },
@@ -62,7 +63,7 @@ export const storyboard: Storyboard = {
       id: "term",
       type: "terminal",
       steps: [{ cwd: "~/app", command: "npm install", output: ["added 361 packages"] }],
-      rect: { x: "53%", y: "15%", w: "42%", h: "70%" },
+      rect: rects.splitRight,
       startAt: { line: "code.intro" },
       endAt: [{ line: "code.intro", end: true }],
     },
@@ -80,7 +81,7 @@ export const storyboard: Storyboard = {
 - `{ line: "a.b", end: true }` - when the line finishes (spans the whole line)
 - `{ line: "a.b", offsetFrames: 150, sync: "a.b" }` - fence: the timeline waits for this frame
 
-Rect numbers are px, `"NN%"` is percent of 1920x1080. Split screen = two clips with `w: "50%"`. Overlay on top = small rect + `zIndex: 10`. `paneTitle` labels a pane from the outside (comparison-style split screens); for one shared title above cooperating panes, place a `cinematic-title` clip in a top rect instead.
+Standard rects come from `rects` in `src/engine/clip-style.ts`: `rects.full` (title pages, backgrounds), `rects.large` (the standard single window), `rects.medium` (smaller centered window), `rects.splitLeft`/`rects.splitRight` (side-by-side pair). A custom `{x,y,w,h}` (px or `"NN%"` of 1920x1080) is an explicit, scene-specific choice - inset cards, asymmetric layouts. Overlay on top = small rect + `zIndex: 10`. `paneTitle` labels a pane from the outside (comparison-style split screens); for one shared title above cooperating panes, place a `cinematic-title` clip in a top rect instead.
 
 ## Clip types (common config)
 

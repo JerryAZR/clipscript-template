@@ -10,7 +10,7 @@ Simulated terminal: types commands and reveals output, fully deterministic.
     { cwd: "~/app", command: "npm install", output: ["added 361 packages in 21s"] },
     { cwd: "~/app", command: "npm run lint", output: ["> tsc && eslint src"] },
   ],
-  rect: { x: "53%", y: "15%", w: "42%", h: "70%" },
+  rect: rects.splitRight,          // right half of a side-by-side pair
   startAt: { line: "showcase.terminal" },
   endAt: [{ line: "showcase.terminal", end: true }],
 }

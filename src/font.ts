@@ -5,18 +5,23 @@ import { staticFile } from "remotion";
 // dependency at render time, so renders are reproducible offline.
 export const fontFamily = "Fira Code";
 
-const fontReady = Promise.all([
-  loadFont({
-    family: fontFamily,
-    url: staticFile("fonts/FiraCode-Regular.ttf"),
-    weight: "400",
-  }),
-  loadFont({
-    family: fontFamily,
-    url: staticFile("fonts/FiraCode-Bold.ttf"),
-    weight: "700",
-  }),
-]).then(() => undefined);
+// FontFace only exists in the browser; under Node (vitest) there is no
+// DOM to load fonts into, so resolve immediately.
+const fontReady =
+  typeof FontFace === "undefined"
+    ? Promise.resolve()
+    : Promise.all([
+        loadFont({
+          family: fontFamily,
+          url: staticFile("fonts/FiraCode-Regular.ttf"),
+          weight: "400",
+        }),
+        loadFont({
+          family: fontFamily,
+          url: staticFile("fonts/FiraCode-Bold.ttf"),
+          weight: "700",
+        }),
+      ]).then(() => undefined);
 
 export const waitUntilDone = () => fontReady;
 

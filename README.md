@@ -1,63 +1,70 @@
-# Remotion video
+# clipscript
 
-<p align="center">
-  <a href="https://github.com/remotion-dev/logo">
-    <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="https://github.com/remotion-dev/logo/raw/main/animated-logo-banner-dark.apng">
-      <img alt="Animated Remotion Logo" src="https://github.com/remotion-dev/logo/raw/main/animated-logo-banner-light.gif">
-    </picture>
-  </a>
-</p>
+Narration-driven, clip-based videos for programming tutorials and dev-logs.
+You write the voiceover; the timeline builds itself.
 
-Welcome to your Remotion project!
+<!--
+TODO: demo GIF of showcase highlights (trimmed, a few seconds)
+![clipscript showcase](doc/assets/showcase.gif)
+-->
 
-## Commands
+## The idea
 
-**Install Dependencies**
+- **Narration is the master clock.** One flat `narration.toml` of id'd lines;
+  line durations (measured from generated voiceover) pace the whole video.
+- **Visuals are modular clips** anchored to line ids, never to hand-computed
+  frames: code panes with Code Hike morphs and annotations, terminals,
+  recordings, titles, lists, callouts.
+- **A storyboard is a typed TS object**, so malformed episodes fail at write
+  time, and the timeline compiler fails loudly on anything that doesn't
+  resolve.
 
-```console
+## Install
+
+Use the **Use this template** button on GitHub, or:
+
+```bash
+npx degit JerryAZR/clipscript-template my-video
+cd my-video
 npm i
 ```
 
-**Start Preview**
+## Quickstart
 
-```console
-npm run dev
+```bash
+npm run dev   # Remotion Studio; the examples/ folder holds the demo episodes
 ```
 
-**Change code snippets**
+Your own episode: write `public/<episode>/narration.toml`, generate voiceover
+(`npx tsx scripts/tts.mts --episode <episode>`), write
+`src/episodes/<episode>/storyboard.ts`, register it in
+`src/episodes/registry.ts`, render with `npx remotion render <episode>`.
 
-The snippets are located in the `public` folder.  
-Change the code or create new files in there.
+The full authoring workflow lives in
+[`.agents/skills/episode-authoring/`](.agents/skills/episode-authoring/SKILL.md);
+project conventions in [`AGENTS.md`](AGENTS.md).
 
-**Render video**
+## What's inside
 
-```console
-npx remotion render
-```
+The `examples/` episodes are reference material — keep them while learning,
+delete them in your own copy:
 
-**Upgrade Remotion**
+- **showcase** — the polished ad for the framework; what the engine can do
+- **code-tutorial** — a realistic tutorial slice; the authoring reference
+- **clip-gallery** — one line per clip type; a visual catalog
+- **diff-tool** — the `annotate-diff` workflow: diff views generated from
+  pristine file versions
 
-```console
-npx remotion upgrade
-```
+## Built for AI agents
 
-## More examples
+The repo ships structured agent context: `AGENTS.md` for always-on
+conventions and task-scoped skills under `.agents/skills/` (authoring
+episodes, writing custom clips, engine internals). Point your coding agent
+at the repo and it knows how to make a video.
 
-Visit the [Code Hike examples](https://github.com/code-hike/examples/tree/main/with-remotion) for more variants of code animations.
+## Commands
 
-## Docs
-
-Get started with Remotion by reading the [fundamentals page](https://www.remotion.dev/docs/the-fundamentals).
-
-## Help
-
-We provide help on our [Discord server](https://discord.gg/6VzzNDwUwV).
-
-## Issues
-
-Found an issue with Remotion? [File an issue here](https://github.com/remotion-dev/remotion/issues/new).
-
-## License
-
-Note that for some entities a company license is needed. [Read the terms here](https://github.com/remotion-dev/remotion/blob/main/LICENSE.md).
+- `npm run dev` — Remotion Studio
+- `npm test` — unit + render smoke tests
+- `npm run lint` — tsc + eslint
+- `npx remotion render <Comp>` — render a video

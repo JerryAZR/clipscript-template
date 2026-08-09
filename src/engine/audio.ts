@@ -1,8 +1,8 @@
 import { ALL_FORMATS, BlobSource, Input } from "mediabunny";
 import { staticFile } from "remotion";
-import { estimateDurationFrames, NarrationLine } from "./narration";
+import { estimateDurationFrames, SubtitleLine } from "./subtitles";
 
-export type ResolvedLine = NarrationLine & {
+export type ResolvedLine = SubtitleLine & {
   durationFrames: number;
   audio: string | null;
 };
@@ -17,14 +17,14 @@ export const measureAudioDuration = async (blob: Blob): Promise<number> => {
 };
 
 /**
- * Resolves narration lines to durations: measured from the voiceover mp3 when
+ * Resolves subtitle lines to durations: measured from the voiceover mp3 when
  * it exists (produced by scripts/tts.mts), estimated from text length when it
  * doesn't (silent episodes still render). Estimation shifts the whole
  * timeline, so missing voiceover is reported, once, not silent.
  */
 export const resolveLineAudio = async (
   episode: string,
-  lines: NarrationLine[],
+  lines: SubtitleLine[],
   fps: number,
 ): Promise<ResolvedLine[]> => {
   const resolved = await Promise.all(

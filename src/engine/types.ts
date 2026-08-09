@@ -217,6 +217,8 @@ export type BackgroundDef = {
 export type Storyboard = {
   clips: StoryboardClip[];
   background?: BackgroundDef;
+  /** Render the subtitle band (bottom-center, on top of clips). Default false */
+  subtitles?: boolean;
 };
 
 /**
@@ -235,6 +237,8 @@ export type TimelineLine = {
   startFrame: number;
   endFrame: number;
   audio: string | null;
+  /** false = hidden from the subtitle band */
+  subtitle: boolean;
 };
 
 export type TimelineClip<T extends StoryboardClip = StoryboardClip> = T & {

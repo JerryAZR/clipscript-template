@@ -11,7 +11,7 @@ Use this skill when writing a new clip type (a custom visual block for episodes)
 
 ## The clip contract
 
-A clip component is `React.FC<{ clip: TimelineClip<T> }>` where `T` is the clip's def type. It renders inside a `<Sequence>` sized by the clip's `rect`, so `useCurrentFrame()` is clip-local and the component should fill 100%x100% of its pane. The clip arrives **fully resolved**: absolute `startFrame`/`endFrame`, inherited fields applied. Components never see narration lines, stores, or other clips.
+A clip component is `React.FC<{ clip: TimelineClip<T> }>` where `T` is the clip's def type. It renders inside a `<Sequence>` sized by the clip's `rect`, so `useCurrentFrame()` is clip-local and the component should fill 100%x100% of its pane. The clip arrives **fully resolved**: absolute `startFrame`/`endFrame`, inherited fields applied. Components never see subtitle lines, stores, or other clips.
 
 Resolution guarantees you can rely on: `rect` is always set (ClipPane throws otherwise); code clips always have chain carry-in steps prepended, `scrollFrom`, and `filename` (the state resolver fills or throws). Authoring-optional fields stay optional in the type - trust the guarantees, don't re-default them.
 

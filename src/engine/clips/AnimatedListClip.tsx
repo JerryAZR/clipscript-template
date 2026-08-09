@@ -7,7 +7,7 @@ import { useClipFrame } from "../useClipFrame";
 /**
  * Pure frame math: the clip-local frame at which each list item starts
  * appearing. Items start every `stagger` frames (default 15). If the
- * narration window is too short for items x stagger, the stagger is
+ * line window is too short for items x stagger, the stagger is
  * compressed (never stretched) so the last item still starts inside the
  * window: items appear faster, they never start after the clip has ended.
  * Deterministic: no randomness, no time, same inputs always yield the same

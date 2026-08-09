@@ -1,7 +1,9 @@
 # Introduction
+# intro.first is a title beat: the title is on screen, so no subtitle band
 [[lines]]
 id = "intro.first"
 text = "Welcome to the clip engine demo."
+subtitle = false
 
 [[lines]]
 id = "intro.second"

@@ -1,12 +1,12 @@
 # clipscript
 
 A Remotion template for programming tutorial / dev-log videos, built around a
-narration-driven clip engine: narration is the master clock, visuals are
-modular clips anchored to narration lines.
+narration-driven clip engine: the subtitle script is the master clock, visuals
+are modular clips anchored to subtitle lines.
 
 ## Layout
 
-- `public/<episode>/` — episode assets: `narration.toml` (the script),
+- `public/<episode>/` — episode assets: `subtitles.toml` (the script),
   `code/` (code steps), `video/` (recordings), `voiceover/` (generated mp3s).
   Episode names may be nested (`examples/showcase` → `public/examples/showcase/`)
 - `src/engine/` — the clip engine (timeline compiler, renderer, clips)
@@ -48,7 +48,7 @@ Composition ids replace `/` with `-` (`examples/showcase` → comp
 
 ## Rules that apply everywhere
 
-- Narration lines drive all pacing; clips anchor to line ids, never compute frames by hand.
+- Subtitle lines drive all pacing; clips anchor to line ids, never compute frames by hand.
 - Frame-driven animation only. CSS transitions/animations, WAAPI, and wall-clock timers are FORBIDDEN.
 - Everything async (parsing, durations, highlighting) happens in `calculateMetadata`, never during render.
 - Theme colors via `useThemeColors()` + `polished`; never hardcode colors (universal conventions like diff red/green excepted).

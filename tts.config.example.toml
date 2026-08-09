@@ -26,3 +26,18 @@ speed = 1.0
                                  # keys are not supported.
 # apiKey = "..."                 # or a static token, sent as
                                  # Authorization: Bearer <apiKey>
+
+# What TTS speaks, without changing the displayed subtitle text. A built-in
+# default table already strips symbols ("(", "{", "::", ...) - set
+# useDefaults = false to disable it. This table adds project-level terms;
+# per-episode terms go in public/<episode>/pronunciation.toml, per-line in
+# the line's own pronunciation table in subtitles.toml.
+#
+# The defaults (applied unless disabled):
+#   "--" "::" "[" "]" "(" ")" "{" "}" "\"" "<" ">"  ->  " "
+#   "_"  ->  "-"
+#
+# [pronunciation]
+# useDefaults = true
+# "clipscript" = "clip script"
+# "ECS" = "E-C-S"

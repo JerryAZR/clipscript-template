@@ -32,7 +32,7 @@ const clamp01 = (value: number): number => Math.min(1, Math.max(0, value));
 
 /**
  * Frames per step advance. Steps start every `stepInterval` frames (default
- * 24). If the narration window is too short for steps x stepInterval, the
+ * 24). If the line window is too short for steps x stepInterval, the
  * interval is compressed (never stretched) so the last step still completes
  * on the last visible frame: the stepper runs faster, it is never left
  * unfinished when the clip ends.

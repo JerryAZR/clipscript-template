@@ -204,6 +204,20 @@ describe("smoke: kitchen-sink fixture render", () => {
     ).toBeLessThanOrEqual(EPSILON);
   });
 
+  it("shows the subtitle band only for lines that allow it", () => {
+    // Dead-center of the bottom band; clear of the code pane (bottom edge 972)
+    const BAND = { x: 860, y: 990, w: 200, h: 40 };
+    const backdrop = [22, 50, 79]; // fixture background gradient near the bottom
+    // A normal line: the pill + text cover the band region
+    expect(
+      regionRatio(readPng(frames.settledV1), backdrop, BAND, true),
+    ).toBeGreaterThan(0.3);
+    // intro.first opts out via subtitle = false: band region is bare backdrop
+    expect(
+      regionRatio(readPng(frames.introTitle), backdrop, BAND, true),
+    ).toBeLessThan(0.01);
+  });
+
   it("every active clip renders content inside its own pane", () => {
     const bg = hexToRgb(expectedBackground);
     for (const [name, frame] of Object.entries(samplePoints)) {
@@ -273,7 +287,20 @@ describe("smoke: kitchen-sink fixture render", () => {
   });
 
   it("chains clips seamlessly (code-1 end ≈ code-2 carry-in)", () => {
-    expect(fullDiff(readPng(frames.endOfCode1), readPng(frames.startOfCode2))).toBeLessThan(0.005);
+    // Cropped to the code pane: the chain boundary is also a line boundary,
+    // so the subtitle band legitimately changes between these frames
+    expect(
+      cropDiff(
+        readPng(frames.endOfCode1),
+        readPng(frames.startOfCode2),
+        PANE.x,
+        PANE.y,
+        PANE.x,
+        PANE.y,
+        PANE.w,
+        PANE.h,
+      ),
+    ).toBeLessThan(0.005);
   });
 
   it("keeps the filename tab identical across the chain", () => {

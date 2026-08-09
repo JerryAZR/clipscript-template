@@ -1,5 +1,5 @@
 /**
- * Narration voiceover pipeline: narration.toml -> voiceover/<lineId>.mp3
+ * Voiceover pipeline: subtitles.toml -> voiceover/<lineId>.mp3
  * Content-hash cached: only lines whose text/provider settings changed are
  * re-synthesized.
  *
@@ -14,13 +14,25 @@
  *
  * Defaults come from tts.config.toml (optional; see tts.config.example.toml).
  * CLI flags override the config file.
+ *
+ * Pronunciation: what TTS speaks, without changing the displayed text.
+ * Layers, later wins: built-in symbol defaults (see pronunciation.ts;
+ * useDefaults = false to disable) < tts.config.toml [pronunciation]
+ * < public/<episode>/pronunciation.toml < a line's pronunciation table.
+ * The cache hash covers the spoken text, so map edits re-synthesize exactly
+ * the affected lines. When spoken differs from displayed, it is logged.
  */
 import { createHash } from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
 import { MsEdgeTTS, OUTPUT_FORMAT } from "msedge-tts";
 import { parse as parseToml } from "smol-toml";
-import { parseNarration } from "../src/engine/narration";
+import {
+  applyPronunciation,
+  defaultPronunciation,
+  mergePronunciation,
+} from "../src/engine/pronunciation";
+import { parseSubtitles } from "../src/engine/subtitles";
 import { mintJwt } from "./ssh-jwt";
 
 const args = process.argv.slice(2);
@@ -163,9 +175,44 @@ const synthesize = (text: string, file: string) =>
 
 // --- Cache -----------------------------------------------------------------
 
-const lines = parseNarration(
-  fs.readFileSync(path.join("public", episode, "narration.toml"), "utf8"),
+const lines = parseSubtitles(
+  fs.readFileSync(path.join("public", episode, "subtitles.toml"), "utf8"),
 );
+
+// --- Pronunciation ---------------------------------------------------------
+// What TTS speaks, without changing the displayed text. Layers, later wins:
+// built-in defaults < tts.config.toml [pronunciation] < episode file < line.
+
+const pronunciationSection = section("pronunciation");
+const projectMap: Record<string, string> = {};
+for (const [k, v] of Object.entries(pronunciationSection)) {
+  if (k === "useDefaults") continue;
+  if (typeof v === "string") projectMap[k] = v;
+}
+
+const episodeMapPath = path.join("public", episode, "pronunciation.toml");
+const episodeMap: Record<string, string> = {};
+if (fs.existsSync(episodeMapPath)) {
+  const parsed = parseToml(fs.readFileSync(episodeMapPath, "utf8"));
+  for (const [k, v] of Object.entries(parsed)) {
+    if (typeof v !== "string") {
+      throw new Error(`${episodeMapPath}: '${k}' must map to a string`);
+    }
+    episodeMap[k] = v;
+  }
+}
+
+const baseMap = mergePronunciation(
+  pronunciationSection.useDefaults === false ? {} : defaultPronunciation,
+  projectMap,
+  episodeMap,
+);
+
+const spokenOf = (line: (typeof lines)[number]) =>
+  applyPronunciation(
+    line.text,
+    line.pronunciation ? mergePronunciation(baseMap, line.pronunciation) : baseMap,
+  );
 
 const outDir = path.join("public", episode, "voiceover");
 fs.mkdirSync(outDir, { recursive: true });
@@ -205,7 +252,8 @@ for (const line of lines) {
   const filename = `${line.fullId}.mp3`;
   wanted.add(filename);
   const file = path.join(outDir, filename);
-  const hash = hashOf(line.text);
+  const spoken = spokenOf(line);
+  const hash = hashOf(spoken);
 
   if (cache[line.fullId] === hash && fs.existsSync(file)) {
     console.log(`skip   ${line.fullId}`);
@@ -216,7 +264,7 @@ for (const line of lines) {
   for (;;) {
     try {
       attempt++;
-      await synthesize(line.text, file);
+      await synthesize(spoken, file);
       break;
     } catch (err) {
       if (attempt >= MAX_ATTEMPTS) {
@@ -236,6 +284,9 @@ for (const line of lines) {
     writeCache();
     synthesized++;
     console.log(`done   ${line.fullId}`);
+    if (spoken !== line.text) {
+      console.log(`       spoken: ${JSON.stringify(spoken)}`);
+    }
   }
 }
 

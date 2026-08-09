@@ -1,19 +1,19 @@
 ---
 name: episode-authoring
-description: Authoring tutorial/dev-log video episodes - narration script, storyboard clips, voiceover, verification
+description: Authoring tutorial/dev-log video episodes - subtitle script, storyboard clips, voiceover, verification
 metadata:
-  tags: episode, narration, storyboard, clips, voiceover, tutorial
+  tags: episode, subtitles, storyboard, clips, voiceover, tutorial
 ---
 
 ## When to use
 
-Use this skill when creating or editing an episode: the narration script, the storyboard (clips), code/video assets, voiceover, or when checking that an episode renders correctly.
+Use this skill when creating or editing an episode: the subtitle script, the storyboard (clips), code/video assets, voiceover, or when checking that an episode renders correctly.
 
 ## The 80% path
 
 An episode is a folder under `public/<episode>/` plus `src/episodes/<episode>/storyboard.ts` registered in `src/episodes/registry.ts`.
 
-**1. Write the script** in `public/<episode>/narration.toml` - a flat `[[lines]]` list. Narration lines are the master clock of the whole video. Keep one point per line.
+**1. Write the script** in `public/<episode>/subtitles.toml` - a flat `[[lines]]` list. The text is shown as subtitles and spoken by TTS; the lines are the master clock of the whole video. Keep one point per line.
 
 ```toml
 # Comments organize topics for reviewers
@@ -99,7 +99,7 @@ Also available: **animated-list** (staggered bullet reveal), **progress** (done/
 ## When the 80% path isn't enough
 
 - Full storyboard reference (all end conditions, validation rules) - [rules/storyboard-format.md](rules/storyboard-format.md)
-- Voiceover details (voices, cache, replacing the pipeline) - [rules/narration-and-voiceover.md](rules/narration-and-voiceover.md)
+- Voiceover details (voices, cache, pronunciation, replacing the pipeline) - [rules/subtitles-and-voiceover.md](rules/subtitles-and-voiceover.md)
 - Code annotations (mark, diff, from, focus, callout) - [rules/annotations.md](rules/annotations.md)
 - Debugging renders - [rules/verification.md](rules/verification.md)
 - Per-clip deep dives - [rules/code-clip.md](rules/code-clip.md), [terminal-clip.md](rules/terminal-clip.md), [video-clip.md](rules/video-clip.md), [overlay-clip.md](rules/overlay-clip.md), [cinematic-title-clip.md](rules/cinematic-title-clip.md)

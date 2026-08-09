@@ -1,13 +1,13 @@
 import { rects } from "../../engine/clip-style";
 import type { Storyboard } from "../../engine/types";
 
-// Hook: the video's own script on screen while the narration calls it out
+// Hook: the video's own subtitle script on screen while the voiceover calls it out
 const hookClips: Storyboard["clips"] = [
   {
     id: "meta-script",
     type: "code",
-    steps: ["showcase-narration.toml"],
-    filename: "narration.toml",
+    steps: ["showcase-subtitles.toml"],
+    filename: "subtitles.toml",
     rect: rects.medium,
     transitionIn: 15,
     startAt: { line: "hook.compiled" },
@@ -152,8 +152,8 @@ const authorClips: Storyboard["clips"] = [
   {
     id: "author-script",
     type: "code",
-    steps: ["showcase-narration.toml"],
-    filename: "narration.toml",
+    steps: ["showcase-subtitles.toml"],
+    filename: "subtitles.toml",
     rect: rects.splitLeft,
     startAt: { line: "author.files" },
     endAt: [{ line: "author.retime", end: true }],
@@ -196,6 +196,7 @@ const outroClips: Storyboard["clips"] = [
 export const storyboard: Storyboard = {
   // Light source image; the scrim keeps light title text legible on it
   background: { src: "background.png", dim: 0.7 },
+  subtitles: true,
   clips: [
     ...hookClips,
     ...introClips,

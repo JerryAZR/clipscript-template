@@ -228,6 +228,8 @@ const flairClips: Storyboard["clips"] = [
 export const storyboard: Storyboard = {
   // Exercises the episode-level background (gradient image, no adjustments)
   background: { src: "bg.png" },
+  // Exercises the subtitle band (intro.first opts out via subtitle = false)
+  subtitles: true,
   clips: [
     ...introClips,
     ...conceptClips,

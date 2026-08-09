@@ -7,6 +7,7 @@ import { ClipRenderer } from "./ClipRenderer";
 import { sharedClipComponents } from "./clips";
 import { EpisodeNameProvider } from "./EpisodeNameContext";
 import { HighlightProvider } from "./HighlightContext";
+import { SubtitleBand } from "./SubtitleBand";
 import type { BackgroundDef, ClipComponent } from "./types";
 
 const Background: React.FC<{ episode: string; background: BackgroundDef }> = ({
@@ -67,6 +68,9 @@ export const Episode: React.FC<EpisodeProps> = ({
               />
             ) : null}
             <ClipRenderer timeline={timeline} clipComponents={clipComponents} />
+            {module.storyboard.subtitles ? (
+              <SubtitleBand lines={timeline.lines} />
+            ) : null}
           </AbsoluteFill>
         </EpisodeNameProvider>
       </HighlightProvider>

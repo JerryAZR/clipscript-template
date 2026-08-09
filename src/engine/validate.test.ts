@@ -8,6 +8,7 @@ const line = (fullId: string, startFrame: number, endFrame: number) => ({
   startFrame,
   endFrame,
   audio: null,
+  subtitle: true,
 });
 
 const clip = (

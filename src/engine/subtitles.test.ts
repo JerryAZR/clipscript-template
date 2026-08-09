@@ -1,9 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { estimateDurationFrames, parseNarration } from "./narration";
+import { estimateDurationFrames, parseSubtitles } from "./subtitles";
 
-describe("parseNarration", () => {
+describe("parseSubtitles", () => {
   it("parses a flat lines list, ids verbatim", () => {
-    const lines = parseNarration(`
+    const lines = parseSubtitles(`
 # a comment
 [[lines]]
 id = "intro.first"
@@ -21,7 +21,7 @@ text = "World."
 
   it("throws on duplicate ids", () => {
     expect(() =>
-      parseNarration(`
+      parseSubtitles(`
 [[lines]]
 id = "a"
 text = "one"
@@ -30,15 +30,15 @@ text = "one"
 id = "a"
 text = "two"
 `),
-    ).toThrow(/Duplicate narration line id 'a'/);
+    ).toThrow(/Duplicate subtitle line id 'a'/);
   });
 
-  it("throws on empty narration", () => {
-    expect(() => parseNarration(`lines = []`)).toThrow(/has no lines/);
+  it("throws on empty subtitles", () => {
+    expect(() => parseSubtitles(`lines = []`)).toThrow(/has no lines/);
   });
 
   it("throws on malformed input", () => {
-    expect(() => parseNarration(`not = "toml lines"`)).toThrow();
+    expect(() => parseSubtitles(`not = "toml lines"`)).toThrow();
   });
 });
 

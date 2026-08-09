@@ -13,7 +13,7 @@ Bullet list whose items spring in one at a time.
 If the clip's frame window is too short for `items.length * stagger`, the
 effective stagger is compressed so the last item still appears before the clip
 ends (never stretched to fill a long window). Keep lists short; one point per
-item, matching the narration.
+item, matching the voiceover.
 
 ## progress
 
@@ -39,7 +39,7 @@ down, then a "GO!" springs in.
 
 Rarely used in typical tutorials, but it is the natural way to demonstrate a
 sync fence: end the clip with `offsetFrames` past the countdown's full length
-plus a `sync` so the narration waits for zero:
+plus a `sync` so the voiceover waits for zero:
 
 ```ts
 {

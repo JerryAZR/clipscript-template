@@ -7,7 +7,7 @@ import { getEpisode } from "../episodes/registry";
 import { resolveLineAudio } from "./audio";
 import { resolveCodeState } from "./clips/code-state";
 import { highlightCodeSteps } from "./highlight";
-import { loadNarration } from "./narration";
+import { loadSubtitles } from "./subtitles";
 import { calculateTimeline } from "./timeline";
 import { validateStoryboard } from "./validate";
 import type { CodeClipDef, Timeline } from "./types";
@@ -36,8 +36,8 @@ export const episodeCalculateMetadata: CalculateMetadataFunction<
   EpisodeProps
 > = async ({ props }) => {
   const { storyboard } = getEpisode(props.episode);
-  const narration = await loadNarration(props.episode);
-  const lines = await resolveLineAudio(props.episode, narration, EPISODE_FPS);
+  const subtitles = await loadSubtitles(props.episode);
+  const lines = await resolveLineAudio(props.episode, subtitles, EPISODE_FPS);
 
   const rawTimeline = calculateTimeline(lines, storyboard.clips);
   const timeline: Timeline = {

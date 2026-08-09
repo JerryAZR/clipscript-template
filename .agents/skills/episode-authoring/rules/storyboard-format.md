@@ -8,6 +8,7 @@ Clips are plain typed objects - TypeScript validates them as you write.
 ```ts
 export const storyboard: Storyboard = {
   background: { src: "bg.png", dim: 0.7, saturate: 0.5 },
+  subtitles: true,
   clips: [...],
 };
 ```
@@ -16,6 +17,13 @@ An episode-level backdrop image (`public/<episode>/images/<src>`), rendered
 under all clips with a cover fit. Keep it non-disturbing: `dim` (0-1 dark
 scrim), `saturate` (0-1), `brightness` pull a colorful source back so pane
 content stays the focus. Omit it for the flat theme background.
+
+## Subtitle band (optional)
+
+`subtitles: true` renders the active line's text bottom-center, on top of all
+clips. It is not a clip and reserves nothing: keep the bottom ~10% of your
+rects clear when it is on. A line with `subtitle = false` in subtitles.toml
+is skipped (use it for title beats whose text is already on screen).
 
 ## Fields every clip has
 
@@ -41,7 +49,7 @@ content stays the focus. Omit it for the flat theme background.
 - `{ line: "a.b", end: true }` - when line `a.b` finishes (cannot combine with offsetFrames)
 - `{ line: "a.b", offsetFrames: 150, sync: "a.b" }` - a **fence**: the next line may
   not start until that frame is reached. Use when a visual needs more time than
-  the narration gives it.
+  the voiceover gives it.
 
 Unknown line ids, `end: true` with offset, sync-before-line, and zero/negative
 clip duration are all hard errors at load time, naming the clip.

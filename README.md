@@ -10,8 +10,9 @@ TODO: demo GIF of showcase highlights (trimmed, a few seconds)
 
 ## The idea
 
-- **Narration is the master clock.** One flat `narration.toml` of id'd lines;
-  line durations (measured from generated voiceover) pace the whole video.
+- **The subtitle script is the master clock.** One flat `subtitles.toml` of
+  id'd lines; the text is shown as subtitles and spoken by TTS, and line
+  durations (measured from the generated voiceover) pace the whole video.
 - **Visuals are modular clips** anchored to line ids, never to hand-computed
   frames: code panes with Code Hike morphs and annotations, terminals,
   recordings, titles, lists, callouts.
@@ -35,7 +36,7 @@ npm i
 npm run dev   # Remotion Studio; the examples/ folder holds the demo episodes
 ```
 
-Your own episode: write `public/<episode>/narration.toml`, generate voiceover
+Your own episode: write `public/<episode>/subtitles.toml`, generate voiceover
 (`npx tsx scripts/tts.mts --episode <episode>`), write
 `src/episodes/<episode>/storyboard.ts`, register it in
 `src/episodes/registry.ts`, render with `npx remotion render <episode>`.

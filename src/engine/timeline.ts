@@ -1,7 +1,7 @@
-import type { NarrationLine } from "./narration";
+import type { SubtitleLine } from "./subtitles";
 import type { StoryboardClip, Timeline, TimelineLine } from "./types";
 
-type LineWithDuration = NarrationLine & {
+type LineWithDuration = SubtitleLine & {
   durationFrames: number;
   audio?: string | null;
 };
@@ -16,7 +16,7 @@ const syncOf = (cond: StoryboardClip["endAt"][number]): string =>
   "sync" in cond && cond.sync ? cond.sync : cond.line;
 
 /**
- * Condition-driven fence algorithm: narration lines are laid back-to-back,
+ * Condition-driven fence algorithm: subtitle lines are laid back-to-back,
  * and clips anchor to them. A `sync` condition "fences" the timeline - the
  * next line does not start until the condition's frame is reached.
  * Ported from the bevy project's scripts/engine/timeline.py.
@@ -101,6 +101,7 @@ export const calculateTimeline = (
       startFrame: lineStart,
       endFrame: nextStart,
       audio: line.audio ?? null,
+      subtitle: line.subtitle !== false,
     });
 
     // Resolve clip starts, ordinary end conditions and sync fences

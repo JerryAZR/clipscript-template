@@ -1,4 +1,4 @@
-# template-coding-video
+# clipscript
 
 A Remotion template for programming tutorial / dev-log videos, built around a
 narration-driven clip engine: narration is the master clock, visuals are

@@ -98,7 +98,7 @@ const showcaseClips: Storyboard["clips"] = [
       {
         cwd: "~/app",
         command: "npm run lint",
-        output: ["> template-code-hike@1.0.0 lint", "> tsc && eslint src"],
+        output: ["> clipscript@1.0.0 lint", "> tsc && eslint src"],
       },
     ],
     rect: { x: "53%", y: "15%", w: "42%", h: "70%" },

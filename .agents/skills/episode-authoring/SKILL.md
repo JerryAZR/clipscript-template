@@ -39,6 +39,7 @@ import { rects } from "../../engine/clip-style";
 import type { Storyboard } from "../../engine/types";
 
 export const storyboard: Storyboard = {
+  // background: { src: "bg.png", dim: 0.7 },   // optional backdrop, public/<episode>/images/
   clips: [
     {
       id: "intro-title",

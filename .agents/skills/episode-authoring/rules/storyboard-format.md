@@ -3,6 +3,20 @@
 A storyboard (`src/episodes/<episode>/storyboard.ts`) exports `{ clips: StoryboardClip[] }`.
 Clips are plain typed objects - TypeScript validates them as you write.
 
+## Background (optional)
+
+```ts
+export const storyboard: Storyboard = {
+  background: { src: "bg.png", dim: 0.7, saturate: 0.5 },
+  clips: [...],
+};
+```
+
+An episode-level backdrop image (`public/<episode>/images/<src>`), rendered
+under all clips with a cover fit. Keep it non-disturbing: `dim` (0-1 dark
+scrim), `saturate` (0-1), `brightness` pull a colorful source back so pane
+content stays the focus. Omit it for the flat theme background.
+
 ## Fields every clip has
 
 ```ts

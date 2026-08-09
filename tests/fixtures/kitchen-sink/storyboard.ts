@@ -226,6 +226,8 @@ const flairClips: Storyboard["clips"] = [
 ];
 
 export const storyboard: Storyboard = {
+  // Exercises the episode-level background (gradient image, no adjustments)
+  background: { src: "bg.png" },
   clips: [
     ...introClips,
     ...conceptClips,

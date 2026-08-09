@@ -198,8 +198,25 @@ export type StoryboardClip =
   | NotificationPopClipDef
   | ProgressStepsClipDef;
 
+/**
+ * Episode-level backdrop, rendered under all clips. Keep it non-disturbing:
+ * `dim`/`saturate`/`brightness` exist so a colorful source image still reads
+ * as a background (pane cards are opaque; the backdrop shows in the gaps).
+ */
+export type BackgroundDef = {
+  /** Image file in public/<episode>/images/ */
+  src: string;
+  /** Scrim over the image in the theme background color, 0-1 (default 0) */
+  dim?: number;
+  /** Saturation multiplier, 0 = grayscale (default 1) */
+  saturate?: number;
+  /** Brightness multiplier (default 1) */
+  brightness?: number;
+};
+
 export type Storyboard = {
   clips: StoryboardClip[];
+  background?: BackgroundDef;
 };
 
 /**

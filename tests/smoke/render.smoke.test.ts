@@ -193,9 +193,11 @@ describe("smoke: kitchen-sink fixture render", () => {
     fs.rmSync(outDir, { recursive: true, force: true });
   });
 
-  it("uses the expected theme background, band and card colors", () => {
+  it("renders the background image, header band and card colors", () => {
     const png = readPng(frames.settledV1);
-    expect(channelDiff(pixel(png, 4, 4), hexToRgb(expectedBackground))).toBeLessThanOrEqual(EPSILON);
+    // The fixture's background is a gradient image; its top-left pixel is
+    // rgb(10,26,46) - proves the backdrop renders (not the flat theme color)
+    expect(channelDiff(pixel(png, 4, 4), [10, 26, 46])).toBeLessThanOrEqual(EPSILON);
     // Inside the header band: top-right corner of the tab row
     expect(
       channelDiff(pixel(png, PANE.x + PANE.w - 24, PANE.y + 12), hexToRgb(expectedBand)),

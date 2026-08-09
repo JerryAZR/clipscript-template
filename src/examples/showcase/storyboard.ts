@@ -194,6 +194,8 @@ const outroClips: Storyboard["clips"] = [
 ];
 
 export const storyboard: Storyboard = {
+  // Light source image; the scrim keeps light title text legible on it
+  background: { src: "background.png", dim: 0.7 },
   clips: [
     ...hookClips,
     ...introClips,

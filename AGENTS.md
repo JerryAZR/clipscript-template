@@ -19,7 +19,7 @@ modular clips anchored to narration lines.
 - `npm run dev` — Remotion Studio
 - `npm run lint` — tsc + eslint
 - `npm test` / `test:unit` / `test:smoke` — vitest + render smoke tests
-- `npx tsx scripts/tts.mts --episode <name>` — generate voiceover (edge-tts, hash-cached)
+- `npx tsx scripts/tts.mts --episode <name>` — generate voiceover (hash-cached; edge-tts by default, OpenAI-compatible endpoints via `tts.config.toml`)
 - `npx tsx scripts/annotate-diff.mts --out public/<ep>/code/ v1.ts v2.ts [...]` — generate annotated code steps from pristine versions (`--static` for merged diff views)
 - `npx remotion still <Comp> --frame=N` — render one frame for visual checks
 

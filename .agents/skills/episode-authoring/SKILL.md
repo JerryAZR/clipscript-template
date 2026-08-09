@@ -29,7 +29,7 @@ text = "Here is the code we will write."
 **2. Generate voiceover** (content-hash cached, re-run after every script edit):
 
 ```bash
-npx tsx scripts/tts.mts --episode <name>   # [--voice en-US-AriaNeural] [--rate +0%]
+npx tsx scripts/tts.mts --episode <name>   # edge-tts by default; tts.config.toml for OpenAI-compatible endpoints
 ```
 
 **3. Write the storyboard** - typed clip objects referencing line ids, never frames:

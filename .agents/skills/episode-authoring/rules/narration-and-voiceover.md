@@ -23,16 +23,29 @@ text = "One line per sentence, one point per line."
 ## Voiceover
 
 ```bash
-npx tsx scripts/tts.mts --episode <name> [--voice en-US-AriaNeural] [--rate +0%]
+npx tsx scripts/tts.mts --episode <name>   # flags override tts.config.toml
 ```
 
-- Uses edge-tts (free, no API key). One mp3 per line at
-  `public/<episode>/voiceover/<lineId>.mp3` (gitignored).
-- Content-hash cached (`voice|rate|text`): only changed lines re-synthesize.
-  3 attempts per line with backoff; failures are reported at the end (exit 1)
-  and re-running resumes from the cache.
-- Browse voices: `npx msedge-tts --voices` or the Azure voice list. Chinese
-  narration works well with `zh-CN-YunxiNeural`.
+- One mp3 per line at `public/<episode>/voiceover/<lineId>.mp3` (gitignored).
+- Content-hash cached (provider + voice + rate/speed + text): only changed
+  lines re-synthesize. 3 attempts per line with backoff; failures are
+  reported at the end (exit 1) and re-running resumes from the cache.
+
+### Providers
+
+Defaults live in `tts.config.toml` (gitignored; copy
+`tts.config.example.toml`). CLI flags (`--provider/--voice/--rate/--url/
+--model/--speed/--key`) override the file for one-off runs.
+
+- **edge** (default) - free, no API key. `--voice en-US-AriaNeural`,
+  `--rate +0%`. Browse voices: `npx msedge-tts --voices` or the Azure voice
+  list. Chinese narration works well with `zh-CN-YunxiNeural`.
+- **openai** - any OpenAI-compatible endpoint (`POST <baseUrl>/audio/speech`,
+  e.g. a local GLM-TTS-Server). Needs `baseUrl` + `model`; `voice` and
+  `speed` are optional. Auth: `apiKey` (static Bearer token) or `keyPath`
+  (SSH private key; a short-lived JWT is minted per run, for
+  GLM-TTS-Server-style public-key JWT auth). A browser-like User-Agent is
+  sent automatically - RunPod's proxy 403s non-browser agents (Cloudflare).
 
 ## Durations
 
@@ -43,6 +56,6 @@ automatically once voiceover exists.
 
 ## Replacing the pipeline
 
-When quality matters, replace `scripts/tts.mts` with your own TTS pipeline
-(e.g. an OpenAI-compatible TTS API). The engine only cares that
-`voiceover/<lineId>.mp3` files exist - nothing else changes.
+The engine only cares that `voiceover/<lineId>.mp3` files exist. For a TTS
+backend that is not OpenAI-compatible, replace `scripts/tts.mts` with your
+own pipeline writing the same files - nothing else changes.

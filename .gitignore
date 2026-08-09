@@ -9,3 +9,6 @@ dist
 # Ignore the output video from Git but not videos you import into src/.
 out
 public/*/voiceover/
+
+# Local TTS provider config (may hold an API key)
+tts.config.toml

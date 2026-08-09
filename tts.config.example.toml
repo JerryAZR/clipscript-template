@@ -1,0 +1,28 @@
+# TTS provider config for scripts/tts.mts. Copy to tts.config.toml and edit;
+# the real file is gitignored (it may hold an API key). CLI flags override
+# anything set here (--provider/--voice/--rate/--url/--model/--speed/--key).
+
+# "edge" (default, free, no key) or "openai" (OpenAI-compatible endpoint)
+provider = "edge"
+
+[edge]
+voice = "en-US-AriaNeural"
+rate = "+0%"
+
+# Any server exposing POST <baseUrl>/audio/speech with the OpenAI request
+# shape ({model, input, voice, response_format, speed} -> audio bytes).
+# Example: GLM-TTS-Server (local GPU, zero-shot voice cloning).
+[openai]
+baseUrl = "http://localhost:8000/v1"
+model = "glm-tts"
+# voice = "jerry"        # optional; the server may resolve a default voice
+speed = 1.0
+# Auth (optional). Two forms:
+# keyPath = "~/.ssh/id_ed25519"  # SSH private key; a JWT is minted per run.
+                                 # For GLM-TTS-Server-style public-key JWT
+                                 # auth (its scripts/make_token.py flow).
+                                 # Unencrypted ed25519 OpenSSH keys and PEM
+                                 # keys work; passphrase-protected OpenSSH
+                                 # keys are not supported.
+# apiKey = "..."                 # or a static token, sent as
+                                 # Authorization: Bearer <apiKey>

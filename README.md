@@ -1,5 +1,7 @@
 # clipscript
 
+[![CI](https://github.com/JerryAZR/clipscript-template/actions/workflows/ci.yml/badge.svg)](https://github.com/JerryAZR/clipscript-template/actions/workflows/ci.yml)
+
 Narration-driven, clip-based videos for programming tutorials and dev-logs.
 You write the voiceover; the timeline builds itself.
 

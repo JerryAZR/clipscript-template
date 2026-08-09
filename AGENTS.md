@@ -25,6 +25,7 @@ are modular clips anchored to subtitle lines.
 - `npm test` / `test:unit` / `test:smoke` — vitest + render smoke tests
 - `npx tsx scripts/tts.mts --episode <name>` — generate voiceover (hash-cached; edge-tts by default, OpenAI-compatible endpoints via `tts.config.toml`)
 - `npx tsx scripts/annotate-diff.mts --out public/<ep>/code/ v1.ts v2.ts [...]` — generate annotated code steps from pristine versions (`--static` for merged diff views)
+- `npm run assets:readme-gif` — regenerate `doc/assets/showcase.gif` from `examples/readme-teaser` (requires ffmpeg)
 - `npx remotion still <Comp> --frame=N` — render one frame for visual checks
 
 ## Episodes (registered in `src/episodes/registry.ts`)
@@ -41,6 +42,8 @@ Composition ids replace `/` with `-` (`examples/showcase` → comp
 - `examples/diff-tool` — annotate-diff workflow showcase: prepare sources, run
   the tool, wire outputs, rendered result. Its `code/gen/` assets are the tool's
   real output (see the storyboard header for the exact commands)
+- `examples/readme-teaser` — short title/code/terminal/progress teaser used to
+  generate the README GIF
 - `codehike-demo` — legacy hand-rolled Code Hike demo, outside the clip engine
 - `kitchen-sink` — engine test fixture (every clip type, code chain, scroll,
   fence); the smoke suite renders it. Internal: never shown in Studio, not a

@@ -2,6 +2,7 @@ import type { ClipComponent, Storyboard } from "../engine/types";
 import { storyboard as codeTutorial } from "../examples/code-tutorial/storyboard";
 import { storyboard as clipGallery } from "../examples/clip-gallery/storyboard";
 import { storyboard as diffTool } from "../examples/diff-tool/storyboard";
+import { storyboard as readmeTeaser } from "../examples/readme-teaser/storyboard";
 import { storyboard as showcase } from "../examples/showcase/storyboard";
 
 export type EpisodeModule = {
@@ -17,6 +18,7 @@ const episodes: Record<string, EpisodeModule> = {
   "examples/code-tutorial": { storyboard: codeTutorial },
   "examples/clip-gallery": { storyboard: clipGallery },
   "examples/diff-tool": { storyboard: diffTool },
+  "examples/readme-teaser": { storyboard: readmeTeaser },
 };
 
 // Test fixtures (registered from tests/, e.g. the smoke suite's kitchen

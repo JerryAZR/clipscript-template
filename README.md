@@ -3,10 +3,7 @@
 Narration-driven, clip-based videos for programming tutorials and dev-logs.
 You write the voiceover; the timeline builds itself.
 
-<!--
-TODO: demo GIF of showcase highlights (trimmed, a few seconds)
 ![clipscript showcase](doc/assets/showcase.gif)
--->
 
 ## The idea
 
@@ -55,6 +52,7 @@ delete them in your own copy:
 - **clip-gallery** — one line per clip type; a visual catalog
 - **diff-tool** — the `annotate-diff` workflow: diff views generated from
   pristine file versions
+- **readme-teaser** — the short four-scene episode used to generate the GIF above
 
 ## Built for AI agents
 

@@ -65,7 +65,7 @@ const layoutClips: Storyboard["clips"] = [
       },
       {
         cwd: "~/video",
-        command: "npx remotion render Episode",
+        command: "npx remotion render examples-showcase",
         output: ["Rendered 2216/2216 frames", "+ out/episode.mp4"],
       },
     ],

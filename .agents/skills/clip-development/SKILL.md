@@ -45,7 +45,7 @@ export const OverlayClip: ClipComponent<OverlayClipDef> = ({ clip }) => {
 1. Add the def to the `StoryboardClip` union in `src/engine/types.ts` (`ClipCommon & { type: "myclip", ... }`).
 2. Write the component in `src/engine/clips/MyClip.tsx`.
 3. Register it in `src/engine/clips/index.ts` (`sharedClipComponents`), or in an episode's `clipComponents` (in `src/episodes/registry.ts`) for episode-specific clips.
-4. Exercise it in the demo storyboard and add a smoke assertion if it adds framework behavior.
+4. Exercise it in the kitchen-sink fixture (`tests/fixtures/kitchen-sink/storyboard.ts`) and add a smoke assertion if it adds framework behavior.
 
 ## Conventions (all enforced by review)
 

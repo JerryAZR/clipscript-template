@@ -1,5 +1,5 @@
-import { rects } from "../../engine/clip-style";
-import type { Storyboard } from "../../engine/types";
+import { rects } from "../../../src/engine/clip-style";
+import type { Storyboard } from "../../../src/engine/types";
 
 // Introduction: one full-screen cinematic title spanning two narration lines
 const introClips: Storyboard["clips"] = [

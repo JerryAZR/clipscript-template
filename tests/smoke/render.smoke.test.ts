@@ -11,6 +11,7 @@ import { resolveRectValue } from "../../src/engine/types";
 import type { CodeClipDef, Timeline, TimelineClip } from "../../src/engine/types";
 import { offlineLighterOverride } from "../../src/calculate-metadata/webpack-override";
 import { loadEpisodeTimeline } from "../../scripts/timeline-node";
+import "../fixtures/kitchen-sink/register";
 
 const EPSILON = 8;
 // Code pane of code-1/code-2: rect 10%,10%,80%,80% of 1920x1080
@@ -106,9 +107,9 @@ const clipRegion = (clip: TimelineClip) => {
   };
 };
 
-describe("smoke: Episode demo render", () => {
+describe("smoke: kitchen-sink fixture render", () => {
   beforeAll(async () => {
-    timeline = await loadEpisodeTimeline("demo");
+    timeline = await loadEpisodeTimeline("kitchen-sink");
     const clips = timeline.clips;
     const code1 = clips.find((c) => c.id === "code-1")! as unknown as TimelineClip<CodeClipDef>;
     const code2 = clips.find((c) => c.id === "code-2")!;
@@ -166,14 +167,14 @@ describe("smoke: Episode demo render", () => {
 
     outDir = fs.mkdtempSync(path.join(os.tmpdir(), "smoke-"));
     const serveUrl = await bundle({
-      entryPoint: path.resolve("src/index.ts"),
+      entryPoint: path.resolve("tests/smoke/entry.tsx"),
       webpackOverride: offlineLighterOverride,
     });
     const composition = await selectComposition({
       serveUrl,
-      id: "Episode",
+      id: "kitchen-sink",
       inputProps: {
-        episode: "demo",
+        episode: "kitchen-sink",
         theme: "github-dark",
         timeline: null,
         themeColors: null,

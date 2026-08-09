@@ -1,4 +1,4 @@
-import { Composition } from "remotion";
+import { Composition, Folder } from "remotion";
 import { CodeHikeDemo } from "./CodeHikeDemo";
 
 import { calculateMetadata } from "./calculate-metadata/calculate-metadata";
@@ -8,63 +8,63 @@ import { EPISODE_FPS, episodeCalculateMetadata, episodeSchema } from "./engine/c
 import { Episode } from "./engine/Episode";
 import { listEpisodes } from "./episodes/registry";
 
+// Composition ids cannot contain slashes, so nested episode names
+// ("examples/showcase") render as "examples-showcase"
+const compositionId = (episode: string) => episode.replaceAll("/", "-");
+
+const episodeDefaults = (episode: string) => ({
+  episode,
+  theme: defaultTheme,
+  timeline: null,
+  themeColors: null,
+  highlightedCode: null,
+});
+
+const EpisodeComposition = ({ episode }: { episode: string }) => (
+  <Composition
+    id={compositionId(episode)}
+    component={Episode}
+    defaultProps={episodeDefaults(episode)}
+    fps={EPISODE_FPS}
+    width={1920}
+    height={1080}
+    calculateMetadata={episodeCalculateMetadata}
+    schema={episodeSchema}
+  />
+);
+
 export const RemotionRoot = () => {
+  const examples = listEpisodes().filter((name) => name.startsWith("examples/"));
+  const userEpisodes = listEpisodes().filter((name) => !name.startsWith("examples/"));
   return (
     <>
-      {/* Hand-rolled Code Hike token transitions, outside the clip engine */}
-      <Composition
-        id="codehike-demo"
-        component={CodeHikeDemo}
-        defaultProps={{
-          steps: null,
-          themeColors: null,
-          episode: "codehike-demo",
-          theme: defaultTheme,
-          codeWidth: null,
-          width: {
-            type: "auto",
-          },
-        }}
-        fps={30}
-        height={1080}
-        calculateMetadata={calculateMetadata}
-        schema={schema}
-      />
-      <Composition
-        id="Episode"
-        component={Episode}
-        defaultProps={{
-          episode: "demo",
-          theme: defaultTheme,
-          timeline: null,
-          themeColors: null,
-          highlightedCode: null,
-        }}
-        fps={EPISODE_FPS}
-        width={1920}
-        height={1080}
-        calculateMetadata={episodeCalculateMetadata}
-        schema={episodeSchema}
-      />
-      {/* One composition per registered episode, so Studio lists them */}
-      {listEpisodes().map((name) => (
+      <Folder name="examples">
+        {/* Hand-rolled Code Hike token transitions, outside the clip engine */}
         <Composition
-          key={name}
-          id={name}
-          component={Episode}
+          id="codehike-demo"
+          component={CodeHikeDemo}
           defaultProps={{
-            episode: name,
-            theme: defaultTheme,
-            timeline: null,
+            steps: null,
             themeColors: null,
-            highlightedCode: null,
+            episode: "codehike-demo",
+            theme: defaultTheme,
+            codeWidth: null,
+            width: {
+              type: "auto",
+            },
           }}
-          fps={EPISODE_FPS}
-          width={1920}
+          fps={30}
           height={1080}
-          calculateMetadata={episodeCalculateMetadata}
-          schema={episodeSchema}
+          calculateMetadata={calculateMetadata}
+          schema={schema}
         />
+        {examples.map((name) => (
+          <EpisodeComposition key={name} episode={name} />
+        ))}
+      </Folder>
+      {/* One composition per registered user episode, so Studio lists them */}
+      {userEpisodes.map((name) => (
+        <EpisodeComposition key={name} episode={name} />
       ))}
     </>
   );

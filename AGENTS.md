@@ -7,9 +7,13 @@ modular clips anchored to narration lines.
 ## Layout
 
 - `public/<episode>/` — episode assets: `narration.toml` (the script),
-  `code/` (code steps), `video/` (recordings), `voiceover/` (generated mp3s)
+  `code/` (code steps), `video/` (recordings), `voiceover/` (generated mp3s).
+  Episode names may be nested (`examples/showcase` → `public/examples/showcase/`)
 - `src/engine/` — the clip engine (timeline compiler, renderer, clips)
-- `src/episodes/<episode>/` — `storyboard.ts` (typed clip list) per episode
+- `src/episodes/<episode>/` — `storyboard.ts` (typed clip list) per episode;
+  `registry.ts` registers them (one Studio composition per episode)
+- `src/examples/` — the template's demo episodes (deletable in a fresh copy)
+- `tests/fixtures/kitchen-sink/` — smoke-test fixture episode (not in Studio)
 - `src/annotations/` — Code Hike annotation handlers (mark, diff, focus, callout, error)
 - `doc/` — `checklist.md` (roadmap), `clip-inventory.md`, `clip-engine-port.md` (design history)
 - `scripts/` — `tts.mts` (voiceover), `annotate-diff.mts` (annotated code steps from file versions), `timeline-check.ts`, `timeline-node.ts` (shared node timeline loader)
@@ -25,18 +29,22 @@ modular clips anchored to narration lines.
 
 ## Episodes (registered in `src/episodes/registry.ts`)
 
-- `showcase` — the framework's ad video; the polished example of what the
-  engine can do
-- `code-tutorial` — a realistic tutorial slice (code chain, annotations,
+Composition ids replace `/` with `-` (`examples/showcase` → comp
+`examples-showcase`); Studio groups the examples in one folder.
+
+- `examples/showcase` — the framework's ad video; the polished example of what
+  the engine can do
+- `examples/code-tutorial` — a realistic tutorial slice (code chain, annotations,
   terminal, overlay). Reference for authoring real episodes
-- `clip-gallery` — one line per clip type; a visual catalog + minimal config
-  examples
-- `diff-tool` — annotate-diff workflow showcase: prepare sources, run the
-  tool, wire outputs, rendered result. Its `code/gen/` assets are the tool's
+- `examples/clip-gallery` — one line per clip type; a visual catalog + minimal
+  config examples
+- `examples/diff-tool` — annotate-diff workflow showcase: prepare sources, run
+  the tool, wire outputs, rendered result. Its `code/gen/` assets are the tool's
   real output (see the storyboard header for the exact commands)
-- `demo` — engine test fixture (kitchen sink covering every clip; the smoke
-  suite targets it). Not a reference for authors
 - `codehike-demo` — legacy hand-rolled Code Hike demo, outside the clip engine
+- `kitchen-sink` — engine test fixture (every clip type, code chain, scroll,
+  fence); the smoke suite renders it. Internal: never shown in Studio, not a
+  reference for authors
 
 ## Rules that apply everywhere
 

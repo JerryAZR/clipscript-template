@@ -2,16 +2,17 @@
 
 ## Quick visual check
 
-Render single frames and look at them:
+Render single frames and look at them (`<Comp>` is the episode name with `/`
+replaced by `-`, e.g. `examples-showcase`; your own episodes render as-is):
 
 ```bash
-npx remotion still Episode out/check.png --frame=200
+npx remotion still <Comp> out/check.png --frame=200
 ```
 
 Get frame numbers from the timeline instead of guessing:
 
 ```bash
-npx tsx scripts/timeline-check.ts   # prints every line and clip's frame range
+npx tsx scripts/timeline-check.ts <episode>   # prints every line and clip's frame range
 ```
 
 ## Automated checks
@@ -19,9 +20,9 @@ npx tsx scripts/timeline-check.ts   # prints every line and clip's frame range
 - `npm run lint` - tsc + eslint (always run after engine changes).
 - `npm run test:unit` - fast vitest unit tests for the pure engine core
   (timeline, code-state, narration).
-- `npm run test:smoke` - renders the demo composition and asserts frame
+- `npm run test:smoke` - renders the kitchen-sink fixture and asserts frame
   invariants (colors, continuity, morphs, scroll, clip presence). Slow (~30s),
-  run it after changing clips, the demo storyboard, or the renderer.
+  run it after changing clips, the fixture storyboard, or the renderer.
 
 ## Common failure modes
 

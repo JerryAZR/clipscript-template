@@ -71,7 +71,7 @@ export const storyboard: Storyboard = {
 };
 ```
 
-**4. Verify**: `npx tsx scripts/timeline-check.ts` prints every line/clip's frame range; `npx remotion still Episode out/check.png --frame=N` renders one frame to look at; `npm test` before committing.
+**4. Verify**: `npx tsx scripts/timeline-check.ts <episode>` prints every line/clip's frame range; `npx remotion still <Comp> out/check.png --frame=N` renders one frame to look at (comp id = episode name with `/` → `-`); `npm test` before committing.
 
 ## Fields every clip has
 

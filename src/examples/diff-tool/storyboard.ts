@@ -4,8 +4,8 @@ import type { Storyboard } from "../../engine/types";
 // annotate-diff showcase: pristine sources -> tool invocation -> raw outputs
 // -> storyboard wiring -> rendered result (animated and static diff views).
 // The gen/ assets are the tool's real output:
-//   npx tsx scripts/annotate-diff.mts [--static] --out public/diff-tool/code/gen \
-//     public/diff-tool/code/v1.ts public/diff-tool/code/v2.ts
+//   npx tsx scripts/annotate-diff.mts [--static] --out public/examples/diff-tool/code/gen \
+//     public/examples/diff-tool/code/v1.ts public/examples/diff-tool/code/v2.ts
 
 export const storyboard: Storyboard = {
   clips: [
@@ -47,7 +47,7 @@ export const storyboard: Storyboard = {
       type: "terminal",
       steps: [
         {
-          cwd: "…/public/diff-tool",
+          cwd: "…/public/examples/diff-tool",
           command: "npx tsx scripts/annotate-diff.mts --out code/gen v1.ts v2.ts",
           output: [
             "wrote code/gen/v1.ts",

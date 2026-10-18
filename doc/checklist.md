@@ -63,3 +63,13 @@ per purpose; similar-purpose leftovers stay Niche in the inventory.
 - [x] TTS pipeline (subtitles.toml → voiceover mp3s, hash-cached) + measured durations.
 - [x] Validation/lint pass (coverage, transition sanity, scroll continuity).
 - [ ] Skill updates for the new authoring workflow.
+
+## Possible future directions
+
+- **Rspack migration** (branch `rspack-migration`) — upstream
+  `remotion-dev/template-code-hike` adopted Rspack after our fork. This is a
+  possible future direction for faster bundling, not active work on `main`.
+  The current webpack + `offlineLighterOverride` setup is stable and covered
+  by the smoke suite. A migration would need a Rspack version of that override,
+  equivalent programmatic-bundle coverage, and full Studio/render validation;
+  revisit only if bundling speed becomes a practical concern.

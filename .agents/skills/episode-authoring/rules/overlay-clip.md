@@ -2,6 +2,11 @@
 
 A themed callout card for notes, tips, and asides, stacked above other clips.
 
+**Annotation only.** An overlay must never be the primary content of a scene -
+no matter how much text it holds, it cannot be the sole thing on screen
+holding a line's duration. Always float it over real content (code, video,
+terminal) via a small rect + `zIndex`.
+
 ```ts
 {
   id: "overlay-1",

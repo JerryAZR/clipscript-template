@@ -4,9 +4,10 @@
 // - font-load-vulnerable mirrors src/font.ts's loadFont() pattern: the
 //   delayRender handle is held until FontFace.load() settles, so a wedged
 //   font load hard-fails the whole render.
-// - font-load-bounded mirrors the fix candidate: fire-and-forget FontFace
-//   load, calculateMetadata waits with a bound, then continues with a
-//   fallback font and a loud warning.
+// - font-load-bounded drives the production loader (src/font.ts
+//   createFontLoader) with the same wedged URL: the bounded calculateMetadata
+//   gate expires, and the render continues with a fallback font and a loud
+//   warning.
 //
 // The URL arrives via input props (the test's hanging server picks a free
 // port at runtime), so the vulnerable variant calls loadFont() during the
@@ -18,10 +19,11 @@
 import { loadFont } from "@remotion/fonts";
 import { Composition, registerRoot } from "remotion";
 import type { CSSProperties } from "react";
+import { createFontLoader, fontFamily } from "../../src/font";
 
 type ReproProps = { fontUrl: string };
 
-const REPRO_FONT_FAMILY = "FontLoadRepro";
+const REPRO_FONT_FAMILY = fontFamily;
 const BOUNDED_WAIT_MS = 1500;
 const FALLBACK_WARNING =
   "[font-load-repro] font not loaded; continuing with fallback font";
@@ -43,47 +45,20 @@ const VulnerableFont = ({ fontUrl }: ReproProps) => {
   return <div style={container}>Hello</div>;
 };
 
-/** Fire-and-forget load + bounded wait, the fix candidate's shape. */
-let settled = false;
-let loadPromise: Promise<void> | null = null;
-
-const kickBoundedLoad = (fontUrl: string): Promise<void> => {
-  if (!loadPromise) {
-    loadPromise = new FontFace(
-      REPRO_FONT_FAMILY,
-      `url('${fontUrl}') format('truetype')`,
-      { weight: "400" },
-    )
-      .load()
-      .then((face) => {
-        document.fonts.add(face);
-      })
-      // A failed font means fallback glyphs, not a failed render
-      .catch(() => undefined)
-      .then(() => {
-        settled = true;
-      });
-  }
-  return loadPromise;
-};
-
-/** The blocking gate for calculateMetadata: bounded, loud on expiry. */
-const waitBounded = async (fontUrl: string): Promise<void> => {
-  await Promise.race([
-    kickBoundedLoad(fontUrl),
-    new Promise<void>((resolve) => setTimeout(resolve, BOUNDED_WAIT_MS)),
-  ]);
-  if (!settled) {
-    console.warn(FALLBACK_WARNING);
-  }
-};
+/** One loader per page, keyed by first use - mirrors src/font.ts's
+ *  module-scope singleton, but parameterized by the prop-driven URL. */
+let loader: ReturnType<typeof createFontLoader> | null = null;
+const getLoader = (fontUrl: string) =>
+  (loader ??= createFontLoader(
+    [{ url: fontUrl, weight: "400" }],
+    BOUNDED_WAIT_MS,
+  ));
 
 const BoundedFont = ({ fontUrl }: ReproProps) => {
   // Kick the load here too: each render page is a fresh module instance and
   // calculateMetadata does not necessarily re-run in it. If the load never
   // settled, warn - deterministic signal for the test via onBrowserLog.
-  kickBoundedLoad(fontUrl);
-  if (!settled) {
+  if (!getLoader(fontUrl).isSettled()) {
     console.warn(FALLBACK_WARNING);
   }
   return <div style={container}>Hello</div>;
@@ -109,7 +84,7 @@ const ReproRoot = () => (
       height={180}
       defaultProps={{ fontUrl: "http://127.0.0.1:1/unused.ttf" }}
       calculateMetadata={async ({ props }) => {
-        await waitBounded(props.fontUrl);
+        await getLoader(props.fontUrl).waitUntilDone();
         return { props };
       }}
     />

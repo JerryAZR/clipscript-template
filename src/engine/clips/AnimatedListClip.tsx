@@ -62,12 +62,23 @@ export const AnimatedListClip: ClipComponent<AnimatedListClipDef> = ({
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
-        gap: 28,
+        alignItems: "center",
         padding: "0 64px",
         color: textColor,
       }}
     >
-      {clip.items.map((item, i) => {
+      {/* Center the content block (sized by the widest item); rows stay
+          left-aligned relative to each other so bullets line up */}
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: 28,
+          width: "max-content",
+          maxWidth: "100%",
+        }}
+      >
+        {clip.items.map((item, i) => {
         // spring() handles negative frames, but clamp anyway so the start
         // offset stays an explicit part of the math
         const progress = spring({
@@ -107,7 +118,8 @@ export const AnimatedListClip: ClipComponent<AnimatedListClipDef> = ({
             <span>{item}</span>
           </div>
         );
-      })}
+        })}
+      </div>
     </div>
   );
 };

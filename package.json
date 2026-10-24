@@ -29,6 +29,7 @@
     "@remotion/renderer": "^4.0.490",
     "@types/pngjs": "^6.0.5",
     "@types/react": "19.2.7",
+    "@types/react-dom": "~19.2.0",
     "@types/web": "0.0.166",
     "eslint": "9.19.0",
     "pngjs": "^7.0.0",

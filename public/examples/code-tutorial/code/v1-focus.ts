@@ -8,7 +8,7 @@ const users: User[] = [];
 
 // !focus(1:3)
 export const addUser = (user: User): void => {
-  users.push(user);
+  users.push(user); // !callout[9:13] pushes into shared state
 };
 
 export const removeUser = (name: string): void => {

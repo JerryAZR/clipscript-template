@@ -92,7 +92,7 @@ Standard rects come from `rects` in `src/engine/clip-style.ts`: `rects.full` (ti
 - **video** - `src` (file in `video/`), `startFrom?`, `playbackRate?`, `muted?` (true), `loop?` (false).
 - **overlay** - `text`, `title?`. Callout card; give it a small rect + `zIndex`.
 
-Defaults in parentheses. Key chains: clips sharing `key` continue exactly where the previous ended (code step, scroll, rect, filename) - they must not overlap and must keep the same top-left corner.
+Defaults in parentheses. Key chains: clips sharing `key` continue exactly where the previous ended (code step, scroll, rect, filename) - they must not overlap and must keep the same top-left corner. **For a multi-step code morph aligned with narration, use one keyed code clip per line, each introducing one new step**; steps inside a single clip follow `stepInterval`, not line boundaries. The carry-in step is held for `stepInterval` frames before the morph. Full recipe and timing example: [rules/code-clip.md](rules/code-clip.md#align-morphs-with-narration-lines).
 
 Also available: **animated-list** (staggered bullet reveal), **progress** (done/current/todo checklist), **countdown** (ring timer; pair with a sync fence to hold the timeline), **chapter-title** (numbered chapter card), **notification-pop** (toast stack), **progress-steps** (horizontal stepper) - config in [rules/more-clips.md](rules/more-clips.md).
 

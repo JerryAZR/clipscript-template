@@ -31,6 +31,92 @@ scrolling, and chain continuity.
   When the file doesn't fit the pane, an editor-style overlay scrollbar
   appears on the right, tracking the scroll position.
 
+## Align morphs with narration lines
+
+Use a **key chain: one code clip per narration line, with one new step per
+clip**. Do not put every version in one clip spanning several lines and
+expect the steps to follow those lines - steps within a clip are paced only
+by `stepInterval`, not by line boundaries.
+
+Given one narration line per code state:
+
+```toml
+[[lines]]
+id = "code.initial"
+text = "Start with the basic implementation."
+
+[[lines]]
+id = "code.guard"
+text = "Next, reject invalid input."
+
+[[lines]]
+id = "code.fallback"
+text = "Finally, provide a fallback."
+```
+
+Build the morph as a chain:
+
+```ts
+const codeClips: Storyboard["clips"] = [
+  {
+    id: "code-initial",
+    type: "code",
+    key: "users",
+    steps: ["v1.ts"],
+    filename: "users.ts",
+    rect: rects.large,
+    startAt: { line: "code.initial" },
+    endAt: [{ line: "code.initial", end: true }],
+  },
+  {
+    id: "code-guard",
+    type: "code",
+    key: "users",
+    steps: ["v2.ts"],          // resolved as ["v1.ts", "v2.ts"]
+    stepInterval: 15,          // hold the carry-in, then start the morph
+    transitionDuration: 15,
+    startAt: { line: "code.guard" },
+    endAt: [{ line: "code.guard", end: true }],
+  },
+  {
+    id: "code-fallback",
+    type: "code",
+    key: "users",
+    steps: ["v3.ts"],          // resolved as ["v2.ts", "v3.ts"]
+    stepInterval: 15,
+    transitionDuration: 15,
+    startAt: { line: "code.fallback" },
+    endAt: [{ line: "code.fallback", end: true }],
+  },
+];
+```
+
+The first clip establishes `v1.ts`. At `code.guard`, the chain carries in
+`v1.ts`, holds it for 15 frames, then morphs to `v2.ts` over 15 frames. The
+same happens from `v2.ts` to `v3.ts` at `code.fallback`. Later clips inherit
+`rect` and `filename`; omit pane fades between chained clips so the code
+surface stays seamless.
+
+**`stepInterval` is the delay before the morph, not a narration anchor.** Its
+default is 60 frames, which leaves a two-second hold at 30 fps. Shorten it for
+an earlier morph and choose `transitionDuration` for the morph itself. These
+are relative animation timings; never compute absolute frames to synchronize
+steps with lines.
+
+If a narration line might end before its morph finishes, add a fence so the
+next line waits. For the 15 + 15-frame timing above:
+
+```ts
+endAt: [
+  { line: "code.guard", end: true },
+  { line: "code.guard", offsetFrames: 30, sync: "code.guard" },
+],
+```
+
+A longer line still runs naturally; a shorter one is extended to frame 30.
+Use `timeline-check.ts` and stills near each line boundary to verify the
+carry-in, morph, and settled state.
+
 ## Content
 
 - Syntax highlighting via Code Hike (TextMate grammars), language inferred

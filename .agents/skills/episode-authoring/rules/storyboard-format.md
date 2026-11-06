@@ -68,7 +68,13 @@ and required otherwise.
 
 Clips sharing `key` form a chain in timeline order. A chained clip inherits the
 previous clip's final state unless it overrides: carry-in code step (prepended
-to `steps`), scroll position, `rect`, `filename`. Rules (validated at load):
+to `steps`), scroll position, `rect`, `filename`. This is the intended way to
+align a multi-step code morph with narration: use one keyed clip per line,
+each introducing one new step. Steps within one clip follow `stepInterval`,
+not line boundaries; the carry-in step is also held for `stepInterval` frames
+before the morph. See the full example in
+[code-clip.md](code-clip.md#align-morphs-with-narration-lines). Rules
+(validated at load):
 
 - Chained clips must not overlap, including `transitionOut` tails (no cross-fades).
 - If both clips specify a rect, their top-left corners must match (warning).
